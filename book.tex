@@ -29,14 +29,10 @@
 % \usepackage[bottom]{footmisc}% places footnotes at page bottom
 \usepackage{amsmath}
 \usepackage{longtable}
-% \usepackage{subfigure}
-% \usepackage{multirow}        % combine multiple rows and columns in tables
-% \usepackage{soul}
 \usepackage{color}
 \usepackage{fancyvrb}
 \usepackage{rotating}
 \usepackage{supertabular}
-\usepackage{bytefield}
 \usepackage{url}
 \usepackage{array}
 \usepackage{verbatim}
@@ -46,18 +42,11 @@
 \usepackage{wrapfig}
 \usepackage{framed}
 \usepackage{alltt}
-% \usepackage{draftwatermark}
-% \usepackage{algorithmic}
 \captionsetup{font=small}
-% \captionsetup{tablename=table}
 
 % The following packages can be found on http:\\www.ctan.org
 \usepackage{graphics} % for pdf, bitmapped graphics files
 \usepackage{epsfig} % for postscript graphics files
-%\usepackage{mathptmx} % assumes new font selection scheme installed
-%\usepackage{times} % assumes new font selection scheme installed
-%\usepackage{amsmath} % assumes amsmath package installed
-%\usepackage{amssymb}  % assumes amsmath package installed
 \usepackage{tikz}
 \usetikzlibrary{arrows,decorations.pathmorphing,backgrounds,positioning,fit,petri,shapes.misc}
 \usepackage[linkbordercolor={.9 .9 .9}]{hyperref}
@@ -85,19 +74,19 @@
 
 \newcommand{\png}[1]{
 \begin{center}
-\includegraphics[width=0.8\textwidth]{#1.png}
+\includegraphics[width=0.8\textwidth]{assets/#1.png}
 \end{center}
 }
 
 \newcommand{\szpng}[2]{
 \begin{center}
-\includegraphics[width=#1\textwidth]{#2.png}
+\includegraphics[width=#1\textwidth]{assets/#2.png}
 \end{center}
 }
 
 \newcommand{\minipng}[1]{
 \begin{center}
-\includegraphics[width=0.4\textwidth]{#1.png}
+\includegraphics[width=0.4\textwidth]{assets/#1.png}
 \end{center}
 }
 
@@ -210,7 +199,7 @@ Bowman, James.\\
 \chapter{Plug in. Power up. Play something}
 
 \begin{center}
-\includegraphics[width=0.9\textwidth]{plugin.jpg}
+\includegraphics[width=0.9\textwidth]{assets/plugin.jpg}
 \end{center}
 
 \begin{enumerate}
@@ -240,7 +229,7 @@ Restart the Arduino IDE, and load one of the sketches, for example \\
 \end{small}
 
 \begin{center}
-\includegraphics[width=1.0\textwidth]{menu.png}
+\includegraphics[width=1.0\textwidth]{assets/menu.png}
 \end{center}
 
 \item
@@ -280,7 +269,7 @@ from ``hello world'' to creating a simple touch-based game.
 
 \newcommand{\eg}[1]{
 \begin{framed}
-\input{#1.inc}
+\input{code/#1.inc}
 \end{framed}
 }
 
@@ -321,7 +310,7 @@ The center pixel on the screen is at $(240,136)$.
 \begin{center}
 \begin{tikzpicture}
     [align=center,node distance=4cm]
-    \node [opacity=0.2,inner sep=0] at (0,0) (png) {\includegraphics[width=0.8\textwidth]{helloworld.png}};
+    \node [opacity=0.2,inner sep=0] at (0,0) (png) {\includegraphics[width=0.8\textwidth]{assets/helloworld.png}};
 
     \node [below of=png] (240x136) {$x=240,y=136$)};
     \draw [-latex]   (240x136) -- (png.center);
@@ -425,10 +414,10 @@ Because each frame is 1/60th of a second, the effect is a seething frenzy of lur
 \index{frenzy, seething}
 
 \begin{center}
-\includegraphics[width=0.24\textwidth]{fizz-6.png}
-\includegraphics[width=0.24\textwidth]{fizz-7.png}
-\includegraphics[width=0.24\textwidth]{fizz-8.png}
-\includegraphics[width=0.24\textwidth]{fizz-9.png}
+\includegraphics[width=0.24\textwidth]{assets/fizz-6.png}
+\includegraphics[width=0.24\textwidth]{assets/fizz-7.png}
+\includegraphics[width=0.24\textwidth]{assets/fizz-8.png}
+\includegraphics[width=0.24\textwidth]{assets/fizz-9.png}
 \end{center}
 
 
@@ -527,7 +516,7 @@ This is called the ``tag buffer'' - here is its contents for this example:
 \vspace{10pt}
 
 \begin{tikzpicture}
-  \node[anchor=south west,inner sep=0,opacity=0.2] (image) at (0,0) {\includegraphics[width=0.9\textwidth]{0002.png}};
+  \node[anchor=south west,inner sep=0,opacity=0.2] (image) at (0,0) {\includegraphics[width=0.9\textwidth]{assets/0002.png}};
   \begin{scope}[x={(image.south east)},y={(image.north west)},xscale=0.20833333333333334,yshift=0.51\textwidth,yscale=-0.3676470588235294]
     \draw[black, ultra thick] (2.20,1.00) circle (0.30);
     \draw[black, ultra thick] (2.60,1.70) circle (0.30);
@@ -701,13 +690,14 @@ In practice, most games use fewer than 16 graphical elements, so they can assign
 In an ideal world, all bitmaps would be stored with unlimited color accuracy.
 However, because memory -- both the GPU's and the Arduino's -- is finite,
 the graphics hardware gives you various ways of balancing color precision against memory use.
-\vspace{10pt}
+
 \newcommand{\fmline}[3]{
 \index{#1 bitmap format@\mach{#1} bitmap format}
 \index{bitmap format!#1@\mach{#1}}
 \textbf{\large\mach{#1}} &
 #3
-& {\raisebox{-\height+8pt}{\includegraphics[width=0.4\textwidth]{#2}}} \\
+& {\raisebox{-96}
+            {\includegraphics[height=100pt]{#2}}} \\
 }
 
 \noindent
@@ -723,6 +713,7 @@ One bit per pixel.
 Used for a minimal retro look.
 Also sometimes a useful format for layering and stencil effects.} \\
 \end{tabular}
+\newpage
 
 \noindent
 \begin{tabular}{p{0.15\textwidth}p{0.35\textwidth}p{0.4\textwidth}}
@@ -745,8 +736,8 @@ Sometimes used for images and icons.} \\
 Two bits each for red, green, blue and alpha.
 Not usually suitable for images, but works well for retro gaming sprites and low-color icons.} \\
 \end{tabular}
-
 \newpage
+
 \section{Bitmap color}
 
 \png{0011}
@@ -828,7 +819,7 @@ draws the eight animation frames across the screen:
 \noindent
 
 \noindent
-\includegraphics[width=\textwidth,trim=0 216 80 0,clip=true]{0058.png}}
+\includegraphics[width=\textwidth,trim=0 216 80 0,clip=true]{assets/0058.png}}
 
 Each bitmap handle can contain up to 128 cells, and the cells are arranged
 consecutively in graphics memory.
@@ -950,18 +941,18 @@ becomes thin again at the end of its cycle.
 \index{explosion}
 
 \begin{center}
-\includegraphics[width=0.3\textwidth]{ns-lines-0000.png}
-\includegraphics[width=0.3\textwidth]{ns-lines-0001.png}
-\includegraphics[width=0.3\textwidth]{ns-lines-0002.png}
-\includegraphics[width=0.3\textwidth]{ns-lines-0003.png}
-\includegraphics[width=0.3\textwidth]{ns-lines-0004.png}
-\includegraphics[width=0.3\textwidth]{ns-lines-0005.png}
-\includegraphics[width=0.3\textwidth]{ns-lines-0006.png}
-\includegraphics[width=0.3\textwidth]{ns-lines-0007.png}
-\includegraphics[width=0.3\textwidth]{ns-lines-0008.png}
-\includegraphics[width=0.3\textwidth]{ns-lines-0009.png}
-\includegraphics[width=0.3\textwidth]{ns-lines-0010.png}
-\includegraphics[width=0.3\textwidth]{ns-lines-0011.png}
+\includegraphics[width=0.3\textwidth]{assets/ns-lines-0000.png}
+\includegraphics[width=0.3\textwidth]{assets/ns-lines-0001.png}
+\includegraphics[width=0.3\textwidth]{assets/ns-lines-0002.png}
+\includegraphics[width=0.3\textwidth]{assets/ns-lines-0003.png}
+\includegraphics[width=0.3\textwidth]{assets/ns-lines-0004.png}
+\includegraphics[width=0.3\textwidth]{assets/ns-lines-0005.png}
+\includegraphics[width=0.3\textwidth]{assets/ns-lines-0006.png}
+\includegraphics[width=0.3\textwidth]{assets/ns-lines-0007.png}
+\includegraphics[width=0.3\textwidth]{assets/ns-lines-0008.png}
+\includegraphics[width=0.3\textwidth]{assets/ns-lines-0009.png}
+\includegraphics[width=0.3\textwidth]{assets/ns-lines-0010.png}
+\includegraphics[width=0.3\textwidth]{assets/ns-lines-0011.png}
 \end{center}
 
 This 12-frame detail shows the sparks' progress.
@@ -1081,7 +1072,7 @@ After loading it, you can use the new font with any of the drawing commands.
 \eg{fonts-night}
 
 \begin{center}
-\includegraphics[width=0.7\textwidth]{fonts1.png}
+\includegraphics[width=0.7\textwidth]{assets/fonts1.png}
 \end{center}
 
 \newpage
@@ -1132,7 +1123,7 @@ This extra precision means that ``pixel'' effects are much less noticable.
 \vspace{10pt}
 \noindent
 \begin{tikzpicture}[scale=0.08928571428571428]
-\node[anchor=south west,inner sep=0] (image) at (0,0) {\includegraphics[width=1.0\textwidth]{subpixel.png}};
+\node[anchor=south west,inner sep=0] (image) at (0,0) {\includegraphics[width=1.0\textwidth]{assets/subpixel.png}};
 \foreach \x in {0,0.1,...,11.3}
   \draw [white] (\x\textwidth,0) -- (\x\textwidth,9.6);
 \foreach \y in {0,0.1,...,0.9}
@@ -1208,7 +1199,7 @@ For example, when incrementing angles for a rotating object, normal
 back to zero.
 
 \begin{center}
-\includegraphics[width=0.7\textwidth]{angle.png}
+\includegraphics[width=0.7\textwidth]{assets/angle.png}
 \end{center}
 
 \index{tracking controls}
@@ -1228,7 +1219,7 @@ When the turret is drawn, the angle variable is used with \cmd{rotate} to rotate
 \cmdidx{cmd\_rotate}
 which is in the ``0 Furmans'' orientation:
 \begin{center}
-\includegraphics[width=0.10\textwidth]{turret.png}
+\includegraphics[width=0.10\textwidth]{assets/turret.png}
 \end{center}
 
 \newpage
@@ -1358,7 +1349,7 @@ Each adjustable widget is drawn with a unique tag value, here
 \vspace{10pt}
 
 \begin{tikzpicture}
-  \node[anchor=south west,inner sep=0,opacity=0.2] (image) at (0,0) {\includegraphics[width=0.9\textwidth]{widgets3d.png}};
+  \node[anchor=south west,inner sep=0,opacity=0.2] (image) at (0,0) {\includegraphics[width=0.9\textwidth]{assets/widgets3d.png}};
   \begin{scope}[x={(image.south east)},y={(image.north west)},xscale=0.20833333333333334,yshift=0.51\textwidth,yscale=-0.3676470588235294]
 
     \draw[black, thick] (0.68,0.68) circle (0.50);
@@ -1675,7 +1666,7 @@ Because \mach{.ima} is a headerless format, \mach{play} needs to know the sample
 \chapter{Accelerometer}
 
 \begin{center}
-\includegraphics[width=0.4\textwidth]{accel.jpg}
+\includegraphics[width=0.4\textwidth]{assets/accel.jpg}
 \end{center}
 
 \gdtwo has a 3-axis accelerometer sensor connected to the Arduino's analog inputs A0, A1 and A2.
@@ -2135,7 +2126,7 @@ features to create effects for games.
 The source image is this 256 $\times$ 256 seamless texture, created by Patrick Hoesly\footnote{
 One of the hundreds that he has made available on Flickr, all under a  Creative Commons licence.}.
 \begin{center}
-\includegraphics[width=0.5\textwidth]{metal.png}
+\includegraphics[width=0.5\textwidth]{assets/metal.png}
 \end{center}
 tiling the image across the entire 480 $\times$ 272 screen using \dcmd{BitmapSize} gives:
 \png{tiled-norot}
@@ -2160,7 +2151,7 @@ A smaller font looks better with a 2- or 1-pixel offset.
 
 \noindent
 \begin{minipage}[][][t]{0.45\textwidth}
-\includegraphics[width=1.0\textwidth]{logodrop.png}
+\includegraphics[width=1.0\textwidth]{assets/logodrop.png}
 \end{minipage}
 \begin{minipage}[][][t]{0.55\textwidth}
 A similar technique works for bitmaps: draw the bitmap in black for the shadow, then draw the bitmap
@@ -2228,8 +2219,8 @@ The eight stacked transparent pieces give a nicely blurred motion along the move
 \index{blending}
 
 \begin{center}
-\includegraphics[width=0.55\textwidth]{0048.png}
-\includegraphics[width=0.55\textwidth]{0049.png}
+\includegraphics[width=0.55\textwidth]{assets/0048.png}
+\includegraphics[width=0.55\textwidth]{assets/0049.png}
 \end{center}
 
 Both of these images are drawn by the code below.
@@ -2281,7 +2272,7 @@ but when drawing with \mach{RECTS} two vertices define each rectangle.
 The code uses this 512$\times$1 ``spectrum'' image, loaded into graphics memory as an
 \mach{RGB565} bitmap
 \begin{center}
-\includegraphics[width=1.0\textwidth]{spectrum.png}
+\includegraphics[width=1.0\textwidth]{assets/spectrum.png}
 \end{center}
 
 \noindent
@@ -2293,7 +2284,7 @@ As with any bitmap, the 1D bitmap can be rotated and scaled.
 Here is the same bitmap scaled by 0.3 and rotated by 80$^\circ$
 
 \begin{center}
-\includegraphics[width=0.5\textwidth]{0054.png}
+\includegraphics[width=0.5\textwidth]{assets/0054.png}
 \end{center}
 
 \newpage
@@ -2360,15 +2351,15 @@ Together they give a pleasing glow effect.
 \index{glow effect}
 
 \begin{center}
-\includegraphics[width=0.28\textwidth]{ns-pwr-0000.png}
-\includegraphics[width=0.28\textwidth]{ns-pwr-0001.png}
-\includegraphics[width=0.28\textwidth]{ns-pwr-0002.png}
-\includegraphics[width=0.28\textwidth]{ns-pwr-0003.png}
-\includegraphics[width=0.28\textwidth]{ns-pwr-0004.png}
-\includegraphics[width=0.28\textwidth]{ns-pwr-0005.png}
-\includegraphics[width=0.28\textwidth]{ns-pwr-0006.png}
-\includegraphics[width=0.28\textwidth]{ns-pwr-0007.png}
-\includegraphics[width=0.28\textwidth]{ns-pwr-0008.png}
+\includegraphics[width=0.28\textwidth]{assets/ns-pwr-0000.png}
+\includegraphics[width=0.28\textwidth]{assets/ns-pwr-0001.png}
+\includegraphics[width=0.28\textwidth]{assets/ns-pwr-0002.png}
+\includegraphics[width=0.28\textwidth]{assets/ns-pwr-0003.png}
+\includegraphics[width=0.28\textwidth]{assets/ns-pwr-0004.png}
+\includegraphics[width=0.28\textwidth]{assets/ns-pwr-0005.png}
+\includegraphics[width=0.28\textwidth]{assets/ns-pwr-0006.png}
+\includegraphics[width=0.28\textwidth]{assets/ns-pwr-0007.png}
+\includegraphics[width=0.28\textwidth]{assets/ns-pwr-0008.png}
 \end{center}
 
 \newpage
@@ -2376,8 +2367,8 @@ Together they give a pleasing glow effect.
 \index{photography}
 
 \begin{center}
-\includegraphics[width=0.48\textwidth]{vignette-0.png}}
-\includegraphics[width=0.48\textwidth]{vignette-1.png}}
+\includegraphics[width=0.48\textwidth]{assets/vignette-0.png}}
+\includegraphics[width=0.48\textwidth]{assets/vignette-1.png}}
 \end{center}
 
 In photography,
@@ -2390,7 +2381,7 @@ becoming more opaque towards the edge:
 \begin{center}
 \setlength{\fboxsep}{0pt}
 \setlength{\fboxrule}{1pt}
-\fbox{\includegraphics[width=0.6\textwidth]{vignette.png}}
+\fbox{\includegraphics[width=0.6\textwidth]{assets/vignette.png}}
 \end{center}
 
 Drawing this bitmap in white will produce a milky transparency towards the edges of the screen.
@@ -2447,8 +2438,8 @@ Here the outlines are all drawn first, which gives a common outline to the whole
 % \eg{abstract3-outline}
 
 \begin{center}
-\includegraphics[width=0.48\textwidth]{outline3.png}}
-\includegraphics[width=0.48\textwidth]{outline2.png}}
+\includegraphics[width=0.48\textwidth]{assets/outline3.png}}
+\includegraphics[width=0.48\textwidth]{assets/outline2.png}}
 \end{center}
 
 This button graphic is drawn with two wide lines.
@@ -2459,7 +2450,7 @@ Edges like this can be drawn with
 \mach{RECTS}.
 
 \begin{center}
-\includegraphics[width=0.6\textwidth,trim=120 100 120 100,clip=true]{0057.png}}
+\includegraphics[width=0.6\textwidth,trim=120 100 120 100,clip=true]{assets/0057.png}}
 \end{center}
 
 \newpage
@@ -2518,8 +2509,8 @@ This two-pass drawing gives an appropriate subtle glow to all the lines.
 \index{binary}
 
 \begin{center}
-\includegraphics[height=0.3\textwidth]{weave.png}}
-\includegraphics[height=0.3\textwidth,trim=100 60 100 60,clip=true]{0067.png}}
+\includegraphics[height=0.3\textwidth]{assets/weave.png}}
+\includegraphics[height=0.3\textwidth,trim=100 60 100 60,clip=true]{assets/0067.png}}
 \end{center}
 
 Early humans didn't have the sophisticated tools we enjoy today.
@@ -2555,7 +2546,7 @@ then a \cmd{clock} widget to draw the hands.
 But adding a JPEG background image gives an unfortunate result
 
 \begin{center}
-\includegraphics[width=0.4\textwidth]{comp2.png}
+\includegraphics[width=0.4\textwidth]{assets/comp2.png}
 \end{center}
 \newpage
 
@@ -2602,7 +2593,7 @@ After these operations, nothing has been drawn on the visible screen yet --
 because the \dcmd{ColorMask} disabled writes to R,G and B.
 But the alpha buffer now contains this image:
 \begin{center}
-\includegraphics[width=0.8\textwidth]{comp1.png}
+\includegraphics[width=0.8\textwidth]{assets/comp1.png}
 \end{center}
 
 The final step is to make the alpha buffer visible.
@@ -2620,15 +2611,15 @@ The complete code is
 \section{Slot gags}
 
 \begin{center}
-\includegraphics[width=0.32\textwidth]{slotgag/00.png}
-\includegraphics[width=0.32\textwidth]{slotgag/02.png}
-\includegraphics[width=0.32\textwidth]{slotgag/04.png}
-\includegraphics[width=0.32\textwidth]{slotgag/06.png}
-\includegraphics[width=0.32\textwidth]{slotgag/08.png}
-\includegraphics[width=0.32\textwidth]{slotgag/10.png}
-\includegraphics[width=0.32\textwidth]{slotgag/12.png}
-\includegraphics[width=0.32\textwidth]{slotgag/14.png}
-\includegraphics[width=0.32\textwidth]{slotgag/16.png}
+\includegraphics[width=0.32\textwidth]{assets/slotgag/00.png}
+\includegraphics[width=0.32\textwidth]{assets/slotgag/02.png}
+\includegraphics[width=0.32\textwidth]{assets/slotgag/04.png}
+\includegraphics[width=0.32\textwidth]{assets/slotgag/06.png}
+\includegraphics[width=0.32\textwidth]{assets/slotgag/08.png}
+\includegraphics[width=0.32\textwidth]{assets/slotgag/10.png}
+\includegraphics[width=0.32\textwidth]{assets/slotgag/12.png}
+\includegraphics[width=0.32\textwidth]{assets/slotgag/14.png}
+\includegraphics[width=0.32\textwidth]{assets/slotgag/16.png}
 \end{center}
 
 \term{Slot gags} are a very old animation technique for 
@@ -2721,7 +2712,7 @@ After drawing the top bitmap,
 the code draws a 1D vertical 128$\times$1 gradient bitmap into the alpha buffer, repeated horizontally so it covers the screen:
 
 \begin{center}
-\includegraphics[width=0.5\textwidth]{reflection1.png}
+\includegraphics[width=0.5\textwidth]{assets/reflection1.png}
 \end{center}
 
 The code then sets a bitmap transform that flips the logo in the Y axis,
@@ -2735,11 +2726,11 @@ Masking uses macro \mach{MASK\_ALPHA()}, which multiplies the logo's alpha chann
 \index{alpha!masking}
 
 \begin{center}
-\vcenter{\hbox{\includegraphics[width=0.3\textwidth]{reflection1.png}}}
+\vcenter{\hbox{\includegraphics[width=0.3\textwidth]{assets/reflection1.png}}}
 $\times$
-\vcenter{\hbox{\includegraphics[width=0.3\textwidth]{reflection3.png}}}
+\vcenter{\hbox{\includegraphics[width=0.3\textwidth]{assets/reflection3.png}}}
 $=$
-\vcenter{\hbox{\includegraphics[width=0.3\textwidth]{reflection2.png}}}
+\vcenter{\hbox{\includegraphics[width=0.3\textwidth]{assets/reflection2.png}}}
 \end{center}
 
 \newpage
@@ -2756,7 +2747,7 @@ The final step is to draw the mirrored logo using the alpha buffer to control tr
 \eg{mono-a}
 The source image is this seamless texture, created by Patrick Hoesly
 \begin{center}
-\includegraphics[width=0.3\textwidth]{tile_green.jpg}
+\includegraphics[width=0.3\textwidth]{assets/tile_green.jpg}
 \end{center}
 It would be fine to encode this image in
 \mach{RGB565} format.
@@ -2772,7 +2763,7 @@ and light green is
 \mach{0x68b203}. Then convert the image to monochrome and stretch the contrast
 so that it ranges from pure black to pure white
 \begin{center}
-\includegraphics[width=0.3\textwidth]{tile_greenm.png}
+\includegraphics[width=0.3\textwidth]{assets/tile_greenm.png}
 \end{center}
 
 The code first clears the screen to the dark green color,
@@ -2784,9 +2775,9 @@ As a bonus, you can recolor the bitmap at runtime by adjusting the
 foreground and background colors,
 \textit{strictly} guided by the rules of good taste, of course.
 \begin{center}
-\includegraphics[width=0.3\textwidth]{mono1.png}
-\includegraphics[width=0.3\textwidth]{mono2.png}
-\includegraphics[width=0.3\textwidth]{mono3.png}
+\includegraphics[width=0.3\textwidth]{assets/mono1.png}
+\includegraphics[width=0.3\textwidth]{assets/mono2.png}
+\includegraphics[width=0.3\textwidth]{assets/mono3.png}
 \end{center}
 
 \newpage
@@ -2805,8 +2796,8 @@ but by drawing in two passes the format can be simulated.
 The trick is to split the original 2-bit image into two 1-bit \mach{L1} bitmaps, one for the high bit and one for the low bit:
 
 \begin{center}
-\includegraphics[width=0.35\textwidth]{abe1.png}
-\includegraphics[width=0.35\textwidth]{abe0.png}
+\includegraphics[width=0.35\textwidth]{assets/abe1.png}
+\includegraphics[width=0.35\textwidth]{assets/abe0.png}
 \end{center}
 
 The
@@ -2863,8 +2854,8 @@ The matte bitmap is drawn first, with \dcmd{ColorRGB} set to black.
 This clears every pixel covered by the matte.
 Then the foreground bitmap is drawn as usual.
 \begin{center}
-\includegraphics[width=0.3\textwidth]{ns-matteA-0000.png}
-\includegraphics[width=0.3\textwidth]{ns-matteB-0000.png}
+\includegraphics[width=0.3\textwidth]{assets/ns-matteA-0000.png}
+\includegraphics[width=0.3\textwidth]{assets/ns-matteB-0000.png}
 \end{center}
 
 \newpage
@@ -2899,7 +2890,7 @@ Halving the resolution of a bitmap reduces its memory usage by 75\%.
 \label{eightbit}
 
 \begin{center}
-\includegraphics[width=0.6\textwidth]{0034.png}
+\includegraphics[width=0.6\textwidth]{assets/0034.png}
 \end{center}
 
 For most images, the 16-bit per pixels formats --
@@ -2944,13 +2935,9 @@ and this rapid motion conceals the reduced color range.
 \index{DXT1}
 
 \begin{center}
-\includegraphics[width=0.48\textwidth]{../assets/nightstrike/backgrounds/welcome.jpg}
-\includegraphics[width=0.48\textwidth]{dxt1.png}
+\includegraphics[width=0.48\textwidth]{assets/nightstrike/backgrounds/welcome.jpg}
+\includegraphics[width=0.48\textwidth]{assets/dxt1.png}
 \end{center}
-% \begin{center}
-% \includegraphics[width=0.25\textwidth,trim=240 100 80 80,clip=true]{../assets/nightstrike/backgrounds/welcome.jpg}
-% \includegraphics[width=0.25\textwidth,trim=240 100 80 80,clip=true]{dxt1.png}
-% \end{center}
 
 DXT is a texture compression system -- it squeezes a bigger image into less graphics memory.
 The image on the left is the artist's original rendering of the \textit{NightStrike} welcome screen. On the right is a screenshot
@@ -3151,12 +3138,12 @@ The backgrounds for each level are 480$\times$272 images, encoded using DXT1-lik
 so they only use 65 Kbytes of video memory.
 
 \begin{center}
-\includegraphics[width=0.3\textwidth]{../assets/nightstrike/backgrounds/welcome.jpg}
-\includegraphics[width=0.3\textwidth]{../assets/nightstrike/backgrounds/burningwoods.jpg}
-\includegraphics[width=0.3\textwidth]{../assets/nightstrike/backgrounds/greenland.jpg}
-\includegraphics[width=0.3\textwidth]{../assets/nightstrike/backgrounds/nightfall.jpg}
-\includegraphics[width=0.3\textwidth]{../assets/nightstrike/backgrounds/purplesnow.jpg}
-\includegraphics[width=0.3\textwidth]{../assets/nightstrike/backgrounds/redworld.jpg}
+\includegraphics[width=0.3\textwidth]{assets/nightstrike/backgrounds/welcome.jpg}
+\includegraphics[width=0.3\textwidth]{assets/nightstrike/backgrounds/burningwoods.jpg}
+\includegraphics[width=0.3\textwidth]{assets/nightstrike/backgrounds/greenland.jpg}
+\includegraphics[width=0.3\textwidth]{assets/nightstrike/backgrounds/nightfall.jpg}
+\includegraphics[width=0.3\textwidth]{assets/nightstrike/backgrounds/purplesnow.jpg}
+\includegraphics[width=0.3\textwidth]{assets/nightstrike/backgrounds/redworld.jpg}
 \end{center}
 
 \newpage
@@ -3213,12 +3200,12 @@ As well as using animated bitmaps for explosions,
 the game draws exploding sparks using wide lines (see \xref{lines}).
 Because they use \mach{LINES}, the sparks require no graphics memory
 \begin{center}
-\includegraphics[width=0.3\textwidth]{ns-lines-0006.png}
-\includegraphics[width=0.3\textwidth]{ns-lines-0007.png}
-\includegraphics[width=0.3\textwidth]{ns-lines-0008.png}
-\includegraphics[width=0.3\textwidth]{ns-lines-0009.png}
-\includegraphics[width=0.3\textwidth]{ns-lines-0010.png}
-\includegraphics[width=0.3\textwidth]{ns-lines-0011.png}
+\includegraphics[width=0.3\textwidth]{assets/ns-lines-0006.png}
+\includegraphics[width=0.3\textwidth]{assets/ns-lines-0007.png}
+\includegraphics[width=0.3\textwidth]{assets/ns-lines-0008.png}
+\includegraphics[width=0.3\textwidth]{assets/ns-lines-0009.png}
+\includegraphics[width=0.3\textwidth]{assets/ns-lines-0010.png}
+\includegraphics[width=0.3\textwidth]{assets/ns-lines-0011.png}
 \end{center}
 
 \noindent
@@ -3368,12 +3355,12 @@ This paints the game's pixels, using the color from the overlay.
 
 \newpage
 \begin{center}
-\includegraphics[width=0.6\textwidth]{../assets/invaders-272.png}
+\includegraphics[width=0.6\textwidth]{assets/invaders-272.png}
 \end{center}
 
 \begin{center}
 \begin{tikzpicture}[scale=0.02142857142857143]
-\node[anchor=south west,inner sep=0] (image) at (0,0) {\includegraphics[width=0.6\textwidth]{../assets/invaders-overlay.png}};
+\node[anchor=south west,inner sep=0] (image) at (0,0) {\includegraphics[width=0.6\textwidth]{assets/invaders-overlay.png}};
 \foreach \x in {0,...,28}
   \draw [lightgray] (\x\textwidth,0) -- (\x\textwidth,32\textwidth);
 \foreach \y in {0,...,32}
