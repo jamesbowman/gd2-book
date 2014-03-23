@@ -80,7 +80,7 @@
 
 \newcommand{\szpng}[2]{
 \begin{center}
-\includegraphics[width=#1\textwidth]{assets/#2.png}
+\includegraphics[width=#1\textwidth]{#2.png}
 \end{center}
 }
 
@@ -1841,11 +1841,11 @@ For a complete list, consult the FT800 programming guide.
 
 \input{highcommands-en.tex}
 
-\newcommand{\cmd}[1]{
-% \newpage
-\section{\texttt{#1}}
-\label{#1}
-}
+% \newcommand{\cmd}[1]{
+% % \newpage
+% \section{\texttt{#1}}
+% \label{#1}
+% }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{Management commands}
@@ -2364,8 +2364,8 @@ Together they give a pleasing glow effect.
 \index{photography}
 
 \begin{center}
-\includegraphics[width=0.48\textwidth]{assets/vignette-0.png}}
-\includegraphics[width=0.48\textwidth]{assets/vignette-1.png}}
+\includegraphics[width=0.48\textwidth]{assets/vignette-0.png}
+\includegraphics[width=0.48\textwidth]{assets/vignette-1.png}
 \end{center}
 
 In photography,
@@ -2435,8 +2435,8 @@ Here the outlines are all drawn first, which gives a common outline to the whole
 % \eg{abstract3-outline}
 
 \begin{center}
-\includegraphics[width=0.48\textwidth]{assets/outline3.png}}
-\includegraphics[width=0.48\textwidth]{assets/outline2.png}}
+\includegraphics[width=0.48\textwidth]{assets/outline3.png}
+\includegraphics[width=0.48\textwidth]{assets/outline2.png}
 \end{center}
 
 This button graphic is drawn with two wide lines.
@@ -2447,7 +2447,7 @@ Edges like this can be drawn with
 \mach{RECTS}.
 
 \begin{center}
-\includegraphics[width=0.6\textwidth,trim=120 100 120 100,clip=true]{assets/0057.png}}
+\includegraphics[width=0.6\textwidth,trim=120 100 120 100,clip=true]{assets/0057.png}
 \end{center}
 
 \newpage
@@ -2506,8 +2506,8 @@ This two-pass drawing gives an appropriate subtle glow to all the lines.
 \index{binary}
 
 \begin{center}
-\includegraphics[height=0.3\textwidth]{assets/weave.png}}
-\includegraphics[height=0.3\textwidth,trim=100 60 100 60,clip=true]{assets/0067.png}}
+\includegraphics[height=0.3\textwidth]{assets/weave.png}
+\includegraphics[height=0.3\textwidth,trim=100 60 100 60,clip=true]{assets/0067.png}
 \end{center}
 
 Early humans didn't have the sophisticated tools we enjoy today.
@@ -2715,20 +2715,19 @@ the code draws a 1D vertical 128$\times$1 gradient bitmap into the alpha buffer,
 The code then sets a bitmap transform that flips the logo in the Y axis,
 using a method similar to the one in \xref{mirror}.
 It then draws the logo's alpha channel into the alpha buffer,
-\tern{masked}
+\term{masked}
 with the existing alpha contents.
 Masking uses macro \mach{MASK\_ALPHA()}, which multiplies the logo's alpha channel with the existing alpha buffer values:
 \index{matte}
 \index{masking, alpha}
 \index{alpha!masking}
 
-\begin{center}
-\vcenter{\hbox{\includegraphics[width=0.3\textwidth]{assets/reflection1.png}}}
+\vspace{10pt}
+$\vcenter{\hbox{\includegraphics[width=0.3\textwidth]{assets/reflection1.png}}}$
 $\times$
-\vcenter{\hbox{\includegraphics[width=0.3\textwidth]{assets/reflection3.png}}}
+$\vcenter{\hbox{\includegraphics[width=0.3\textwidth]{assets/reflection3.png}}}$
 $=$
-\vcenter{\hbox{\includegraphics[width=0.3\textwidth]{assets/reflection2.png}}}
-\end{center}
+$\vcenter{\hbox{\includegraphics[width=0.3\textwidth]{assets/reflection2.png}}}$
 
 \newpage
 The final step is to draw the mirrored logo using the alpha buffer to control transparency.
@@ -2981,25 +2980,21 @@ Taking the \textit{NightStrike} welcome screen as an example, the source image i
 Hence the width in 4$\times$4 tiles is 120$\times$68. So the $C_0$ and $C_1$ images are both encoded in \mach{RGB565} at a resolution of
 120$\times$68:
 
-\begin{center}
+\vspace{10pt}
 $C_0=$
-\vcenter{\hbox{\includegraphics[width=0.9\textwidth]{previews/nightstrike_welcome-WELCOME_BACKGROUND_COLOR-00.png}}}
-\end{center}
+$\vcenter{\hbox{\includegraphics[width=0.9\textwidth]{previews/nightstrike_welcome-WELCOME_BACKGROUND_COLOR-00.png}}}$
 
-\begin{center}
 $C_1=$
-\vcenter{\hbox{\includegraphics[width=0.9\textwidth]{previews/nightstrike_welcome-WELCOME_BACKGROUND_COLOR-01.png}}}
-\end{center}
+$\vcenter{\hbox{\includegraphics[width=0.9\textwidth]{previews/nightstrike_welcome-WELCOME_BACKGROUND_COLOR-01.png}}}$
 
+\newpage
 Because the hardware does not directly support 2-bit bitmaps, the two bit layer is split into two 1-bit images,
 using the same technique as \xref{twobit}. 
 
-\begin{center}
 $b_0=$
-\vcenter{\hbox{\includegraphics[width=0.32\textwidth]{previews/nightstrike_welcome-WELCOME_BACKGROUND_BITS-00.png}}}
+$\vcenter{\hbox{\includegraphics[width=0.32\textwidth]{previews/nightstrike_welcome-WELCOME_BACKGROUND_BITS-00.png}}}$
 $\;\;\;\;\;\;b_1=$
-\vcenter{\hbox{\includegraphics[width=0.32\textwidth]{previews/nightstrike_welcome-WELCOME_BACKGROUND_BITS-01.png}}}
-\end{center}
+$\vcenter{\hbox{\includegraphics[width=0.32\textwidth]{previews/nightstrike_welcome-WELCOME_BACKGROUND_BITS-01.png}}}$
 \vspace{10pt}
 
 \noindent
@@ -3060,7 +3055,7 @@ The 20 tiles are each 32$\times$32 bitmaps, encoded as \mach{ARGB4}
 in handle \mach{TILES\_HANDLE}.
 Tile code zero is the blank cell, and the code checks for this and only
 draws tiles with non-zero codes.
-\szpng{1.0}{kenney_2}
+\szpng{1.0}{assets/kenney_2}
 }
 \begin{center}
 \includegraphics[width=0.09\textwidth]{previews/kenney-TILES-00.png}
@@ -3318,7 +3313,7 @@ Each object has a \mach{draw()} method to draw the object on the screen,
 and an \mach{update()} method to animate, move and compute any collisions.
 Object collision testing uses a simple overlapping box scheme.
 
-\testit{NightStrike} uses 20 Kbytes of the Arduino's 32 Kbytes of flash, and
+\textit{NightStrike} uses 20 Kbytes of the Arduino's 32 Kbytes of flash, and
 the game loop runs in about 7ms on a standard 16MHz Arduino.
 
 \newpage
@@ -3382,19 +3377,3 @@ Detailed documentation is available online.
 \printindex
 
 \end{document}
-
-% DONE:
-%   Continuous playback
-%   Font loading
-%   Vertex2f
-%   SDcard
-%   {Blending} useful modes
-%   Invaders
-%   Kenney
-%   NightStrike
-%   Accelerometer
-%   Plug in...
-%
-% TODO:
-%   Streamer
-%   Poly
