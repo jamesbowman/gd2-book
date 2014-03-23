@@ -365,8 +365,6 @@ gives huge points with a radius of 30 pixels (and hence a \term{diameter} of 60 
 In fact, the hardware always draws \mach{POINTS} using mathematical circles, but when the point size is small the circles
 happen to look like single pixels.
 
-\end{samepage}
-
 \newpage
 \section{Color and transparency}
 
@@ -696,8 +694,7 @@ the graphics hardware gives you various ways of balancing color precision agains
 \index{bitmap format!#1@\mach{#1}}
 \textbf{\large\mach{#1}} &
 #3
-& {\raisebox{-96}
-            {\includegraphics[height=100pt]{#2}}} \\
+& {\raisebox{-96pt}{\includegraphics[height=100pt]{#2}}} \\
 }
 
 \noindent
@@ -819,7 +816,7 @@ draws the eight animation frames across the screen:
 \noindent
 
 \noindent
-\includegraphics[width=\textwidth,trim=0 216 80 0,clip=true]{assets/0058.png}}
+\includegraphics[width=\textwidth,trim=0 216 80 0,clip=true]{assets/0058.png}
 
 Each bitmap handle can contain up to 128 cells, and the cells are arranged
 consecutively in graphics memory.
@@ -1022,9 +1019,9 @@ the two results are summed to produce the final pixel color.
 \begin{tikzpicture} [scale=0.75]
   \tikzstyle{txt}=[text width=0.15\textwidth,align=center]
   \node [txt]               at (-4.5,4) (pix) {incoming pixel color};
-  \node [shape=rect,draw,txt] at (-1.5,4) (sbf) {\textit{source blend factor}};
+  \node [shape=rectangle,draw,txt] at (-1.5,4) (sbf) {\textit{source blend factor}};
   \node [txt]               at (1.5,4) (exi) {existing pixel color};
-  \node [shape=rect,draw,txt] at (4.5,4) (dbf) {\textit{destination blend factor}};
+  \node [shape=rectangle,draw,txt] at (4.5,4) (dbf) {\textit{destination blend factor}};
   \node [shape=circle,draw] at (-3.0,2) (src) {$\times$};
   \node [shape=circle,draw] at (3.0,2) (dst) {$\times$};
   \node [shape=circle,draw] at (0,0) (sum) {+};
