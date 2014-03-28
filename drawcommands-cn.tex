@@ -1,0 +1,825 @@
+\drawcmd{AlphaFunc}{Sets the alpha-test function}
+
+\begin{framed}
+\begin{verbatim}
+void AlphaFunc(byte func,
+               byte ref);
+\end{verbatim}
+\end{framed}
+
+\begin{tabular}{lp{0.8 \textwidth}}
+
+\\ \mach{func} & comparison function, one of
+        \mach{NEVER}, \mach{LESS}, \mach{LEQUAL}, \mach{GREATER}, \mach{GEQUAL}, \mach{EQUAL}, \mach{NOTEQUAL}, or \mach{ALWAYS} \\
+
+\\ \mach{ref} & reference value for comparison function \\
+
+\end{tabular}
+
+\vspace{10pt}
+The alpha test function tests each pixel's
+alpha value, and only draws the pixel
+if the test passes.
+For example
+\begin{verbatim}
+  GD.AlphaText(GEQUAL, 160);
+\end{verbatim}
+means that only pixels with $(A \ge 160)$ are drawn.  
+The default state is \mach{ALWAYS}, which means that pixels are always drawn.
+\minipng{0032}
+\eg{examples-alphafunc}
+
+\drawcmd{Begin}{Selects the graphics primitive for drawing}
+
+\begin{framed}
+\begin{verbatim}
+void Begin(byte prim);
+\end{verbatim}
+\end{framed}
+
+\begin{tabular}{lp{0.8 \textwidth}}
+
+\\ \mach{prim} & one of
+\mach{BITMAPS},
+\mach{POINTS},
+\mach{LINES},
+\mach{LINE\_STRIP},
+\mach{EDGE\_STRIP\_R},
+\mach{EDGE\_STRIP\_L},
+\mach{EDGE\_STRIP\_A},
+\mach{EDGE\_STRIP\_B} or
+\mach{RECTS} \\
+\end{tabular}
+
+\vspace{10pt}
+The \mach{Begin} command sets the current graphics draw primitve.
+It does not draw anything - that is done by a later \nameref{Vertex2f} or \nameref{Vertex2ii} command.
+The drawing primitive can be:
+
+\vspace{10pt}
+
+\begin{tabular}{lp{0.8 \textwidth}}
+\mach{BITMAPS     } & each vertex draws a bitmap \\
+\mach{POINTS      } & each vertex draws an anti-aliased point  \\
+\mach{LINES       } & each pair of vertices draws an anti-aliased line \\
+\mach{RECTS       } & each pair of vertices draws an anti-aliased rectangle \\
+\mach{LINE\_STRIP  } & the vertices define a connected line segment \\
+\mach{EDGE\_STRIP\_A} & like \mach{LINE\_STRIP}, but draws pixels above the line \\
+\mach{EDGE\_STRIP\_B} & like \mach{LINE\_STRIP}, but draws pixels below the line \\
+\mach{EDGE\_STRIP\_L} & like \mach{LINE\_STRIP}, but draws pixels left of the line \\
+\mach{EDGE\_STRIP\_R} & like \mach{LINE\_STRIP}, but draws pixels right of the line
+\end{tabular}
+
+\png{0047}
+
+\drawcmd{BitmapHandle}{Sets the bitmap handle}
+
+\begin{framed}
+\begin{verbatim}
+void BitmapHandle(byte handle);
+\end{verbatim}
+\end{framed}
+
+\begin{tabular}{lp{0.8 \textwidth}}
+
+\\ \mach{handle} & integer handle number, 0-15 \\
+
+\end{tabular}
+
+\vspace{10pt}
+The \mach{BitmapHandle} command sets the current bitmap handle, used by
+\nameref{Vertex2f},
+\nameref{BitmapSource},
+\nameref{BitmapLayout} and
+\nameref{BitmapSize}.
+
+The bitmap handle is part of the graphics context; its default value is 0.
+
+
+
+\drawcmd{BitmapLayout}{Sets the bitmap layout}
+
+\begin{framed}
+\begin{verbatim}
+void BitmapLayout(byte format,
+                  uint16_t linestride,
+                  uint16_t height);
+\end{verbatim}
+\end{framed}
+
+\begin{tabular}{lp{0.8 \textwidth}}
+
+\\ \mach{format} & pixel format of the bitmap, one of:
+\mach{ARGB1555},
+\mach{L1},
+\mach{L4},
+\mach{L8},
+\mach{RGB332},
+\mach{ARGB2},
+\mach{ARGB4},
+\mach{RGB565},
+\mach{PALETTED},
+\mach{TEXT8X8},
+\mach{TEXTVGA},
+\mach{BARGRAPH}.
+\\
+
+\\ \mach{linestride} & the size in bytes of one line of the bitmap in memory \\
+
+\\ \mach{height} & height of the bitmap in pixels \\
+
+\end{tabular}
+
+\vspace{10pt}
+The \mach{BitmapLayout} command sets the current bitmap's layout in memory.
+The \mach{format} controls how memory data is converted into pixels. 
+Each pixel in memory is 1,4,8 or 16 bits. The color is extracted from these bits as follows,
+where ``v'' is the pixel data.
+
+\vspace{10pt}
+\begin{tabular}{cccccc}
+format           & bits per & alpha        & red   & green & blue \\
+                 &  pixel   &              &       &       &      \\
+\hline
+\mach{L1}        &    1     & v$_0$        &  1.0  &  1.0  &  1.0 \\
+\mach{L4}        &    4     & v$_{3..0}$   &  1.0  &  1.0  &  1.0 \\
+\mach{L8}        &    8     & v$_{7..0}$   &  1.0  &  1.0  &  1.0 \\
+\hline
+\mach{RGB332}    &    8     & 1.0          &  v$_{7..5}$   &  v$_{4..2}$  &  v$_{1..0}$ \\
+\mach{RGB565}    &    16    & 1.0          &  v$_{15..1}$  &  v$_{10..5}$ &  v$_{4..0}$ \\
+\hline
+\mach{ARGB2}     &    8     & v$_{7..6}$   &  v$_{5..4}$   &  v$_{3..2}$  &  v$_{1..0}$ \\
+\mach{ARGB4}     &    16    & v$_{15..12}$ &  v$_{11..8}$  &  v$_{7..4}$  &  v$_{3..0}$ \\
+\end{tabular}
+\vspace{10pt}
+
+1 and 4 bit pixels are packed in bytes from left to right, so
+leftmost pixels in the bitmap occupy the most significant bits in a byte.
+16 bit pixels are little-endian in graphics memory, and must be aligned on even memory boundaries.
+
+\mach{PALETTED} format uses 8 bits per pixel, each pixel is an index
+into the 256 entry 32-bit color table loaded at \mach{RAM\_PALETTE}.
+% \mach{TEXT8X8} interpret each byte in the bitmap as an index into a character array, with a character size of 8x8 pixels.
+% \mach{TEXTVGA} interprets memory in the same format as an IBM PC VGA graphic controller, 8 bits of character attribute and an 8-bit character code. The character size is 8x16.
+
+
+\drawcmd{BitmapSize}{Sets the bitmap size and appearance}
+
+\begin{framed}
+\begin{verbatim}
+void BitmapSize(byte filter,
+                byte wrapx,
+                byte wrapy,
+                uint16_t width,
+                uint16_t height);
+\end{verbatim}
+\end{framed}
+
+\begin{tabular}{lp{0.8 \textwidth}}
+
+\\ \mach{filter} & bitmap pixel filtering, \mach{NEAREST} or \mach{BILINEAR} \\
+
+\\ \mach{wrapx} & $x$ wrapping mode, \mach{BORDER} or \mach{REPEAT} \\
+
+\\ \mach{wrapy} & $y$ wrapping mode, \mach{BORDER} or \mach{REPEAT} \\
+
+\\ \mach{width} & on-screen drawn width, in pixels \\
+
+\\ \mach{height} & on-screen drawn height, in pixels \\
+
+\end{tabular}
+
+\vspace{10pt}
+The \mach{BitmapSize} command controls how the current bitmap appears on screen.
+
+
+
+\drawcmd{BitmapSource}{Sets the bitmap source address}
+
+\begin{framed}
+\begin{verbatim}
+void BitmapSource(uint32_t addr);
+\end{verbatim}
+\end{framed}
+
+\begin{tabular}{lp{0.8 \textwidth}}
+
+\\ \mach{addr} & base address for bitmap \mach{0x00000} - \mach{0x3ffff} \\
+
+\end{tabular}
+
+\vspace{10pt}
+The \mach{BitmapSource} command sets the base address for the bitmap.
+For 16-bit bitmaps, this address must be even.
+
+
+
+\drawcmd{BlendFunc}{Sets the color blend function}
+
+\begin{framed}
+\begin{verbatim}
+void BlendFunc(byte src,
+               byte dst);
+\end{verbatim}
+\end{framed}
+
+\begin{tabular}{lp{0.8 \textwidth}}
+
+\\ \mach{src} & source blend factor, one of
+\mach{ZERO},
+\mach{ONE},
+\mach{SRC\_ALPHA},
+\mach{DST\_ALPHA},
+\mach{ONE\_MINUS\_SRC\_ALPHA},
+\mach{ONE\_MINUS\_DST\_ALPHA}.  \\
+
+\\ \mach{dst} & destination blend factor, one of
+\mach{ZERO},
+\mach{ONE},
+\mach{SRC\_ALPHA},
+\mach{DST\_ALPHA},
+\mach{ONE\_MINUS\_SRC\_ALPHA},
+\mach{ONE\_MINUS\_DST\_ALPHA}.  \\
+
+\end{tabular}
+
+\vspace{10pt}
+The \mach{BlendFunc} command sets the blend function used to combine pixels
+with the contents of the frame buffer.
+Each incoming pixel's color is multiplied by the source blend factor, and each frame buffer pixel
+is multiplied by the destination blend factor.
+These two results are added to give the final pixel color.
+
+\minipng{0031}
+\eg{examples-blendfunc}
+
+
+% \drawcmd{Call}{Something}
+% 
+% \begin{framed}
+% \begin{verbatim}
+% void Call(uint16_t dest);
+% \end{verbatim}
+% \end{framed}
+% 
+% \begin{tabular}{lp{0.8 \textwidth}}
+% 
+% \\ \mach{dest} & something \\
+% 
+% \end{tabular}
+% 
+% \vspace{10pt}
+% The \mach{Call} command
+
+\drawcmd{Cell}{Sets the bitmap cell}
+
+\begin{framed}
+\begin{verbatim}
+void Cell(byte cell);
+\end{verbatim}
+\end{framed}
+
+\begin{tabular}{lp{0.8 \textwidth}}
+
+\\ \mach{cell} & cell number 0-127 \\
+
+\end{tabular}
+
+\vspace{10pt}
+The \mach{Cell} command sets the current bitmap cell used by the \nameref{Vertex2f} command.
+
+\png{0034}
+\eg{examples-cell}
+
+
+\drawcmd{ClearColorA}{Sets the alpha component of the clear color}
+
+\begin{framed}
+\begin{verbatim}
+void ClearColorA(byte alpha);
+\end{verbatim}
+\end{framed}
+
+\begin{tabular}{lp{0.8 \textwidth}}
+
+\\ \mach{alpha} & Clear color alpha component, 0-255 \\
+
+\end{tabular}
+
+\vspace{10pt}
+The \mach{ClearColorA} command sets the clear color A channel value.
+A subsequent \nameref{Clear} writes this value to the frame buffer alpha channel.
+
+
+
+\drawcmd{Clear}{Clears the screen}
+
+\begin{framed}
+\begin{verbatim}
+void Clear(byte c = 1,
+           byte s = 1,
+           byte t = 1);
+\end{verbatim}
+\end{framed}
+
+\begin{tabular}{lp{0.8 \textwidth}}
+
+\\ \mach{c} & if set, clear the color buffer \\
+
+\\ \mach{s} & if set, clear the stencil buffer \\
+
+\\ \mach{t} & if set, clear the tag buffer \\
+
+\end{tabular}
+
+\vspace{10pt}
+The \mach{Clear} command clears the requested frame buffers.
+
+\png{0035}
+\eg{examples-clear}
+
+
+\drawcmd{ClearColorRGB}{Sets the R,G,B components of the clear color}
+
+\begin{framed}
+\begin{verbatim}
+void ClearColorRGB(byte red,
+                   byte green,
+                   byte blue);
+void ClearColorRGB(uint32_t rgb);
+\end{verbatim}
+\end{framed}
+
+\begin{tabular}{lp{0.8 \textwidth}}
+
+\\ \mach{red} & red component 0-255 \\
+
+\\ \mach{green} & green component 0-255 \\
+
+\\ \mach{blue} & blue component 0-255 \\
+
+\\ \mach{rgb} & 24-bit color in RGB order, \mach{0x000000}-\mach{0xffffff} \\
+
+\end{tabular}
+
+\vspace{10pt}
+The \mach{ClearColorRGB} command sets the clear color R,G and B values.
+A subsequent \nameref{Clear} writes this value to the frame buffer R,G and B channels.
+\minipng{0030}
+\eg{examples-clearcolorrgb}
+
+
+
+\drawcmd{ClearStencil}{Sets the stencil clear value}
+
+\begin{framed}
+\begin{verbatim}
+void ClearStencil(byte s);
+\end{verbatim}
+\end{framed}
+
+\begin{tabular}{lp{0.8 \textwidth}}
+
+\\ \mach{s} & stencil buffer clear value 0-255 \\
+
+\end{tabular}
+
+\vspace{10pt}
+The \mach{ClearStencil} command sets the stencil buffer clear value.
+A subsequent \nameref{Clear} writes this value to the stencil buffer.
+
+
+
+\drawcmd{ClearTag}{Sets the tag clear value}
+
+\begin{framed}
+\begin{verbatim}
+void ClearTag(byte s);
+\end{verbatim}
+\end{framed}
+
+\begin{tabular}{lp{0.8 \textwidth}}
+
+\\ \mach{s} & tag value 0-255 \\
+
+\end{tabular}
+
+\vspace{10pt}
+The \mach{ClearTag} command sets the tag buffer clear value.
+A subsequent \nameref{Clear} writes this value to the tag buffer.
+
+
+
+\drawcmd{ColorA}{Sets the A component of the current color}
+
+\begin{framed}
+\begin{verbatim}
+void ColorA(byte alpha);
+\end{verbatim}
+\end{framed}
+
+\begin{tabular}{lp{0.8 \textwidth}}
+
+\\ \mach{alpha} & alpha value 0-255 \\
+
+\end{tabular}
+
+\vspace{10pt}
+The \mach{ColorA} command sets the alpha component of the current drawing color.
+\png{0029}
+\eg{examples-colora}
+
+\drawcmd{ColorMask}{Sets the mask controlling color channel writes}
+
+\begin{framed}
+\begin{verbatim}
+void ColorMask(byte r,
+               byte g,
+               byte b,
+               byte a);
+\end{verbatim}
+\end{framed}
+
+\begin{tabular}{lp{0.8 \textwidth}}
+
+\\ \mach{r} & if set, enable writes to the red component \\
+
+\\ \mach{g} & if set, enable writes to the green component \\
+
+\\ \mach{b} & if set, enable writes to the blue component \\
+
+\\ \mach{a} & if set, enable writes to the alpha component \\
+
+\end{tabular}
+
+\vspace{10pt}
+The \mach{ColorMask} command sets the color mask, which enables color writes to the frame buffer
+R,G,B and A components.
+
+\minipng{0033}
+\eg{examples-colormask}
+
+
+\drawcmd{ColorRGB}{Sets the R,G,B components of the current color}
+
+\begin{framed}
+\begin{verbatim}
+void ColorRGB(byte red,
+              byte green,
+              byte blue);
+
+void ColorRGB(uint32_t rgb);
+\end{verbatim}
+\end{framed}
+
+\begin{tabular}{lp{0.8 \textwidth}}
+
+\\ \mach{red} & red component 0-255 \\
+
+\\ \mach{green} & green component 0-255 \\
+
+\\ \mach{blue} & blue component 0-255 \\
+
+\\ \mach{rgb} & 24-bit color in RGB order, \mach{0x000000}-\mach{0xffffff} \\
+
+\end{tabular}
+
+\vspace{10pt}
+The \mach{ColorRGB} command sets the current color.
+This color is used by all drawing operations.
+
+\minipng{0028}
+\eg{examples-colorrgb}
+
+
+\drawcmd{LineWidth}{Set the line width}
+
+\begin{framed}
+\begin{verbatim}
+void LineWidth(uint16_t width);
+\end{verbatim}
+\end{framed}
+
+\begin{tabular}{lp{0.8 \textwidth}}
+
+\\ \mach{width} & line width in $1/16$th of a pixel \\
+
+\end{tabular}
+
+\vspace{10pt}
+The \mach{LineWidth} command sets the line width used when drawing \mach{LINES} and \mach{LINE\_STRIP}.
+The width is specified in $1/16$th of a pixel, so
+\mach{LineWidth(16)} sets the width to 1 pixel.
+Note that the width is the distance from the center of the line to its outside edge,
+rather like the radius of a circle. So the total width of the line is double the value specified.
+
+The maximum line width is 4095, or $255 \frac{15}{16}$ pixels.
+\png{0026}
+\eg{examples-linewidth}
+
+\drawcmd{PointSize}{Set the point size}
+
+\begin{framed}
+\begin{verbatim}
+void PointSize(uint16_t size);
+\end{verbatim}
+\end{framed}
+
+\begin{tabular}{lp{0.8 \textwidth}}
+
+\\ \mach{size} & point size in $1/16$th of a pixel \\
+
+\end{tabular}
+
+\vspace{10pt}
+The \mach{PointSize} command sets the point size used when drawing \mach{POINTS}.
+The size is specified in $1/16$th of a pixel, so
+\mach{LineWidth(16)} sets the width to 1 pixel.
+Note that the size is the distance from the center of the point to its outside edge,
+that is, the radius. So the total width of the point is double the value specified.
+
+The maximum point size is 4095, or $255 \frac{15}{16}$ pixels.
+\png{0027}
+\eg{examples-pointsize}
+
+
+\drawcmd{RestoreContext}{Restore the drawing context to a previously saved state}
+
+\begin{framed}
+\begin{verbatim}
+void RestoreContext(void);
+\end{verbatim}
+\end{framed}
+
+\begin{tabular}{lp{0.8 \textwidth}}
+
+\end{tabular}
+
+\vspace{10pt}
+The collected graphics state is called the \textit{graphics context}.
+The \mach{SaveContext} command saves a copy of this state, and the \mach{RestoreContext} command restores this saved copy.
+
+The hardware can preserve up to four graphics contexts in this way. The graphics context consists of:
+\vspace{10pt}
+
+\begin{tabular}{rl}
+state & drawing commands \\
+\hline
+alpha-test function   &  \nameref{AlphaFunc} \\
+bitmap handle         &  \nameref{BitmapHandle} \\
+blend function        &  \nameref{BlendFunc} \\
+bitmap cell           &  \nameref{Cell} \\
+color clear value     & \nameref{ClearColorA}, \nameref{ClearColorRGB} \\
+stencil clear value   & \nameref{ClearStencil} \\
+tag clear value       & \nameref{ClearTag} \\
+color write mask      & \nameref{ColorMask} \\
+color                 & \nameref{ColorA}, \nameref{ColorRGB} \\
+line width            & \nameref{LineWidth} \\
+point size            & \nameref{PointSize} \\
+scissor rectangle     & \nameref{ScissorSize}, \nameref{ScissorXY} \\
+stencil test function & \nameref{StencilFunc} \\
+stencil write mask    & \nameref{StencilMask} \\
+stencil operation     & \nameref{StencilOp} \\
+tag write mask        & \nameref{TagMask} \\
+tag value             & \nameref{Tag}
+\end{tabular}
+
+
+
+\drawcmd{SaveContext}{Save the graphics context}
+
+\begin{framed}
+\begin{verbatim}
+void SaveContext(void);
+\end{verbatim}
+\end{framed}
+
+\begin{tabular}{lp{0.8 \textwidth}}
+
+\end{tabular}
+
+\vspace{10pt}
+The collected graphics state is called the \textit{graphics context}.
+The \mach{SaveContext} command saves a copy of this state, and the \mach{RestoreContext} command restores this saved copy.
+
+\png{0036}
+\eg{examples-context}
+
+\drawcmd{ScissorSize}{Set the size of the scissor rectangle}
+
+\begin{framed}
+\begin{verbatim}
+void ScissorSize(uint16_t width,
+                 uint16_t height);
+\end{verbatim}
+\end{framed}
+
+\begin{tabular}{lp{0.8 \textwidth}}
+
+\\ \mach{width} & scissor rectangle width, in pixels, 0-512 \\
+
+\\ \mach{height} & scissor rectangle height, in pixels, 0-512 \\
+
+\end{tabular}
+
+\vspace{10pt}
+The \mach{ScissorSize} command sets the dimensions of the scissor rectangle.
+The scissor rectangle limits drawing to a rectangular region on the screen.
+
+\png{0037}
+\eg{examples-scissor}
+
+
+\drawcmd{ScissorXY}{Set the top-left corner of the scissor rectangle}
+
+\begin{framed}
+\begin{verbatim}
+void ScissorXY(uint16_t x,
+               uint16_t y);
+\end{verbatim}
+\end{framed}
+
+\begin{tabular}{lp{0.8 \textwidth}}
+
+\\ \mach{x} & $x$ coordinate of top-left corner of the scissor rectangle, 0-511 \\
+
+\\ \mach{y} & $y$ coordinate of top-left corner of the scissor rectangle, 0-511 \\
+
+\end{tabular}
+
+\vspace{10pt}
+The \mach{ScissorXY} command sets the top-left corner of the scissor rectangle.
+The scissor rectangle limits drawing to a rectangular region on the screen.
+
+
+\drawcmd{StencilFunc}{Set the stencil test function}
+
+\begin{framed}
+\begin{verbatim}
+void StencilFunc(byte func,
+                 byte ref,
+                 byte mask);
+\end{verbatim}
+\end{framed}
+
+\begin{tabular}{lp{0.8 \textwidth}}
+
+\\ \mach{func} & set the stencil comparison operation, one of
+        \mach{NEVER}, \mach{LESS}, \mach{LEQUAL}, \mach{GREATER}, \mach{GEQUAL}, \mach{EQUAL}, \mach{NOTEQUAL}, or \mach{ALWAYS} \\
+
+\\ \mach{ref} & set the stencil reference value used for the comparison, 0-255 \\
+
+\\ \mach{mask} & an 8-bit mask that is anded with both \mach{ref} and the pixel's stencil value before comparison, 0-255 \\
+
+\end{tabular}
+
+\vspace{10pt}
+The \mach{StencilFunc} command controls the stencil testing operation.
+During drawing, the stencil test is applied to each pixel, and if the test fails, the pixel is not drawn.
+Setting \mach{func} to \mach{ALWAYS} means that pixels are always drawn.
+
+\drawcmd{StencilMask}{Sets the mask controlling stencil writes}
+
+\begin{framed}
+\begin{verbatim}
+void StencilMask(byte mask);
+\end{verbatim}
+\end{framed}
+
+\begin{tabular}{lp{0.8 \textwidth}}
+
+\\ \mach{mask} & Each set bit enables the corresponding bit write to the stencil buffer \\
+
+\end{tabular}
+
+\vspace{10pt}
+The \mach{StencilMask} command controls writes to the stencil buffer.
+Because the stencil buffer is 8 bits deep, each bit in \mach{mask} enables writes to the same bit of the stencil buffer.
+So a \mach{mask} of \mach{0x00} disables stencil writes, and a \mach{mask} of \mach{0xff} enables stencil writes.
+
+
+\drawcmd{StencilOp}{Set the stencil update operation}
+
+\begin{framed}
+\begin{verbatim}
+void StencilOp(byte sfail,
+               byte spass);
+\end{verbatim}
+\end{framed}
+
+\begin{tabular}{lp{0.8 \textwidth}}
+
+\\ \mach{sfail} & the operation to be applied to pixels that fail the stencil test.
+One of \mach{ZERO}, \mach{KEEP}, \mach{REPLACE}, \mach{INCR}, \mach{DECR} or \mach{INVERT}.
+
+\\ \mach{spass} & the operation to be applied to pixels that pass the stencil test.
+One of \mach{ZERO}, \mach{KEEP}, \mach{REPLACE}, \mach{INCR}, \mach{DECR} or \mach{INVERT}.
+
+\end{tabular}
+
+\vspace{10pt}
+The \mach{StencilOp} command controls how drawn pixels modify the stencil buffer.
+If the the pixel failed the stencil test, then the operation specified by \mach{sfail} is performed.
+Otherwise the operation \mach{spass} is performed.
+
+\minipng{0038}
+\eg{examples-stencil}
+
+
+\drawcmd{TagMask}{Sets the mask controlling tag writes}
+
+\begin{framed}
+\begin{verbatim}
+void TagMask(byte mask);
+\end{verbatim}
+\end{framed}
+
+\begin{tabular}{lp{0.8 \textwidth}}
+
+\\ \mach{mask} & if set, drawn pixels write to the tag buffer \\
+
+\end{tabular}
+
+\vspace{10pt}
+The \mach{TagMask} command controls writes to the tag buffer.
+If \mach{mask} is 1, then as each pixel is drawn the byte value set by \nameref{Tag} is also written to the tag buffer.
+If the \mach{mask} is 0, then drawing does not affect the tag buffer.
+
+
+
+\drawcmd{Tag}{Set the tag value for drawing}
+
+\begin{framed}
+\begin{verbatim}
+void Tag(byte s);
+\end{verbatim}
+\end{framed}
+
+\begin{tabular}{lp{0.8 \textwidth}}
+
+\\ \mach{s} & tag value, 0-255 \\
+
+\end{tabular}
+
+\vspace{10pt}
+The \mach{Tag} command sets the byte value that is drawn into the tag buffer.
+
+
+
+\drawcmd{Vertex2f}{Draw at a subpixel position}
+
+\begin{framed}
+\begin{verbatim}
+void Vertex2f(int16_t x,
+              int16_t y);
+\end{verbatim}
+\end{framed}
+
+\begin{tabular}{lp{0.8 \textwidth}}
+
+\\ \mach{x} & $x$ coordinate of vertex in $1/16$ths of a pixel. -16384 to 16383. \\
+
+\\ \mach{y} & $y$ coordinate of vertex in $1/16$ths of a pixel. -16384 to 16383. \\
+
+\end{tabular}
+
+\vspace{10pt}
+The \mach{Vertex2f} command specifies a screen position for drawing.
+What gets drawn depends on the current drawing object specified in \nameref{Begin}.
+\mach{Vertex2f} specifies \textit{subpixel} coordinates, so it has a precision of $1/16$th of a pixel.
+It also allows a coordinate range much larger than the physical screen - this is useful for drawing objects that are larger than the screen itself.
+
+When drawing \mach{BITMAP} \mach{Vertex2f} uses the bitmap handle and cell currently set by
+\nameref{BitmapHandle} and \nameref{Cell}.
+
+\drawcmd{Vertex2ii}{Draw at a integer pixel position}
+
+\begin{framed}
+\begin{verbatim}
+void Vertex2ii(uint16_t x,
+               uint16_t y,
+               byte handle = 0,
+               byte cell = 0);
+\end{verbatim}
+\end{framed}
+
+\begin{tabular}{lp{0.8 \textwidth}}
+
+\\ \mach{x} & $x$ coordinate of vertex in pixels, 0-511 \\
+
+\\ \mach{y} & $y$ coordinate of vertex in pixels, 0-511 \\
+
+\\ \mach{handle} & bitmap handle, 0-31 \\
+
+\\ \mach{cell} & bitmap cell, 0-127 \\
+
+\end{tabular}
+
+\vspace{10pt}
+The \mach{Vertex2ii} command specifies a screen position for drawing.
+What gets drawn depends on the current drawing object specified in \nameref{Begin}.
+\mach{Vertex2ii} 
+
+When drawing \mach{BITMAP} \mach{Vertex2ii} uses the bitmap handle and cell specified
+in \mach{handle} and \mach{cell}. The graphics state of commands \nameref{BitmapHandle}
+and \nameref{Cell} are neither used not altered by this command.

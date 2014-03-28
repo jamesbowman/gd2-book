@@ -1,0 +1,692 @@
+
+\newcommand\aspect{
+This widget draws itself horizontally if \mach{w} $>$ \mach{h}, otherwise it draws vertically.
+}
+\newcommand\threed{
+By default this widget has a 3D look. Setting \mach{options} to \mach{OPT\_FLAT} gives it a 2D look.
+}
+\newcommand\fsixteen{
+These arguments are expressed as signed 16.16 fixed
+point values, so 65536 means 1.0.
+As a convenience, the macro \mach{F16()} converts from floating-point to
+signed 16.16 representation.
+}
+\newcommand\style{
+All widgets share a common style;
+they use the current background color (\nameref{cmd:bgcolor}) for non-interactive elements,
+and the current foreground color (\nameref{cmd:fgcolor}) for interactive elements.
+Using a darker color for \nameref{cmd:bgcolor} and a lighter one for \nameref{cmd:fgcolor} is probably a good idea.
+}
+\newcommand\centeropts{
+If \mach{options} is \mach{OPT\_CENTERX} the text is centered horizontally,
+if \mach{OPT\_CENTERY} then vertically, and if \mach{OPT\_CENTER} then both
+horizontally and vertically.
+Adding \mach{OPT\_SIGNED} causes \mach{val} to be treated as signed,
+and displayed with a leading minus sign if negative.
+}
+\newcommand{\sbs}[2]{
+\begin{minipage}[][][t]{0.70\textwidth}
+#2
+\end{minipage}
+\begin{minipage}[][][t]{0.30\textwidth}
+\begin{center}
+\includegraphics[width=0.9\textwidth]{assets/#1.png}
+\end{center}
+\end{minipage}
+}
+\newcommand\example[2]{
+For an example of \mach{cmd\_#1()}, see \nameref{#2}.
+}
+
+\highcmd{append}{Something}
+
+\begin{framed}
+\begin{verbatim}
+void cmd_append(uint32_t ptr,
+                uint32_t num);
+\end{verbatim}
+\end{framed}
+
+The \mach{append} command
+executes \mach{num} bytes of drawing commands from graphics memory at
+\mach{ptr}.
+This can be useful for using graphics memory as a cache for frequently
+used drawing sequences, much like OpenGL's display lists.
+
+
+
+\highcmd{bgcolor}{Something}
+
+\begin{framed}
+\begin{verbatim}
+void cmd_bgcolor(uint32_t c);
+\end{verbatim}
+\end{framed}
+
+The \mach{bgcolor} command sets the background color used when drawing widgets.
+\style
+
+
+\highcmd{button}{Something}
+
+\begin{framed}
+\begin{verbatim}
+void cmd_button(int16_t x,
+                int16_t y,
+                uint16_t w,
+                uint16_t h,
+                byte font,
+                uint16_t options,
+                const char *label);
+\end{verbatim}
+\end{framed}
+
+\sbs{0024}{
+The \mach{button} command
+draws a button widget at screen (\mach{x}, \mach{y}) with pixel size \mach{w} $\times$ \mach{h}.
+\mach{label} gives the text label.
+\threed
+}
+
+\highcmd{calibrate}{Something}
+
+\begin{framed}
+\begin{verbatim}
+void cmd_calibrate(void);
+\end{verbatim}
+\end{framed}
+
+The \mach{calibrate} command
+runs the GPU's interactive touchscreen calibration procedure.
+
+
+
+\highcmd{clock}{Something}
+
+\begin{framed}
+\begin{verbatim}
+void cmd_clock(int16_t x,
+               int16_t y,
+               int16_t r,
+               uint16_t options,
+               uint16_t h,        // hours 0-23
+               uint16_t m,        // minutes 0-59
+               uint16_t s,        // seconds 0-59
+               uint16_t ms);      // milliseconds 0-999
+\end{verbatim}
+\end{framed}
+
+\sbs{0013}{
+The \mach{clock} command
+draws an analog clock at screen (\mach{x}, \mach{y}) with pixel radius \mach{r}.
+The displayed time is \mach{h}, \mach{m}, \mach{s} and \mach{ms}.
+\threed
+}
+
+\highcmd{coldstart}{Something}
+
+\begin{framed}
+\begin{verbatim}
+void cmd_coldstart(void);
+\end{verbatim}
+\end{framed}
+
+The \mach{coldstart} command
+resets all widget state to its default value.
+
+
+\highcmd{dial}{Something}
+
+\begin{framed}
+\begin{verbatim}
+void cmd_dial(int16_t x,
+              int16_t y,
+              int16_t r,
+              uint16_t options,
+              uint16_t val);
+\end{verbatim}
+\end{framed}
+
+\sbs{0014}{
+The \mach{dial} command
+draws a dial at screen (\mach{x}, \mach{y}) with pixel radius \mach{r}.
+\mach{val} gives the dial's angular position in Furmans.
+\threed
+}
+
+\highcmd{fgcolor}{Something}
+
+\begin{framed}
+\begin{verbatim}
+void cmd_fgcolor(uint32_t c);
+\end{verbatim}
+\end{framed}
+
+The \mach{fgcolor} command
+Sets the foreground color used for drawing widgets.
+\style
+
+\highcmd{gauge}{Something}
+
+\begin{framed}
+\begin{verbatim}
+void cmd_gauge(int16_t x,
+               int16_t y,
+               int16_t r,
+               uint16_t options,
+               uint16_t major,
+               uint16_t minor,
+               uint16_t val,
+               uint16_t range);
+\end{verbatim}
+\end{framed}
+
+\sbs{0015}{
+The \mach{gauge} command
+draws an analog gauge at screen (\mach{x}, \mach{y}) with pixel radius \mach{r}.
+\mach{major} and \mach{minor}
+are the number of
+major and minor tick marks on the gauge's face.
+The fraction (\mach{val} / \mach{range}) gives the gauge's value.
+\threed
+}
+
+
+\highcmd{getprops}{Something}
+
+\begin{framed}
+\begin{verbatim}
+void cmd_getprops(uint32_t &ptr,
+                  uint32_t &w,
+                  uint32_t &h);
+\end{verbatim}
+\end{framed}
+
+The \mach{getprops} command
+queries the GPU for the properties of the last image loaded by
+\nameref{cmd:loadimage}.
+\mach{ptr} is the image base address, and (\mach{w}, \mach{h}) gives its size in pixels.
+
+
+\highcmd{gradient}{Something}
+
+\begin{framed}
+\begin{verbatim}
+void cmd_gradient(int16_t x0,
+                  int16_t y0,
+                  uint32_t rgb0,
+                  int16_t x1,
+                  int16_t y1,
+                  uint32_t rgb1);
+\end{verbatim}
+\end{framed}
+
+\sbs{0012}{
+The \mach{gradient} command
+draws a smooth color gradient, blended from
+color \mach{rgb0} at screen pixel (\mach{x0}, \mach{y0})
+to \mach{rgb1} at (\mach{x1}, \mach{y1}).
+\example{gradient}{gradient}
+}
+
+
+\highcmd{inflate}{Something}
+
+\begin{framed}
+\begin{verbatim}
+void cmd_inflate(uint32_t ptr);
+\end{verbatim}
+\end{framed}
+
+The \mach{inflate} command
+decompresses data into main graphics memory at \mach{ptr}.
+The compressed data should be supplied
+after this command.
+The format of the compressed data is zlib DEFLATE.
+
+\highcmd{keys}{Something}
+
+\begin{framed}
+\begin{verbatim}
+void cmd_keys(int16_t x,
+              int16_t y,
+              int16_t w,
+              int16_t h,
+              byte font,
+              uint16_t options,
+              const char *keys);
+\end{verbatim}
+\end{framed}
+
+\sbs{0016}{
+The \mach{keys} command
+draws a rows of keys, each labeled with the characters of \mach{chars},
+at screen (\mach{x}, \mach{y}) with pixel size \mach{w} $\times$ \mach{h}.
+\threed
+Specifying a character code in \mach{options} highlights that key.
+}
+
+\highcmd{loadidentity}{Something}
+
+\begin{framed}
+\begin{verbatim}
+void cmd_loadidentity(void);
+\end{verbatim}
+\end{framed}
+
+The \mach{loadidentity} command
+sets the bitmap transform to the identity matrix.
+
+
+\highcmd{loadimage}{Something}
+\index{jpeg}
+
+\begin{framed}
+\begin{verbatim}
+void cmd_loadimage(uint32_t ptr,
+                   int32_t options);
+\end{verbatim}
+\end{framed}
+
+\sbs{jpeg2}{
+The \mach{loadimage} command
+uncompresses a JPEG image into graphics memory at address \mach{ptr}.
+The image parameters are loaded into the current bitmap handle.
+The default format for the image is \mach{RGB565}.
+If \mach{options} is \mach{OPT\_MONO} then the format is \mach{L8}.
+\example{loadimage}{bitmaphandles}
+}
+
+\highcmd{memcpy}{Something}
+
+\begin{framed}
+\begin{verbatim}
+void cmd_memcpy(uint32_t dest,
+                uint32_t src,
+                uint32_t num);
+\end{verbatim}
+\end{framed}
+
+The \mach{memcpy} command
+copies \mach{num} bytes from \mach{src} to \mach{dest}
+in graphics memory.
+
+
+\highcmd{memset}{Something}
+
+\begin{framed}
+\begin{verbatim}
+void cmd_memset(uint32_t ptr,
+                byte value,
+                uint32_t num);
+\end{verbatim}
+\end{framed}
+
+The \mach{memset} command
+sets \mach{num} bytes starting at \mach{ptr} to \mach{value}
+in graphics memory.
+
+
+\highcmd{memwrite}{Something}
+
+\begin{framed}
+\begin{verbatim}
+void cmd_memwrite(uint32_t ptr,
+                  uint32_t num);
+\end{verbatim}
+\end{framed}
+
+The \mach{memwrite} command
+copies the following \mach{num} bytes into
+graphics memory, starting at addresss \mach{ptr}.
+
+
+\highcmd{regwrite}{Something}
+
+\begin{framed}
+\begin{verbatim}
+void cmd_regwrite(uint32_t ptr,
+                  uint32_t val);
+\end{verbatim}
+\end{framed}
+
+The \mach{regwrite} command
+sets the GPU register \mach{ptr} to \mach{val}.
+
+
+
+\highcmd{number}{Something}
+
+\begin{framed}
+\begin{verbatim}
+void cmd_number(int16_t x,
+                int16_t y,
+                byte font,
+                uint16_t options,
+                uint32_t val);
+\end{verbatim}
+\end{framed}
+
+\sbs{0017}{
+The \mach{number} command
+renders a decimal number \mach{val} in font \mach{font}
+at screen (\mach{x}, \mach{y}).
+If options is $n$, then leading zeroes are added so that $n$ digits 
+are always drawn.
+\centeropts
+}
+
+\highcmd{progress}{Something}
+
+\begin{framed}
+\begin{verbatim}
+void cmd_progress(int16_t x,
+                  int16_t y,
+                  int16_t w,
+                  int16_t h,
+                  uint16_t options,
+                  uint16_t val,
+                  uint16_t range);
+\end{verbatim}
+\end{framed}
+
+\sbs{0018}{
+The \mach{progress} command
+draws a progress bar 
+at screen (\mach{x}, \mach{y}) with pixel size \mach{w} $\times$ \mach{h}.
+The fraction (\mach{val} / \mach{range}) gives the bar's value.
+\aspect
+}
+
+\highcmd{rotate}{Something}
+
+\begin{framed}
+\begin{verbatim}
+void cmd_rotate(int32_t a);
+\end{verbatim}
+\end{framed}
+
+The \mach{rotate} command
+applies a rotation of \mach{a} Furmans to the
+current bitmap transform matrix.
+
+\highcmd{scale}{Something}
+
+\begin{framed}
+\begin{verbatim}
+void cmd_scale(int32_t sx,
+               int32_t sy);
+\end{verbatim}
+\end{framed}
+
+The \mach{scale} command
+scales the current bitmap transform matrix by
+(\mach{sx}, \mach{sy}).
+\fsixteen
+
+\highcmd{scrollbar}{Something}
+
+\begin{framed}
+\begin{verbatim}
+void cmd_scrollbar(int16_t x,
+                   int16_t y,
+                   int16_t w,
+                   int16_t h,
+                   uint16_t options,
+                   uint16_t val,
+                   uint16_t size,
+                   uint16_t range);
+\end{verbatim}
+\end{framed}
+
+\sbs{0019}{
+The \mach{scrollbar} command
+draws a scroll bar 
+at screen (\mach{x}, \mach{y}) with pixel size \mach{w} $\times$ \mach{h}.
+The fraction (\mach{val} / \mach{range}) gives the bar's value,
+and (\mach{size} / \mach{range}) gives its size.
+\aspect
+}
+
+
+\highcmd{setfont}{Something}
+
+\begin{framed}
+\begin{verbatim}
+void cmd_setfont(byte font,
+                 uint32_t ptr);
+\end{verbatim}
+\end{framed}
+
+\vspace{20pt}
+The \mach{setfont} command
+defines a RAM \mach{font} numbered 0-15
+using a font block at \mach{ptr}.
+Before calling \mach{setfont}, the font graphics must be loaded into memory
+and the bitmap handle must be set up.
+The font block is 148 bytes in size, as follows:
+
+\vspace{10 pt}
+\begin{tabular}{lcl}
+address & size & value \\ \hline
+$\mach{ptr}+0$   & 128 & width of each font character, in pixels \\
+$\mach{ptr}+128$ & 4   & font bitmap format, for example \mach{L1}, \mach{L4} or \mach{L8}  \\
+$\mach{ptr}+132$ & 4   & font line stride, in bytes \\
+$\mach{ptr}+136$ & 4   & font width, in pixels \\
+$\mach{ptr}+140$ & 4   & font height, in pixels \\
+$\mach{ptr}+144$ & 4   & pointer to font graphic data in memory \\
+\end{tabular}
+
+
+\highcmd{setmatrix}{Something}
+
+\begin{framed}
+\begin{verbatim}
+void cmd_setmatrix(void);
+\end{verbatim}
+\end{framed}
+
+\begin{tabular}{cl}
+
+\end{tabular}
+
+\vspace{20pt}
+The \mach{setmatrix} command
+applies the current bitmap transform matrix to the next drawing operation.
+
+
+\highcmd{sketch}{Something}
+
+\begin{framed}
+\begin{verbatim}
+void cmd_sketch(int16_t x,
+                int16_t y,
+                uint16_t w,
+                uint16_t h,
+                uint32_t ptr,
+                uint16_t format);
+\end{verbatim}
+\end{framed}
+
+\vspace{20pt}
+\sbs{sketching_b}{
+The \mach{sketch} command
+starts a continuous sketching process
+that paints touched pixels
+into a bitmap in graphics memory.
+The bitmap's base addresss is given in
+\mach{ptr}, its size in
+(\mach{w},  \mach{h})
+and its position on screen is
+(\mach{x}, \mach{y}).
+The \mach{format} of the bitmap can be either
+\mach{L1} or \mach{L8}.
+}
+The sketching continues until \nameref{cmd:stop} is executed.
+For an example of \nameref{cmd:sketch}, see \xref{sketching}.
+
+\highcmd{slider}{Something}
+
+\begin{framed}
+\begin{verbatim}
+void cmd_slider(int16_t x,
+                int16_t y,
+                uint16_t w,
+                uint16_t h,
+                uint16_t options,
+                uint16_t val,
+                uint16_t range);
+\end{verbatim}
+\end{framed}
+
+\sbs{0020}{
+The \mach{slider} command
+draws a control slider
+at screen (\mach{x}, \mach{y}) with pixel size \mach{w} $\times$ \mach{h}.
+The fraction (\mach{val} / \mach{range}) gives the slider's value.
+\aspect
+\threed
+}
+
+
+
+\highcmd{spinner}{Something}
+
+\begin{framed}
+\begin{verbatim}
+void cmd_spinner(int16_t x,
+                 int16_t y,
+                 byte style,
+                 byte scale);
+\end{verbatim}
+\end{framed}
+
+\vspace{20pt}
+\sbs{0021}{
+The \mach{spinner} command
+starts drawing an animated ``waiting'' spinner
+centered at screen pixel (\mach{x}, \mach{y}).
+\mach{style} gives the spinner style;
+\mach{0} is circular,
+\mach{1} is linear,
+\mach{2} is a clock, and
+\mach{3} is rotating disks.
+\mach{scale} gives the size of the graphic;
+\mach{0} is small and
+\mach{2} is huge.
+
+% Use \nameref{cmd:stop} to stop the spin animation.
+}
+
+\highcmd{stop}{Something}
+
+\begin{framed}
+\begin{verbatim}
+void cmd_stop(void);
+\end{verbatim}
+\end{framed}
+
+The \mach{stop} command stops the current animating spinner,
+or the currently executing sketching operation.
+See \nameref{cmd:spinner} and
+\nameref{cmd:sketch}.
+
+
+
+\highcmd{text}{Something}
+
+\begin{framed}
+\begin{verbatim}
+void cmd_text(int16_t x,
+              int16_t y,
+              byte font,
+              uint16_t options,
+              const char s);
+\end{verbatim}
+\end{framed}
+
+\sbs{helloworld}{
+The \mach{text} command
+draws a text string number \mach{s} in font \mach{font}
+at screen (\mach{x}, \mach{y}).
+\centeropts
+}
+\example{text}{helloworld}
+
+
+\highcmd{toggle}{Something}
+
+\begin{framed}
+\begin{verbatim}
+void cmd_toggle(int16_t x,
+                int16_t y,
+                int16_t w,
+                byte font,
+                uint16_t options,
+                uint16_t state,
+                const char *s);
+\end{verbatim}
+\end{framed}
+
+\sbs{0023}{
+The \mach{toggle} command
+draws a toggle control
+at screen (\mach{x}, \mach{y})
+with width \mach{w} pixels.
+The position of the toggle is given by \mach{state};
+0 means the toggle is in the left position, 65535 in the right.
+The label contains a pair of strings, separated by ASCII character code
+\mach{0xff}.
+}
+\threed
+
+\highcmd{track}{Something}
+
+\begin{framed}
+\begin{verbatim}
+void cmd_track(int16_t x,
+               int16_t y,
+               uint16_t w,
+               uint16_t h,
+               byte tag);
+\end{verbatim}
+\end{framed}
+
+The \mach{track} command
+instructs the GPU to track presses
+that touch a pixel with \mach{tag}
+and report them in \mach{GD.inputs.track\_val}.
+The screen rectangle at
+(\mach{x}, \mach{y}) with size
+(\mach{w}, \mach{h}) defines the track area.
+If the track area is $1 \times 1$ pixels in size, then the tracking is angular,
+and \mach{GD.inputs.track\_val} reports an angle in Furmans relative to the tracking center
+(\mach{x}, \mach{y}).
+Angular tracking is useful for the
+\nameref{cmd:dial} and \nameref{cmd:clock} widgets, and for games with a rotating control element, e.g. \nameref{nightstrike}.
+
+Otherwise, the tracking is linear along the long axis of the (\mach{w}, \mach{h}) rectangle, and the value reported in 
+\mach{GD.inputs.track\_val} is the distance along the rectangle, normalized to the range 0-65535.
+Linear tracking is useful for the
+\nameref{cmd:scrollbar},
+\nameref{cmd:toggle}
+and
+\nameref{cmd:slider} widgets.
+
+For an example of \nameref{cmd:track}, see \nameref{widgets}.
+
+\highcmd{translate}{Something}
+
+\begin{framed}
+\begin{verbatim}
+void cmd_translate(int32_t tx,
+                   int32_t ty);
+\end{verbatim}
+\end{framed}
+
+The \mach{translate} command
+applies a translation of (\mach{tx}, \mach{ty})
+to the bitmap transform matrix.
+\fsixteen
+
+
