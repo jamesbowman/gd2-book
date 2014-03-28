@@ -152,7 +152,7 @@ Gameduino 2\\
 \parindent 0pt
 \parskip \baselineskip
 \textcopyright{} 2013, James Bowman \\
-作者保留对本书的一切权力
+原作者保留对本书的一切权力。
 
 %     This work may be distributed and/or modified under the conditions
 % of the LaTeX Project Public License, either version~1.3 of this license
@@ -175,7 +175,7 @@ Gameduino 2\\
 
 \begin{center}
 \begin{tabular}{ll}
-出版时间:  & 2013年10月 \\
+首次出版时间:  & 2013年10月 \\
 \end{tabular}
 \end{center}
 
@@ -214,15 +214,15 @@ Bowman, James.\\
 \begin{enumerate}
 
 \item
-从 \url{http://gameduino.com/code} 下载 \gdtwo 的软件包 \mach{Gameduino2.zip} 并且将其安装至Arduino IDE.
-安装Arduino库的方法详见
+从 \url{http://gameduino.com/code} 下载 \gdtwo 的软件包 \mach{Gameduino2.zip} 并且将其安装至Arduino IDE。
+安装Arduino外设库的方法详见
 \url{http://arduino.cc/en/Guide/Libraries}.
 
 \item
-将 \gdtwo 连接至Arduino, 确认所有的引脚都正确对齐。
+将 \gdtwo 连接至Arduino，确认所有的引脚都正确对齐。
 
 \item
-为Arduino上电。 因为当前还没有程序载入到Arduino中，所以 \gdtwo 的屏幕上不会有任何内容。
+为Arduino上电。因为当前还没有程序载入到Arduino中，所以 \gdtwo 的屏幕上不会有任何内容。
 
 \item
 重新启动Arduino IDE并且载入一个程序，例如 \\
@@ -243,7 +243,7 @@ Bowman, James.\\
 将程序编译、下载到Arduino中。 此时 \gdtwo 将会启动并运行绘制程序。
 
 \item
-很多示例程序需要从microSD中读取数据。为了运行这些程序，需要有一张格式化的microSD卡，并将 \mach{Gameduino2sd.zip} 压缩包中的文件拷入(可从 \url{http://gameduino.com/code} 上下载)。
+很多示例程序需要从microSD中读取数据。为了运行这些程序，需要有一张格式化的microSD卡，并且事先将 \mach{Gameduino2sd.zip} 压缩包中的文件拷入(该文件可从 \url{http://gameduino.com/code} 上下载)。
 
 \item
 劲情享受!
@@ -280,32 +280,22 @@ Bowman, James.\\
 以上代码中，函数 \mach{loop()} 将屏幕背景设置为舒爽的深绿色，并将一段文本写入了屏幕的正中央。这个代码将以每秒钟60次的速度连续执行，但由于每次写入的内容相同，屏幕上看不出什么变化。
 
 \dcmd{ClearColorRGB} 是一个绘图指令：它设置了屏幕清屏时所使用的背景色。
-这里所用的颜色是 \texttt{0x103000}, a dark green.
-Gameduino 2 uses standard hex triplets for colors, like HTML.
+这里所用的颜色是深绿色 \texttt{0x103000}。 \gdtwo 和HTML一样，使用三个16进制数来表示颜色。
 \index{HTML color triplet}
 
-\dcmd{Clear} is another drawing command.
-It clears the screen to the dark green color.
-Drawing must always begin with a clear screen.
+\dcmd{Clear} 是另外一个绘图指令，它将屏幕清除为ClearColorRGB()中所设置的颜色。所有的绘图都是从清屏指令开始的。
 
-\cmd{text} is a higher-level GPU command.
-It draws a text string in a particular font on the screen. 
-In this case the text is being drawn in the center of the screen, at $(x,y)$ coordinates (240, 136).
-\mach{OPT\_CENTER} draws the text so that its center is at (240, 136).
-The font number 31 is the largest available built-in font.
+\cmd{text} 是一个高级GPU绘图指令。该指令在屏幕指定位置用特定字体绘制字符串。在这个例子中，文字被绘制在屏幕的正中心， $(x,y)$ 坐标值为 (240, 136)。
+\mach{OPT\_CENTER} 参数的作用是指明绘制文本时使用中心坐标绘制，所以文本的中心设置将设置为(240, 136)。
+参数中的31是文本的字号，31是内置字体中能设置的最大字号。
 
-Finally, \mach{GD.swap()} tells the graphics system that the drawing is finished
-and it can be made visible on the screen.
-There are always two copies of the screen: one that is visible, and one that is work-in-progress.
-Calling \mach{GD.swap()} exchanges the screens so that the work-in-progress screen becomes visible.
-This swapping system (sometimes called \term{double buffering}) means that the display updates smoothly,
-only updating when the program calls \mach{GD.swap()}.
+最后 \mach{GD.swap()} 函数告知图形系统图形绘制已经完成，并将绘制完成后的图形内容显示到显示屏上。这里有两份图像的拷贝，一份是实际显示出来的图形，一份是在缓存中正在编辑的图形。调用 \mach{GD.swap()} 函数将把缓存中的内容同步到屏幕上。
+这种交换机制 (又称\term{double buffering}) 意味着显示的内容更新将更加平滑，只有程序调用 \mach{GD.swap()} 时才会进行一次真正的绘制。
 
 \index{screen coordinates}
 \index{coordinates, screen}
-Gameduino 2's screen is 480 pixels wide and 272 high.
-$(0,0)$ is the top-left corner of the screen, $(479,271)$ is the bottom right.
-The center pixel on the screen is at $(240,136)$.
+\gdtwo 的屏幕分辨率为宽480像素，高度272像素。
+屏幕的左上角是 $(0,0)$，屏幕的右下角是 $(479,271)$，而屏幕的中心坐标点在 $(240,136)$。
 
 \begin{center}
 \begin{tikzpicture}
@@ -331,24 +321,17 @@ The center pixel on the screen is at $(240,136)$.
 \index{drawing!points}
 \index{points}
 
-What about graphics?
-Graphics drawing uses two commands:
-\dcmd{Begin} and \dcmd{Vertex2ii}.
-\dcmd{Begin} tells the graphics system what to draw,
-and \dcmd{Vertex2ii} draws it.  So this code
-draws two single-pixel points, at coordinates (220,100) and (260,170):
+那么如何使用\gdtwo 绘制图形呢？图形绘制有两个指令：\dcmd{Begin} 和 \dcmd{Vertex2ii}。
+其中 \dcmd{Begin} 告知图形系统将要绘制的图形类型，而 \dcmd{Vertex2ii} 将该图形绘制出来。 以下代码实现了在 $(220,100)$和 $(260,170)$两处分别绘制两个单像素的坐标点:
 
 \eg{examples-a}
 
 \png{0000}
 
-The \mach{Begin(POINTS)} tells the GPU to start drawing points.
-Then each call to \dcmd{Vertex2ii} draws another point at the specified $(x, y)$ screen coordinates.
-Note that if you don't supply a \dcmd{Begin},
-then the hardware doesn't know what to draw so it ignores the following \dcmd{Vertex2ii} calls.
+\mach{Begin(POINTS)} 函数告知GPU准备开始绘制点。之后 \dcmd{Vertex2ii} 函数调用在指定的屏幕坐标 $(x, y)$ 处绘制一个新点。注意如果你不先调用函数 \dcmd{Begin}, 那么硬件无从得知将要绘制的图形类型，从而忽略接下来的 \dcmd{Vertex2ii} 调用。
 
 \newpage
-The GD library also has a
+GD图形库还包含
 \dcmd{PointSize} call that lets you set the size of points.
 Its argument is the radius of the points, in units of $1/16$th of a pixel.
 The hardware uses these \term{subpixel} units to give you fine control over the
