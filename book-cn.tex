@@ -240,13 +240,13 @@ Bowman, James.\\
 \end{center}
 
 \item
-将程序编译、下载到Arduino中。 此时 \gdtwo 将会启动并运行绘制程序。
+将程序编译、下载到Arduino中。 此时 \gdtwo 将会启动并开始绘制载入的程序。
 
 \item
 很多示例程序需要从microSD中读取数据。为了运行这些程序，需要有一张格式化的microSD卡，并且事先将 \mach{Gameduino2sd.zip} 压缩包中的文件拷入(该文件可从 \url{http://gameduino.com/code} 上下载)。
 
 \item
-劲情享受!
+试着运行其他的例程，劲情享受!
 
 \end{enumerate}
 
@@ -332,24 +332,20 @@ Bowman, James.\\
 
 \newpage
 GD图形库还包含
-\dcmd{PointSize} call that lets you set the size of points.
-Its argument is the radius of the points, in units of $1/16$th of a pixel.
-The hardware uses these \term{subpixel} units to give you fine control over the
-dimensions of drawn objects, much finer than the width of a pixel.
-For situations where you want to specify a distance in pixels, it is usually clearest to multiply the distance by 16 in the code.
+\dcmd{PointSize} 调用，该函数用于设置绘制点的大小。此函数仅有一个参数，为绘制点的直径，单位为 $1/16$ 像素。硬件系统使用这样的子像素( \term{subpixel} ) 让用户对绘制物体的尺寸有更好的控制，相比以像素作为单位，可以提高显示效果。
+对于你想要用像素表示长度或直径的时候，最好在代码中显式将对应的距离乘以16。
 
-Adding a call to \dcmd{PointSize} before the drawn points
-gives huge points with a radius of 30 pixels (and hence a \term{diameter} of 60 pixels).
+这里，在调用点绘制函数之前增加了一个 \dcmd{PointSize} 调用，绘制了一个半径为30像素(即直径( \term{diameter} )60像素)的圆点。
 
 \png{0001}
 \eg{examples-b}
 
 
-In fact, the hardware always draws \mach{POINTS} using mathematical circles, but when the point size is small the circles
-happen to look like single pixels.
+实际上, 硬件系统总是以和绘制圆相同的方式来绘制点( \mach{POINTS} )，但当绘制半径很小时，此时绘制的圆看上去就像单个像素点。
+所以在Gameduino中，点与圆可以看作同一种图形。
 
 \newpage
-\section{颜色与透明度}
+\section{色彩与透明度}
 
 Adding calls to \dcmd{ColorRGB} before each vertex changes their colors to
 orange and teal:
@@ -581,7 +577,7 @@ In some of the code you will see the term \textit{sprite} --
 it usually just means a bitmap that is being moved around.
 
 \newpage
-\section{载入一个JPEG}
+\section{载入一张JPEG}
 \index{jpeg}
 
 \png{jpeg}
@@ -595,7 +591,7 @@ it directly to the GPU, which loads it into graphics memory as a bitmap.
 The \dcmd{Begin} call uses \mach{BITMAPS}, so each call to \dcmd{Vertex2ii}
 draws the loaded bitmap with its top-left corner at the given $(x, y)$.
 
-\section{位图大小}
+\section{位图尺寸}
 
 Each call to \dcmd{Vertex2ii} draws a bitmap, so this code
 
@@ -665,7 +661,7 @@ You can re-assign bitmap handles during drawing, so a game can use more than 16 
 In practice, most games use fewer than 16 graphical elements, so they can assign the handles once in \mach{setup()}.
 
 \newpage
-\section{位图的像素格式}
+\section{像素格式}
 \index{bitmaps!formats}
 
 In an ideal world, all bitmaps would be stored with unlimited color accuracy.
@@ -718,7 +714,7 @@ Not usually suitable for images, but works well for retro gaming sprites and low
 \end{tabular}
 \newpage
 
-\section{位图颜色}
+\section{颜色叠加}
 
 \png{0011}
 
@@ -888,7 +884,7 @@ The third bitmap is scaled by 0.4, shrinking it.
 \eg{examples-scale1}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\chapter{更多图形元素}
+\chapter{其他图形元素}
 \newpage
 \section{直线}
 \defidx{LINES}
@@ -957,7 +953,7 @@ This example draws a 420$\times$20 rectangle three times with increasing corner 
 
 \eg{examples-rects}
 
-\section{渐变}
+\section{渐变色}
 \label{gradient}
 \index{gradient}
 \index{drawing!gradients}
@@ -981,7 +977,7 @@ To draw a gradient on part of the screen, you can use \dcmd{ScissorXY} and \dcmd
 drawing to a rectangular area. For more complex shapes, \cmd{gradient} can be used with a stencil test.
 \clearpage
 
-\section{混合}
+\section{图形混合}
 \index{blending}
 \png{0040}
 
@@ -1056,7 +1052,7 @@ After loading it, you can use the new font with any of the drawing commands.
 \end{center}
 
 \newpage
-\section{Subpixel coordinates}
+\section{子坐标系}
 
 So far all drawing has used \dcmd{Vertex2ii} to supply the vertices.
 \dcmd{Vertex2ii} can only handle $(x,y)$ that are integers in the range 0-511.
@@ -1203,7 +1199,7 @@ which is in the ``0 Furmans'' orientation:
 \end{center}
 
 \newpage
-\section{内容堆栈}
+\section{环境堆栈}
 \index{context}
 \png{context}
 
@@ -1266,7 +1262,7 @@ The ``random'' color is actually computed using modulo arithmetic.
 
 \eg{blobs-b}
 
-\section{标签}
+\section{触摸标签}
 
 Tagging is a GPU feature that makes touch detection easier.
 In many situations the exact coordinates of the touch are not important -- you are only interested in \textit{what} has been touched.
@@ -1304,7 +1300,7 @@ This forces any buffered commands to the GPU immediately.
 \eg{sketch-a}
 
 \newpage
-\section{Widgets and tracking controls}
+\section{控件与跟踪控制}
 \label{widgets}
 \index{widgets}
 \index{tracking controls}
@@ -1735,10 +1731,10 @@ So the \mach{frogger} sketch can just use \mach{LOAD\_ASSETS()} in its \mach{set
 % \section{Reading directories}
 
 
-\part{Reference}
+\part{编程参考}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\chapter{Drawing commands}
+\chapter{绘图指令}
 
 \newcommand{\drawcmd}[2]{
 \newpage
@@ -1761,7 +1757,7 @@ So the \mach{frogger} sketch can just use \mach{LOAD\_ASSETS()} in its \mach{set
 \input{drawcommands-en.tex}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\chapter{Higher-level commands}
+\chapter{高级指令}
 
 This section describes some of the high-level commands
 that Gameduino 2's GPU 
@@ -1831,7 +1827,7 @@ For a complete list, consult the FT800 programming guide.
 % }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\chapter{Management commands}
+\chapter{管理指令}
 
 \lightcmd{begin}{begin}
 
@@ -1979,7 +1975,7 @@ Swaps the working and displayed images.
 This command must be called at the end of frame drawing.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\chapter{Math utilities}
+\chapter{数学函数}
 
 The GD library's main business is as a thin
 interface to the Gameduino 2's hardware.
@@ -2993,7 +2989,7 @@ writes the $C_0$ and $C_1$ bitmaps (zoomed 4$\times$ using \cmd{scale}) into the
 % \section{Kitchen timer}
 % \section{Photo frame}
 
-\chapter{游戏和演示程序}
+\chapter{游戏及演示程序}
 
 \newpage
 \section{Kenney}
