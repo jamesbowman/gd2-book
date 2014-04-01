@@ -4,7 +4,17 @@ gd2-book
 LaTeX source for [The Gameduino 2 Tutorial, Reference and Cookbook]
 (http://www.amazon.com/gp/product/1492888621/ref=as_li_ss_tl?ie=UTF8&camp=1789&creative=390957&creativeASIN=1492888621&linkCode=as2&tag=wispdiary-20)
 
-To build it, install ``tex-live`` and then run
+To prepare for build on Debian/Ubuntu, install these packages:
+
+``texlive-latex-base``
+``texlive``
+``texlive-latex-extra``
+
+For example:
+
+    sudo apt-get install texlive-latex-base texlive texlive-latex-extra
+
+Then to build the PDF, run:
 
     pdflatex book-en.tex
     makeindex book-en
