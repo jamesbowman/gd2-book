@@ -108,7 +108,7 @@
 \newcommand{\cmd}[1]{\cmdidx{cmd\_#1}\nameref{cmd:#1}}
 \newcommand{\dcmd}[1]{\cmdidx{#1}\nameref{#1}}
 
-\newcommand{\xref}[1]{\textit{\nameref{#1}} on  p.\pageref{#1}}
+\newcommand{\xref}[1]{见第 \pageref{#1} 页：\textit{\nameref{#1}}}
 
 \newcommand{\boldindex}[1]{\textbf{\hyperpage{#1}}}
 
@@ -290,7 +290,7 @@ Bowman, James.\\
 参数中的31是文本的字号，31是内置字体中能设置的最大字号。
 
 最后 \mach{GD.swap()} 函数告知图形系统图形绘制已经完成，并将绘制完成后的图形内容显示到显示屏上。这里有两份图像的拷贝，一份是实际显示出来的图形，一份是在缓存中正在编辑的图形。调用 \mach{GD.swap()} 函数将把缓存中的内容同步到屏幕上。
-这种交换机制 (又称\term{double buffering}) 意味着显示的内容更新将更加平滑，只有程序调用 \mach{GD.swap()} 时才会进行一次真正的绘制。
+这种交换机制 (又称\term{双缓冲}) 意味着显示的内容更新将更加平滑，只有程序调用 \mach{GD.swap()} 时才会进行一次真正的绘制。
 
 \index{screen coordinates}
 \index{coordinates, screen}
@@ -730,7 +730,7 @@ If black (\mach{0x000000}), then all pixels are drawn black.
 \clearpage
 
 \newpage
-\section{转化图形}
+\section{图形转化}
 \index{asset converter}
 \label{assets}
 
@@ -1639,14 +1639,14 @@ Because \mach{.ima} is a headerless format, \mach{play} needs to know the sample
 \eg{song-A}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\chapter{加速度计}
+\chapter{加速度传感器}
 
 \begin{center}
 \includegraphics[width=0.4\textwidth]{assets/accel.jpg}
 \end{center}
 
-\gdtwo has a 3-axis accelerometer sensor connected to the Arduino's analog inputs A0, A1 and A2.
-To read the accelerometer inputs, call \dcmd{getaccel} like this:
+\gdtwo 还包含一个三轴加速度传感器，该传感器的输出直接连接到Arduino的A0, A1和A2模拟输入引脚上。用户可以通过\dcmd{getaccel} 
+函数来获取当前的加速度大小:
 
 \begin{framed}
 \begin{verbatim}
@@ -1656,33 +1656,31 @@ GD.get_accel(x, y, z);
 \end{framed}
 
 \noindent
-\mach{get\_accel()} corrects the values so that the force of gravity, 1G, gives a deflection in
+\mach{get\_accel()} 函数对输出结果进行了矫正，在这种情况下重力(1G)在
 \mach{x},
-\mach{y} or
-\mach{z} of 256.
-Tilting \gdtwo all the way to the left, for example, gives
+\mach{y} 或
+\mach{z} 轴上的分量大小是256。
+如果将 \gdtwo 完全倾向左侧，就会得到以下数值：
 \mach{x} = -256,
 \mach{y} = 0,
-\mach{z} =0.
-Because the accelerometer is an analog input, these values are only approximate,
-and in the \mach{tilt} demo you can see that there is a little ``noise'' in the accelerometer reports.
+\mach{z} =0。
+因为该加速度传感器是模拟量输入，所以这些值会存在一些误差。
+在示例程序 \mach{tilt} 中，你将看到在加速度传感器的输出中就会存在一些微小的 ``噪声''。
 
 \eg{tilt-A}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{MicroSD卡}
 
-\gdtwo includes a standard microSD card slot.
-It is connected to the same SPI bus as \gdtwos GPU,
-and is enabled by Arduino pin 9.
-There are several software libraries available for driving microSD cards.
-The GD library includes a lightweight library that handles FAT microSD cards,
-and integrates with the GD graphics system.
+\gdtwo 包含一个标准microSD卡接口。
+它与 \gdtwo 的GPU芯片共用一组SPI接口，并通过Arduino的数字引脚9进行使能。
+现在有很多程序库可以用于驱动microSD卡，而GD程序库包含了一个相对轻量级的程序库。
+该程序库可以用于驱动FAT格式的microSD卡，并且与GD图形系统无缝集成。
 
-MicroSD files are usually fed directly to the GPU's command stream.
-The \mach{GD.load()} command does exactly this: it reads a file from the microSD card
-and copies its contents to the \gdtwo's GPU.
-For example, to load a JPEG file, executing:
+MicroSD的文件经常用于直接输入到GPU的命令流中。
+\mach{GD.load()} 命令按照以下方式工作：该函数从SD中读取一个文件，并把它的内容传送到
+\gdtwo 的GPU中。
+举一个例子，用户可以通过以下指令来载入一张JPEG格式的图片：
 
 \begin{framed}
 \begin{verbatim}
@@ -1692,8 +1690,8 @@ GD.load("kitten.jpg");
 \end{framed}
 
 \noindent
-The \cmd{loadimage} tells the GPU to expect a JPEG, and then \nameref{load} streams all the JPEG data into the GPU.
-As another example, loading 16 Kbytes of raw data from ``\mach{mem.raw}" from the microSD card can be done with:
+函数\cmd{loadimage} 告知GPU准备接收一个JPEG图片，之后 \nameref{load} 函数将图片数据全部读取到GPU中。
+下面是另外一个例子，演示了如何从SD卡的``\mach{mem.raw}"文件中读取16KB的原始数据：
 
 \begin{framed}
 \begin{verbatim}
@@ -1703,10 +1701,10 @@ GD.load("mem.raw");
 \end{framed}
 
 \noindent
-Again, \cmd{memwrite} tells the GPU to expect the following data, and then \nameref{load} streams the data in.
+同样的，此处 \cmd{memwrite} 告知GPU准备接收数据，之后由 \nameref{load} 函数将数据装载至GPU中。
 
-The files with suffix \mach{.gd2} created by the asset converter (\xref{assets}) are pure command streams,
-just by executing:
+由对象转化器(\xref{assets})生成的 \mach{.gd2} 格式文件为纯命令流，也可以通过 \nameref{load}
+函数载入：
 
 \begin{framed}
 \begin{verbatim}
@@ -1715,8 +1713,8 @@ GD.load("frogger.gd2");
 \end{framed}
 
 \noindent
-all the graphics required by the \mach{frogger} game are loaded into memory, and all bitmap handles are set up.
-When the asset converter generates the header file \mach{frogger\_assets.h}, it includes a line:
+通过该命令，所有 \mach{frogger} 游戏需要的图形元素就被载入到了内存中，并同时设置好了相应的位图句柄。
+在对象转换器生成的头文件 \mach{frogger\_assets.h} 中，包含了以下的宏定义：
 
 \begin{framed}
 \begin{verbatim}
@@ -1725,7 +1723,8 @@ When the asset converter generates the header file \mach{frogger\_assets.h}, it 
 \end{framed}
 
 \noindent
-So the \mach{frogger} sketch can just use \mach{LOAD\_ASSETS()} in its \mach{setup()} to set up all its graphics resources.
+所以在 \mach{frogger} 的程序中，只需简单地在 \mach{setup()} 
+函数中调用 \mach{LOAD\_ASSETS()} 就可以载入所有的图形资源了。
 
 % \section{Reading files}
 % \section{Reading directories}
