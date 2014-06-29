@@ -56,7 +56,8 @@
 \usepackage{epsfig} % for postscript graphics files
 \usepackage{tikz}
 \usetikzlibrary{arrows,decorations.pathmorphing,backgrounds,positioning,fit,petri,shapes.misc}
-\usepackage[linkbordercolor={.9 .9 .9}]{hyperref}
+%\usepackage[linkbordercolor={.9 .9 .9}]{hyperref}
+\usepackage[driverfallback=dvipdfmx,unicode,linkbordercolor={.9 .9 .9}]{hyperref}
 
 \usepackage[dotinlabels]{titletoc}
 
@@ -347,34 +348,30 @@ GD图形库还包含
 \newpage
 \section{色彩与透明度}
 
-Adding calls to \dcmd{ColorRGB} before each vertex changes their colors to
-orange and teal:
+在绘制vertex图形之前，可以通过 \dcmd{ColorRGB} 函数改变绘制的颜色：
 
 \png{0002}
 \eg{examples-c}
 
-\dcmd{ClearColorRGB}, \dcmd{ColorRGB} and \dcmd{PointSize} are examples of \term{graphics state},
-like variables in the graphics hardware.
-When changed by program, they will affect later drawing operations.
-To keep life simple,
-all graphics state is set to a default value at the start of the frame.
-As you might have already guessed, the default \dcmd{ColorRGB} is white,
-which is why ``Hello world'' is white.
-The default \dcmd{PointSize} is 8, meaning a radius of half a pixel.
+\dcmd{ClearColorRGB}, \dcmd{ColorRGB} 和\dcmd{PointSize} 都属于\term{图形状态}的范畴，
+这些图形状态好比是图形硬件系统中的变量一样。
+当这些状态被程序更改之后，将会影响到之后的绘图操作。
+为了让生活更加美好，所有的图形状态都在每一帧的开始被设置成了默认值。
+你可能想到了，对于\dcmd{ColorRGB} 来说，默认的颜色就是是白色的，这也是为什么 ``Hello world'' 会是白色的。
+默认的\dcmd{PointSize} 是8，也就是半个像素的直径大小。
 
-You can also set the transparency of drawing, just like color.
-Transparency is controlled by an alpha channel, which has a value from 0 to 255.
+你也可以如同改变颜色一样简单的更改绘图的透明度。
+透明度是通过一个alpha通道控制的，可用值为0-255。
 \index{alpha}
 \index{transparency, alpha}
-0 means completely transparent.
-255 -- the default -- means completely opaque.
-Setting the transparency to 128 with \dcmd{ColorA} before the point drawing
-makes the points 50\% transparent.
+其中0表示完全透明，而默认值255表示完全不透明。
+利用\dcmd{ColorA} 函数将透明度设置为128，也就是50\%的透明度。
+
 \png{0003}
 \eg{examples-d}
 
-The color commands \dcmd{ColorRGB} and \dcmd{ClearColorRGB} also accept (R,G,B) triplet values.
-So \mach{ColorRGB(0x0080ff)} can be written \mach{ColorRGB(0, 128, 255)} instead:
+颜色修改函数\dcmd{ColorRGB} 和\dcmd{ClearColorRGB} 同样接受(R,G,B)组值作为参数。
+所以\mach{ColorRGB(0x0080ff)} 也可以被写作\mach{ColorRGB(0, 128, 255)}：
 
 \eg{examples-triplet}
 
@@ -386,8 +383,8 @@ So \mach{ColorRGB(0x0080ff)} can be written \mach{ColorRGB(0, 128, 255)} instead
 \png{fizz}
 \eg{fizz-a}
 
-Every frame, ``fizz'' draws 100 points, with random size, color and transparency.
-Because each frame is 1/60th of a second, the effect is a seething frenzy of luridly colored disks.
+``fizz'' 程序在每一帧中绘制100个圆，这些圆使用随机的大小、颜色和透明度。
+每一帧执行时间是1/60秒，因为视觉暂留，整体上看就好像无数五彩斑斓的圆盘。
 \index{frenzy, seething}
 
 \begin{center}
@@ -400,18 +397,16 @@ Because each frame is 1/60th of a second, the effect is a seething frenzy of lur
 
 \section{播放音符}
 
-\gdtwo has several ways of making sound,
-but the easiest to use is its built-in sample library.
-Calling \mach{GD.play()} with an instrument and a MIDI note number
-starts a note playing:
+\gdtwo 有两种方式可以播放声音，较简单的一种是使用内置的音频采样。
+调用\mach{GD.play()} 函数，指明要使用的乐器以及要播放的MIDI音符编号就可以播放对应音符：
 \index{MIDI notes}
 
 \eg{examples-e}
 
 \defidx{HARP}\defidx{XYLOPHONE}\defidx{TUBA}\defidx{GLOCKENSPIEL}\defidx{ORGAN}\defidx{TRUMPET}\defidx{PIANO}\defidx{CHIMES}\defidx{MUSICBOX}\defidx{BELL}
-The code continues immediately after \mach{GD.play()}, so here the
-\mach{delay()} waits for the first note to finish before playing the second note.
-The list of available sampled instruments is:
+\mach{GD.play()} 函数是非阻塞执行的，下一个命令会立刻执行，所以这里调用了
+\mach{delay()} 延时函数等待之前的音符播放完毕再播放第二个音符。
+所有可用的内建乐器列表如下：
 \index{instruments}
 \mach{HARP},
 \mach{XYLOPHONE},
@@ -421,25 +416,25 @@ The list of available sampled instruments is:
 \mach{TRUMPET},
 \mach{PIANO},
 \mach{CHIMES},
-\mach{MUSICBOX} and
-\mach{BELL}.
-While the samples are not particularly hi-fi
-\footnote{\mach{PIANO} is probably the worst, but \mach{TUBA} comes close second for sounding unlike any musical instrument, ever.
+\mach{MUSICBOX} 和
+\mach{BELL}。
+虽然这些内置采样并不是Hi-Fi音质
+\footnote{其中\mach{PIANO} 可能是最糟糕的了，其次是\mach{TUBA} ：听起来怎么都不像一个乐器。
 }
-, they are quite handy for quick tests.
-Each instrument can play notes in the MIDI range 21-108.
+，但他们用于快速测试就再方便不过了。
+每个乐器可以播放的音符是MIDI编号的21-108。
 
-The continuous sounds
+以下可以连续播放的声音
 \index{wave instruments}
-\mach{SQUAREWAVE},
-\mach{SINEWAVE},
-\mach{SAWTOOTH} and
-\mach{TRIANGLE} are also available.
-These are good for matching the sound effects of retro games.
-Unlike the synthesized instrument sounds, these sounds continue indefinitely.
-In addition to the musical sounds, there is a small selection of percussive samples.
-These samples do not use the MIDI note parameter, so it can be omitted.
-For example \mach{GD.play(NOTCH)}. The full list is
+\mach{SQUAREWAVE}，
+\mach{SINEWAVE}，
+\mach{SAWTOOTH} 和
+\mach{TRIANGLE} 也是可以使用的。
+这些声音特别适合做复古游戏的音效。
+不同于合成的乐器音效，这些声音将无限期地播放下去。
+除了乐器音效，这里还有一小部分打击乐的采样音效。
+这些采样无需使用MIDI音符参数，所以在此可以忽略，如\mach{GD.play(NOTCH)}。
+全部可用的音效列表如下：
 
 \vspace{10pt}
 \begin{tabular}{l}
@@ -456,35 +451,30 @@ For example \mach{GD.play(NOTCH)}. The full list is
 \vspace{10pt}
 \defidx{CLICK} \defidx{SWITCH} \defidx{COWBELL} \defidx{NOTCH} \defidx{HIHAT} \defidx{KICKDRUM} \defidx{POP} \defidx{CLACK} \defidx{CHACK}
 
-The sound hardware can only play one sound at a time. So starting a sound playing instantly interrupts any previously playing sound.
+负责声音播放的硬件同时只能播放一个音符，播放任何声音都将中断上一个声音的播放。
 
 \defidx{SILENCE}
-To stop sound, call \mach{GD.play(SILENCE)}.
+如果需要停止声音播放，则可以使用\mach{GD.play(SILENCE)} 。
 
 \newpage
 \section{触摸标签}
 
-Every pixel on the screen has a color.
-It also has an invisible tag value, useful for detecting touches.
-Setting the tag value for the colored circles to 100 and 101:
+屏幕的每个像素除了有可见的颜色之外，还有一个不可见的标签值，该标签用于对触摸动作的检测。
+此处将彩色圆的标签值分别设置成为100和101：
 
 \eg{examples-f}
 
 \noindent
-gives the same image as before:
+这个代码会生成和之前一样的图形：
 
 \png{0002}
 
-Now, when the system detects a touch on either circle, it reports back its
-touch code, in this case either 100 or 101.
-Here is a loop that senses touches (\nameref{getinputs} updates all the sensor inputs in \mach{GD.inputs}) and prints out the touch value on the serial connection:
+但是这个程序不同之处在于，一旦系统检测到在这两个圆上发生了触摸动作，就会将对应的标签值(这里是100或101)报告给用户。这里再使用一个循环结构不断读取当前的触摸标签值 (\nameref{getinputs} 函数会将最新的触摸标签值更新至 \mach{GD.inputs})，并将其输出到屏幕上：
 
 \eg{examples-g}
 
-As you press each disk, the code 100 or 101 appears on the serial output.
-Touch tags are a useful shortcut.
-Without them, the code would have to sense the touch $(x,y)$ coordinates,
-and then for each disk check whether the $(x,y)$ was inside its perimeter.
+当你按下每一个按钮的时候，从串口输出中就会返回100或101的代码。触摸标签是一个非常有用的捷径。
+如果没有这个功能，那么代码必须检测每一次触摸的 $(x,y)$ 坐标，并依次判断该坐标是否落在按钮的半径范围内。
 Using touch tags, the code uses \dcmd{Tag} to assign a code to each drawn object.
 Then the hardware performs the pixel testing and reports the code of the touched object.
 To do this, the hardware keeps track of the \dcmd{Tag} for each pixel it draws.
@@ -515,20 +505,16 @@ Whenever the screen is touched the hardware looks up the pixel in the tag buffer
 
 \png{simon}
 
-As you probably remember, ``Simon'' is a memory game from 1978.
-It plays out a random sequence on its four lights, and if you repeat it correctly, it extends the sequence by one more note.
-This repeats until you make a mistake, and the ``game'' is over.
+你是否还记得一个诞生于1978年的记忆游戏``Simon''。 这个游戏的规则是：系统按照一个随机序列点亮屏幕中的四个指示灯之一，而你必须按照正确的顺序重复出来。一旦你答对了，系统就将在原序列中再增加一个步骤，如此重复直到你出现失误为止。
 
-The code first defines some primary colors:
+以下代码首先定义了游戏中会出现的主要颜色，之后将利用这些颜色绘制游戏界面：
 
 \eg{simon-a}
 
 \noindent
-and then uses them to draw the game screen.
-The game screen is four large points, each working as a button.
-One is highlighted depending on the \mach{pressed} argument.
-The calls to \dcmd{Tag} before each button mean that a touch anywhere
-on that button will report the value in \mach{GD.inputs.tag}.
+
+游戏的主界面是四个大圆盘，每一个都是一个按钮。按钮的颜色根据 \mach{pressed} 参数决定是否要高亮显示。
+在绘制每个按钮之前的 \dcmd{Tag} 调用意味着在该按钮的任意位置点击将在 \mach{GD.inputs.tag} 中返回对应数值。
 
 \newpage
 \eg{simon-b}
