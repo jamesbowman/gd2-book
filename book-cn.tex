@@ -1,4 +1,3 @@
-%
 % GD2 cookbook
 %
 
@@ -109,7 +108,7 @@
 \newcommand{\cmd}[1]{\cmdidx{cmd\_#1}\nameref{cmd:#1}}
 \newcommand{\dcmd}[1]{\cmdidx{#1}\nameref{#1}}
 
-\newcommand{\xref}[1]{见第 \pageref{#1} 页：\textit{\nameref{#1}}}
+\newcommand{\xref}[1]{第 \pageref{#1} 页：\textit{\nameref{#1}}}
 
 \newcommand{\boldindex}[1]{\textbf{\hyperpage{#1}}}
 
@@ -122,15 +121,17 @@ Gameduino 2\\
 入门指南，编程参考与设计实例
 }
 
-\author{作者：James Bowman(美国) \\
+\author{作者：James Bowman(美) \\
 	{\tt\small jamesb@excamera.com} \\
   Excamera Labs\\
    \\
    \\
-  译者：戴晓天\\
-  {\tt\small automatic.dai@gmail.com} \\
-  云飞机器人实验室
+  译者：戴晓天\footnote{云飞机器人实验室，邮箱：automatic.dai@gmail.com，翻译Chapt. 1-2, 13-16}
+  ,徐欣宇\footnote{英国谢菲尔德大学，邮箱：xinyu.xu@live.cn，翻译Chapt. 3-12}\\
+  \\
+  \\  
 }
+
 \date{}
         
 \usepackage[dotinlabels]{titletoc}
@@ -217,6 +218,7 @@ Bowman, James.\\
 \item
 从 \url{http://gameduino.com/code} 下载 \gdtwo 的软件包 \mach{Gameduino2.zip} 并且将其安装至Arduino IDE。
 安装Arduino外设库的方法详见
+\\
 \url{http://arduino.cc/en/Guide/Libraries}.
 
 \item
@@ -254,7 +256,7 @@ Bowman, James.\\
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{快速入门}
 
-本章介绍了\gdtwo 的基本编程\ -\ 从 ``hello world'' 到创建一个简单的触控游戏。
+本章介绍了 \gdtwo 的基本编程\ -\ 从 ``hello world'' 到创建一个简单的触控游戏。
 
 \newcommand*\cleartoleftpage{%
   \clearpage
@@ -278,25 +280,25 @@ Bowman, James.\\
 
 \eg{helloworld-A}
 
-以上代码中，函数 \mach{loop()} 将屏幕背景设置为舒爽的深绿色，并将一段文本写入了屏幕的正中央。这个代码将以每秒钟60次的速度连续执行，但由于每次写入的内容相同，屏幕上看不出什么变化。
+以上代码中，函数 \mach{loop()} 将屏幕背景设置为舒爽的深绿色，并将一段文本写入了屏幕的正中央。这个代码将以每秒钟 $60$ 次的速度连续执行，但由于每次写入的内容相同，屏幕上看不出什么变化。
 
 \dcmd{ClearColorRGB} 是一个绘图指令：它设置了屏幕清屏时所使用的背景色。
-这里所用的颜色是深绿色 \texttt{0x103000}。 \gdtwo 和HTML一样，使用三个16进制数来表示颜色。
+这里所用的颜色是深绿色 \texttt{0x103000}。 \gdtwo 和HTML一样，使用三个 $16$ 进制数来表示颜色。
 \index{HTML color triplet}
 
 \dcmd{Clear} 是另外一个绘图指令，它将屏幕清除为ClearColorRGB()中所设置的颜色。所有的绘图都是从清屏指令开始的。
 
-\cmd{text} 是一个高级GPU绘图指令。该指令在屏幕指定位置用特定字体绘制字符串。在这个例子中，文字被绘制在屏幕的正中心， $(x,y)$ 坐标值为 (240, 136)。
-\mach{OPT\_CENTER} 参数的作用是指明绘制文本时使用中心坐标绘制，所以文本的中心设置将设置为(240, 136)。
-参数中的31是文本的字号，31是内置字体中能设置的最大字号。
+\cmd{text} 是一个高级GPU绘图指令。该指令在屏幕指定位置用特定字体绘制字符串。在这个例子中，文字被绘制在屏幕的正中心， $(x,y)$ 坐标值为 $(240,136)$ 。
+\mach{OPT\_CENTER} 参数的作用是指明绘制文本时使用中心坐标绘制，所以文本的中心设置将设置为 $(240,136)$ 。
+参数中的 $31$ 是文本的字号，$31$ 是内置字体中能设置的最大字号。
 
 最后 \mach{GD.swap()} 函数告知图形系统图形绘制已经完成，并将绘制完成后的图形内容显示到显示屏上。这里有两份图像的拷贝，一份是实际显示出来的图形，一份是在缓存中正在编辑的图形。调用 \mach{GD.swap()} 函数将把缓存中的内容同步到屏幕上。
 这种交换机制 (又称\term{双缓冲}) 意味着显示的内容更新将更加平滑，只有程序调用 \mach{GD.swap()} 时才会进行一次真正的绘制。
 
 \index{screen coordinates}
 \index{coordinates, screen}
-\gdtwo 的屏幕分辨率为宽480像素，高度272像素。
-屏幕的左上角是 $(0,0)$，屏幕的右下角是 $(479,271)$，而屏幕的中心坐标点在 $(240,136)$。
+\gdtwo 的屏幕分辨率为宽 $480$ 像素，高度 $272$ 像素。
+屏幕的左上角是 $(0,0)$ ，屏幕的右下角是 $(479,271)$ ，屏幕中心坐标点在 $(240,136)$ 。
 
 \begin{center}
 \begin{tikzpicture}
@@ -322,21 +324,21 @@ Bowman, James.\\
 \index{drawing!points}
 \index{points}
 
-那么如何使用\gdtwo 绘制图形呢？图形绘制有两个指令：\dcmd{Begin} 和 \dcmd{Vertex2ii}。
-其中 \dcmd{Begin} 告知图形系统将要绘制的图形类型，而 \dcmd{Vertex2ii} 将该图形绘制出来。 以下代码实现了在 $(220,100)$和 $(260,170)$两处分别绘制两个单像素的坐标点:
+那么如何使用 \gdtwo 绘制图形呢？图形绘制有两个指令：\dcmd{Begin} 和 \dcmd{Vertex2ii}。
+其中 \dcmd{Begin} 告知图形系统将要绘制的图形类型，而 \dcmd{Vertex2ii} 将该图形绘制出来。 以下代码实现了在 $(220,100)$ 和 $(260,170)$ 两处分别绘制两个单像素的坐标点:
 
 \eg{examples-a}
 
 \png{0000}
 
-\mach{Begin(POINTS)} 函数告知GPU准备开始绘制点。之后 \dcmd{Vertex2ii} 函数调用在指定的屏幕坐标 $(x, y)$ 处绘制一个新点。注意如果你不先调用函数 \dcmd{Begin}, 那么硬件无从得知将要绘制的图形类型，从而忽略接下来的 \dcmd{Vertex2ii} 调用。
+\mach{Begin(POINTS)} 函数告知GPU准备开始绘制点。之后 \dcmd{Vertex2ii} 函数调用在指定的屏幕坐标 $(x,y)$ 处绘制一个新点。注意如果你不先调用函数 \dcmd{Begin}, 那么硬件无从得知将要绘制的图形类型，从而忽略接下来对 \dcmd{Vertex2ii} 的调用。
 
 \newpage
 GD图形库还包含
 \dcmd{PointSize} 调用，该函数用于设置绘制点的大小。此函数仅有一个参数，为绘制点的直径，单位为 $1/16$ 像素。硬件系统使用这样的子像素( \term{subpixel} ) 让用户对绘制物体的尺寸有更好的控制，相比以像素作为单位，可以提高显示效果。
-对于你想要用像素表示长度或直径的时候，最好在代码中显式将对应的距离乘以16。
+对于你想要用像素表示长度或直径的时候，最好在代码中显式将对应的距离乘以 $16$ 。
 
-这里，在调用点绘制函数之前增加了一个 \dcmd{PointSize} 调用，绘制了一个半径为30像素(即直径( \term{diameter} )60像素)的圆点。
+这里，在调用点绘制函数之前增加了一个 \dcmd{PointSize} 调用，绘制了一个半径为 $30$ 像素（即直径( \term{diameter} ) $60$ 像素）的圆点。
 
 \png{0001}
 \eg{examples-b}
@@ -353,25 +355,25 @@ GD图形库还包含
 \png{0002}
 \eg{examples-c}
 
-\dcmd{ClearColorRGB}, \dcmd{ColorRGB} 和\dcmd{PointSize} 都属于\term{图形状态}的范畴，
+\dcmd{ClearColorRGB}, \dcmd{ColorRGB} 和 \dcmd{PointSize} 都属于\term{图形状态}的范畴，
 这些图形状态好比是图形硬件系统中的变量一样。
 当这些状态被程序更改之后，将会影响到之后的绘图操作。
 为了让生活更加美好，所有的图形状态都在每一帧的开始被设置成了默认值。
-你可能想到了，对于\dcmd{ColorRGB} 来说，默认的颜色就是是白色的，这也是为什么 ``Hello world'' 会是白色的。
-默认的\dcmd{PointSize} 是8，也就是半个像素的直径大小。
+你可能想到了，对于 \dcmd{ColorRGB} 来说，默认的颜色就是是白色的，这也是为什么 ``Hello world'' 会是白色的。
+默认的 \dcmd{PointSize} 是 $8$ ，也就是半个像素的直径大小。
 
 你也可以如同改变颜色一样简单的更改绘图的透明度。
-透明度是通过一个alpha通道控制的，可用值为0-255。
+透明度是通过一个alpha通道控制的，可用值为 $0\sim255$ 。
 \index{alpha}
 \index{transparency, alpha}
-其中0表示完全透明，而默认值255表示完全不透明。
-利用\dcmd{ColorA} 函数将透明度设置为128，也就是50\%的透明度。
+其中 $0$ 表示完全透明，而默认值 $255$ 表示完全不透明。
+利用 \dcmd{ColorA} 函数将透明度设置为 $128$ ，也就是 $50\%$ 的透明度。
 
 \png{0003}
 \eg{examples-d}
 
-颜色修改函数\dcmd{ColorRGB} 和\dcmd{ClearColorRGB} 同样接受(R,G,B)组值作为参数。
-所以\mach{ColorRGB(0x0080ff)} 也可以被写作\mach{ColorRGB(0, 128, 255)}：
+颜色修改函数 \dcmd{ColorRGB} 和 \dcmd{ClearColorRGB} 同样接受(R,G,B)组值作为参数。
+所以 \mach{ColorRGB(0x0080ff)} 也可以被写作 \mach{ColorRGB(0, 128, 255)}：
 
 \eg{examples-triplet}
 
@@ -383,8 +385,8 @@ GD图形库还包含
 \png{fizz}
 \eg{fizz-a}
 
-``fizz'' 程序在每一帧中绘制100个圆，这些圆使用随机的大小、颜色和透明度。
-每一帧执行时间是1/60秒，因为视觉暂留，整体上看就好像无数五彩斑斓的圆盘。
+``fizz'' 程序在每一帧中绘制 $100$ 个圆，这些圆使用随机的大小、颜色和透明度。
+每一帧执行时间是 $1/60$ 秒，因为视觉暂留，整体上看就好像无数五彩斑斓的圆盘。
 \index{frenzy, seething}
 
 \begin{center}
@@ -422,7 +424,7 @@ GD图形库还包含
 \footnote{其中\mach{PIANO} 可能是最糟糕的了，其次是\mach{TUBA} ：听起来怎么都不像一个乐器。
 }
 ，但他们用于快速测试就再方便不过了。
-每个乐器可以播放的音符是MIDI编号的21-108。
+每个乐器可以播放的音符是MIDI编号的 $21\sim108$。
 
 以下可以连续播放的声音
 \index{wave instruments}
@@ -433,7 +435,7 @@ GD图形库还包含
 这些声音特别适合做复古游戏的音效。
 不同于合成的乐器音效，这些声音将无限期地播放下去。
 除了乐器音效，这里还有一小部分打击乐的采样音效。
-这些采样无需使用MIDI音符参数，所以在此可以忽略，如\mach{GD.play(NOTCH)}。
+这些采样无需使用MIDI音符参数，所以在此可以忽略，如 \mach{GD.play(NOTCH)}。
 全部可用的音效列表如下：
 
 \vspace{10pt}
@@ -460,7 +462,7 @@ GD图形库还包含
 \section{触摸标签}
 
 屏幕的每个像素除了有可见的颜色之外，还有一个不可见的标签值，该标签用于对触摸动作的检测。
-此处将彩色圆的标签值分别设置成为100和101：
+此处将彩色圆的标签值分别设置成为 $100$ 和 $101$ ：
 
 \eg{examples-f}
 
@@ -469,16 +471,14 @@ GD图形库还包含
 
 \png{0002}
 
-但是这个程序不同之处在于，一旦系统检测到在这两个圆上发生了触摸动作，就会将对应的标签值(这里是100或101)报告给用户。这里再使用一个循环结构不断读取当前的触摸标签值 (\nameref{getinputs} 函数会将最新的触摸标签值更新至 \mach{GD.inputs})，并将其输出到屏幕上：
+但是这个程序不同之处在于，一旦系统检测到在这两个圆上发生了触摸动作，就会将对应的标签值（这里是 $100$ 或 $101$ ）报告给用户。这里再使用一个循环结构不断读取当前的触摸标签值 ( \nameref{getinputs} 函数会将最新的触摸标签值更新至 \mach{GD.inputs} )，并将其输出到屏幕上：
 
 \eg{examples-g}
 
-当你按下每一个按钮的时候，从串口输出中就会返回100或101的代码。触摸标签是一个非常有用的捷径。
+当你按下每一个按钮的时候，从串口输出中就会返回 $100$ 或 $101$ 的代码。触摸标签是一个非常有用的捷径。
 如果没有这个功能，那么代码必须检测每一次触摸的 $(x,y)$ 坐标，并依次判断该坐标是否落在按钮的半径范围内。
-Using touch tags, the code uses \dcmd{Tag} to assign a code to each drawn object.
-Then the hardware performs the pixel testing and reports the code of the touched object.
-To do this, the hardware keeps track of the \dcmd{Tag} for each pixel it draws.
-This is called the ``tag buffer'' - here is its contents for this example:
+运用触摸标签，代码为每个对象分配一个 \dcmd{Tag} 作为标签值，随后设备进行像素检测并记录每个按击对象的标签值。
+为此设备会持续更新每个像素的 \dcmd{Tag} 。这被称为``标签缓存''——下面给出关于这部分内容的一个例子：
 
 \vspace{10pt}
 
@@ -496,8 +496,7 @@ This is called the ``tag buffer'' - here is its contents for this example:
 \vspace{10pt}
 
 \noindent
-Whenever the screen is touched the hardware looks up the pixel in the tag buffer and reports it in
-\mach{GD.inputs.tag}.
+每当屏幕被点击，设备都将查找标签缓存中的像素标签值，并将其记录在 \mach{GD.inputs.tag} 中。
 
 \cleartoleftpage
 \section{游戏实例: Simon}
@@ -505,7 +504,7 @@ Whenever the screen is touched the hardware looks up the pixel in the tag buffer
 
 \png{simon}
 
-你是否还记得一个诞生于1978年的记忆游戏``Simon''。 这个游戏的规则是：系统按照一个随机序列点亮屏幕中的四个指示灯之一，而你必须按照正确的顺序重复出来。一旦你答对了，系统就将在原序列中再增加一个步骤，如此重复直到你出现失误为止。
+你是否还记得一个诞生于 $1978$ 年的记忆游戏``Simon''。 这个游戏的规则是：系统按照一个随机序列点亮屏幕中的四个指示灯之一，而你必须按照正确的顺序重复出来。一旦你答对了，系统就将在原序列中再增加一个步骤，如此重复直到你出现失误为止。
 
 以下代码首先定义了游戏中会出现的主要颜色，之后将利用这些颜色绘制游戏界面：
 
@@ -519,48 +518,41 @@ Whenever the screen is touched the hardware looks up the pixel in the tag buffer
 \newpage
 \eg{simon-b}
 
-The function \mach{play()} plays a different note according to the pressed button,
-while lighting up its circle for half a second, or 30 frames.
+函数 \mach{play()} 根据被点击的按钮作出不同的记录，同时点亮相应的圆盘，持续时间为半秒（即 $30$ 帧）。
 
 \eg{simon-play}
 
-\mach{get\_note()} is the player input routine.
-It draws the game screen, and each time checks
-\mach{GD.inputs.tag} to see whether one of the buttons is pressed.
-As soon as a button is pressed, it calls \mach{play()} to play its note, and returns the button value.
+\mach{get\_note()} 是一个用户输入程序。
+它的作用是绘制游戏界面，同时每次绘制都将查看 \mach{GD.input.tag} 以确定是否有按钮被点击。
+一旦有按钮被点击，它将调用 \mach{play()} 来进行记录，并返回按钮的对应数值。
 
 \eg{simon-getnote}
 
-The \mach{loop()} function
-handles a complete game cycle.
-It adds a random button to the current sequence, plays it, asks the player to repeat it,
-and if the player repeats the sequence perfectly, repeats.
-If the player makes a mistake, it plays a taunting ``lose'' sound effect and returns, so the next
-\mach{loop()} call starts a new game.
+\mach{loop()} 函数实现完整的游戏循环程序。
+程序每次循环都将在原按钮序列后添加一个随机的按钮，演示这一新序列后将要求玩家按序列顺序重复点击按钮，
+如果玩家重复点击的顺序完全正确，游戏将继续。
+如果玩家点击出现任何错误，游戏将发出表示''失败''的音效并退出，随后下一次 \mach{loop()} 函数将重新启动游戏。
 
 \eg{simon-loop}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{位图}
 
-Gameduino 2's GPU has hardware support for drawing images,
-which it calls ``bitmaps.''
-Gameduino 2 bitmaps can be:
+\gdtwo 的GPU为输出位图图像提供硬件支持
+\gdtwo 中的位图可以进行如下操作：
 
 \begin{itemize}
-\item any size, from 1$\times$1 pixel to 512$\times$512
-\item layered on top of other bitmaps, dozens deep
-\item recolored and drawn with transparency
-\item repeated indefinitely in both $x$ and $y$ (known as \term{tiling})
-\item rotated, zoomed and shrunk
+\item 定义任意尺寸，从 $1 \times 1$ 像素到 $512 \times 512$
+\item 可在其他位图图像上进行叠加，层数不限
+\item 重新着色和设置透明度
+\item 在x和y轴方向进行无限重复绘制（又称为 \term{tiling} )
+\item 旋转，拉伸和收缩
 \end{itemize}
 
-Bitmaps' graphic data -- the bytes that represent the pixels of the bitmap -- are in
-the GPU's main memory. This main memory is 256 KBytes in size.
+位图图像的数据——代表位图各像素点信息的数据——存储在GPU的主存储器中。这一主存储器的大小是 $256$ KBytes。
 
-In some ways, bitmaps are the descendants of the \term{sprites} of old video hardware.
-In some of the code you will see the term \textit{sprite} --
-it usually just means a bitmap that is being moved around.
+某种程度上说，位图是过去的影像设备 \term{sprites} 的产物。在一些代码中仍可看到这个词 \textit{sprite} 
+——它通常只是表示正被移动的位图。
 
 \newpage
 \section{载入一张JPEG}
@@ -570,46 +562,43 @@ it usually just means a bitmap that is being moved around.
 
 \eg{jpeg-A}
 
-\cmd{loadimage} tells the GPU to expect a JPEG to follow, and load it into memory at address \mach{0}.
-\nameref{load} reads the file \mach{healsky3.jpg}\footnote{Artwork by J. W. Bjerk (eleazzaar) -- www.jwbjerk.com/art}
-from the microSD card and feeds
-it directly to the GPU, which loads it into graphics memory as a bitmap.
-The \dcmd{Begin} call uses \mach{BITMAPS}, so each call to \dcmd{Vertex2ii}
-draws the loaded bitmap with its top-left corner at the given $(x, y)$.
+\cmd{loadimage} 的作用是通知GPU将会有一张JPEG载入到地址 \mach{0} 。 
+\nameref{load} 从microSD卡中读取文件 \mach{healsky3.jpg}\footnote{Artwork by J. W. Bjerk (eleazzaar) -- www.jwbjerk.com/art} 并直接将其提供给GPU，GPU将它作为一张位图存储到显存中。 
+\dcmd{Begin} 调用使用 \mach{BITMAPS} 的指令，随后每次调用 \dcmd{Vertex2ii} 都将在给定的坐标 $(x,y)$ 处
+从已载入位图的左上角开始绘制图像。
 
 \section{位图尺寸}
 
-Each call to \dcmd{Vertex2ii} draws a bitmap, so this code
+每次调用 \dcmd{Vertex2ii} 都会绘制一幅位图，例如这段代码
 
 \eg{examples-i}
 
-produces
+将会生成下图
 
 \png{0006}
 
-The original JPEG file was sized 128$\times$128, so each call to \dcmd{Vertex2ii}
-paints the bitmap into a 128$\times$128 pixel area.
-But you can adjust the area painted by the bitmap using \dcmd{BitmapSize}.
-For example
+原始JPEG文件的尺寸为 $128 \times 128$ ，因此每次调用 \dcmd{Vertex2ii} 
+都将在尺寸为 $128 \times 128$ 的像素区域中绘制这一位图图像。
+不过你可以通过 \dcmd{BitmapSize} 来调节绘制位图的区域尺寸。
+例如
 
 \eg{examples-j}
 
-changes the bitmap size so that only a 64$\times$64 area is drawn:
+改变位图绘制尺寸后，只有 $64 \times 64$ 的区域被绘制出来：
 
 \png{0007}
 
-\textit{Increasing} the bitmap size to 480$\times$272 like this
+\textit{放大} 位图绘制尺寸到 $480 \times 272$ ，代码如下
 
 \eg{examples-k}
 
-does not make the bitmap bigger than the original 128$\times$128
+并没有放大原图 $128 \times 128$ 的尺寸
+
 \png{0008}
 
-Why not? Well, the GPU actually is painting 480$\times$272 pixels.
-But because the source image is only 128$\times$128, it fills in the area outside the
-original image with transparent black pixels.
-Changing the wrapping arguments from \mach{BORDER} to \mach{REPEAT} 
-tells the GPU to repeat the source image infinitely in both directions.
+为什么没有呢？ 其实，GPU的的确确绘制了一幅 $480 \times 272$ 尺寸的图像。
+但是因为原图的尺寸只有 $128 \times 128$ ，因此其余的空间就用透明的黑色像素填满。
+但如果将参数 \mach{BORDER} 改为 \mach{REPEAT} ，GPU就会在x和y轴两个方向上无限重复地绘制原图像。
 
 \index{bitmaps!tiling}
 
@@ -626,34 +615,31 @@ tells the GPU to repeat the source image infinitely in both directions.
 
 \eg{jpeg2-A}
 
-This code loads two JPEGs into graphics memory -- a sunrise image at address \mach{0}, and the \mach{healsky3} image.
-The second \mach{load\_image()} gives \mach{-1} as the address argument, which is a special value that
-tells the JPEG loader to place the JPEG immediately after the last one in graphics memory.
-This is handy for loading a series of JPEGs without having to compute their load addresses.
+上面这段代码的功能是向显存中存放了两张JPEG图片——其中一张日出图片存放在了在地址 \mach{0} 处，还有一张一张名为 \mach{healsky3} 的图片。
+值得注意的是，其中第二个对 \mach{load\_image()} 的调用中将 \mach{$-1$} 作为地址参数，这一特殊数值的作用是命令JPEG载入程序将这张JPEG图片紧紧置于当前显存中最后一张图片之后。
+通过这种方式可以很方便的存储一连串图片，而无需计算每张图片的具体存储位置
 
-By setting the bitmap handle before each load, the graphics hardware can keep track of the two images' properties -- size, format, memory address -- 
-and drawing code can select an image using one of these two handles.
+通过在将图片载入前设定相应的位图句柄，设备能够时刻追踪到这两张图片的各项参数——大小、格式、存储地址——
+而且编辑绘图代码时可以通过这两个句柄对这两张图片进行选择。
 
-\dcmd{Vertex2ii} has a third parameter, used when drawing \mach{BITMAPS}.
-The parameter specifies the bitmap handle to use for drawing.
-If it is omitted then handle 0 is used.  
-Drawing 100 bitmaps with a random handle 0 or 1
-gives a random mosaic, animating furiously like \nameref{fizz}.
+在绘制位图（ \mach{BITMAPS} ）时， \dcmd{Vertex2ii} 还有第 $3$ 个参数。
+这第 $3$ 个参数会指定用于绘制相应位图的句柄。
+缺省值默认为 $0$ 。
+在位图句柄 $0$ 和 $1$ 中随机选择，连续绘制 $100$ 张位图，将会呈现出一幅随机混杂的图像，给人以 \nameref{fizz} 般的感觉。
 \eg{examples-m}
 \png{0010}
 
-The hardware has 16 bitmap handles available for user graphics, numbered 0-15.
-You can re-assign bitmap handles during drawing, so a game can use more than 16 source graphics.
-In practice, most games use fewer than 16 graphical elements, so they can assign the handles once in \mach{setup()}.
+该设备为用户载入图片提供 $16$ 个可用位图句柄，句柄值从 $0\sim15$ 。
+用户可以在绘制过程中重新分配位图句柄，因而应用程序可以通过句柄调用的图片不仅仅限制在 $16$ 张。
+事实上，大部分应用程序用不到 $16$ 张图片，因此各图片通常在 \mach{setup()} 中一次性分配好对应句柄。
 
 \newpage
 \section{像素格式}
 \index{bitmaps!formats}
 
-In an ideal world, all bitmaps would be stored with unlimited color accuracy.
-However, because memory -- both the GPU's and the Arduino's -- is finite,
-the graphics hardware gives you various ways of balancing color precision against memory use.
-
+在理想情况下，希望能够对所有位图的色彩实现百分之百的还原。
+然而，GPU和Arduino的内存有限，用户只能通过使用设备所提供的多种模式来平衡色彩还原度和存储空间的使用。
+\\
 \newcommand{\fmline}[3]{
 \index{#1 bitmap format@\mach{#1} bitmap format}
 \index{bitmap format!#1@\mach{#1}}
@@ -665,38 +651,34 @@ the graphics hardware gives you various ways of balancing color precision agains
 \noindent
 \begin{tabular}{p{0.15\textwidth}p{0.35\textwidth}p{0.4\textwidth}}
 \fmline{L8}{previews/formats-PHOTO_L8-00.png}{
-Eight bits per pixel, highest quality monochrome format.
+每像素 $8$ 位数据，最高质量的单色图片格式。
 } \\
 \fmline{L4}{previews/formats-PHOTO_L4-00.png}{
-Four bits per pixel.
-Suitable for monochrome icons or fonts.} \\
+每像素 $4$ 位数据。适用于单色图标或字体。} \\
 \fmline{L1}{previews/formats-PHOTO_L1-00.png}{
-One bit per pixel.
-Used for a minimal retro look.
-Also sometimes a useful format for layering and stencil effects.} \\
+每像素 $1$ 位数据。用于小幅格式的复古风格图片。同样也适用于分层和蜡纸风格的图片。} \\
 \end{tabular}
 \newpage
 
 \noindent
 \begin{tabular}{p{0.15\textwidth}p{0.35\textwidth}p{0.4\textwidth}}
 \fmline{RGB565}{previews/formats-PHOTO_RGB565-00.png}{
-16 bits per pixel: five bits for red and blue, six bits for green.
-Most suitable for photos and other artwork without any transparency channel.
+每像素 $16$ 位数据：其中各有 $5$ 位用于存储红色和蓝色信息，$6$ 位用于绿色信息。
+适用于大多数没有透明度通道设置的照片图片。
 } \\
 \fmline{ARGB1555}{previews/formats-PHOTO_ARGB1555-00.png}{
-16 bits per pixel: five bits for red, green and blue, and a single bit for alpha.
-The single-bit alpha channel allows simple on/off transparency.
+每像素 $16$ 位数据：其中各有 $5$ 位用于存储红色、绿色和蓝色信息，另有 $1$ 位记录透明度信息。
+这个仅有 $1$ 位的透明度通道只可实现简单的开启或关闭透明度设置。
 % This was the sole color format of the orginal Gameduino.
 } \\
 \fmline{ARGB4}{previews/formats-PHOTO_ARGB4-00.png}{
-16 bits per pixel: four bits each for red, green, blue and alpha.
-A good choice for artwork with smooth transparent edges, e.g. color icons and sprites.} \\
+每像素 $16$ 位数据：各有 $4$ 位用于存储红色、绿色、蓝色和透明度信息。
+适用于要求有光滑透明边缘的图片，例如：彩色图标和子画面。} \\
 \fmline{RGB332}{previews/formats-PHOTO_RGB332-00.png}{
-Two bits for red and blue, three for green.
-Sometimes used for images and icons.} \\
+各有 $2$ 位用于存储红色和蓝色信息，$3$ 位用于绿色信息。时常用于图像显示和图标。} \\
 \fmline{ARGB2}{previews/formats-PHOTO_ARGB2-00.png}{
-Two bits each for red, green, blue and alpha.
-Not usually suitable for images, but works well for retro gaming sprites and low-color icons.} \\
+各有 $2$ 位用于存储红色、绿色、蓝色和透明度信息，
+不常适用于图像显示，但对于复古风格或对色彩还原要求低的图标和子画面。} \\
 \end{tabular}
 \newpage
 
@@ -704,15 +686,13 @@ Not usually suitable for images, but works well for retro gaming sprites and low
 
 \png{0011}
 
-Like other drawn elements, \mach{BITMAPS} are drawn using the current color.
-The original image pixels are multiplied by the color, very
-much like viewing the bitmap through colored glass.
+如其它绘图指令一样， \mach{BITMAPS} 同样使用当前颜色设定。
+原图像的颜色与该颜色叠加，给人呈现出透过有色玻璃看图片的感觉。
 
 \eg{examples-n}
 
-If the current RGB color is white (\mach{0xffffff}) then 
-the original bitmap colors are used.
-If black (\mach{0x000000}), then all pixels are drawn black.
+如果当前RGB颜色设定为白色（ \mach{0xffffff} )，则原图像色彩不变。
+如果设定为黑色（ \mach{0x000000} ），则原图像所有像素将被填涂为黑色。
 \clearpage
 
 \newpage
@@ -720,36 +700,29 @@ If black (\mach{0x000000}), then all pixels are drawn black.
 \index{asset converter}
 \label{assets}
 
-Converting graphics for the Gameduino 2 -- taking images and formatting their pixel data for
-use in bitmaps -- can be complex.
-To help, the Gameduino 2 tools include an asset converter that reads image files and produces data that can be used in your sketch.
+\gdtwo 可以实现较为复杂的图形转化操作——读取图片并将其图像信息格式化为可以用于位图操作的格式。
+为了实现这一功能，\gdtwo 内置工具包含一个资源转换器，能够读取图片文件并生成可用于位图操作的数据文件。
 
-The output of the asset converter is a single header file, named \mach{x\_assets.h}, where
-\mach{x} is the name of your sketch.
-This file defines
-a macro \mach{LOAD\_ASSETS()} that loads the image data into the
-Gameduino 2's graphics RAM.
-To use it, include the header file and then call \mach{LOAD\_ASSETS()} immediately after calling \mach{GD.begin()}:
+
+资源转换器的输出为一个名为 \mach{x\_assets.h} 的头文件，其中 \mach{x} 是用户指定图片的文件名。
+这个头文件定义了一个宏函数 \mach{LOAD\_ASSETS()} ，其作用是将图片信息载入到 \gdtwo 的显存中。
+使用它时，首先加载这个头文件，而后在调用 \mach{GD.begin()} 后立即调用 \mach{LOAD\_ASSETS()} ：
 
 \eg{walk-load}
 
-After the \mach{LOAD\_ASSETS()} finishes, all the bitmaps are loaded into graphics memory,
-and all the bitmap handles are set up to use the bitmaps.
-These handles are also defined in the header file, so the code can use them as:
+在 \mach{LOAD\_ASSETS()} 完成后，所有的位图都将加载到显存中，并且位图句柄也将设定完毕以便用其实现位图操作。
+这些位图句柄同样在头文件中说明，由此代码可以直接实用这些句柄，如下所示：
 
 \eg{walk-asset}
 
-There are two advantages to using the asset converter, rather than loading images from JPEG files.
-The first is that JPEGs are always loaded to an \mach{RGB565} bitmap.
-There is no transparency in JPEGs, so this is the only format supported.
-Second, the asset converter compresses\footnote{
-The compression scheme is zlib INFLATE
-(\url{http://www.zlib.net/}), as used in gzip and Zip.
-The GPU supports zlib INFLATE in hardware.
-} the graphics \textit{losslessly},
-whereas JPEG uses lossy compression.
-For photographic images, the difference is small.
-For carefully drawn game art, icons and fonts, the difference between lossless and lossy compression can be quite noticeable.
+使用资源转换器相比从JPEG文件中载入图片有两个优点。
+第一，JPEG图片通常被加载为一个 \mach{RGB565} 格式的位图。由于在JPEG图片中没有透明度信息，所以这是唯一的支持格式。
+第二，资源转换器对图片进行无损（ \textit{losslessly} ）压缩 \footnote{
+压缩方案为 zlib INFLATE
+（ \url{http://www.zlib.net/} ），即gzip和Zip所使用的压缩方案。
+GPU为zlib INFLATE提供硬件支持。} ，而JPEG使用的是有损压缩。
+对于摄影图像差别虽然很小，
+但对于精细绘制的游戏插图、图标和字体而言，有损和无损压缩的差别是相当明显的。
 
 \newpage
 \section{位图单元}
@@ -767,33 +740,27 @@ For carefully drawn game art, icons and fonts, the difference between lossless a
 \includegraphics[width=0.11\textwidth]{previews/walk-WALK-07.png}
 \end{center}
 
-These eight 32$\times$32
-\mach{ARGB1555}
-bitmap images are an animated
-walk cycle.
-Because all the images are the same size and format,
-they can share the same bitmap handle.
-The drawing commands select which image (or \term{cell}) to draw.
-For bitmaps drawn with \dcmd{Vertex2ii} the fourth parameter
-selects the cell. So for example this code
-draws the eight animation frames across the screen:
+这 $8$ 张 $32 \times 32$ \mach{ARGB1555} 位图图片构成一组走路的循环动画。
+因为所有图片都采用同样的尺寸和格式，所以他们可以共用统一个位图句柄。
+绘制命令将对绘制哪一张位图单元（ \term{cell} ）进行选择。
+调用 \dcmd{Vertex2ii} 绘制位图时，第 $4$ 个参数即为选择位图单元的参数。
+如下面这段代码所示，在屏幕上显示这 $8$ 张动画图片：
 \eg{examples-cell}
 \noindent
 
 \noindent
 \includegraphics[width=\textwidth,trim=0 216 80 0,clip=true]{assets/0058.png}
 
-Each bitmap handle can contain up to 128 cells, and the cells are arranged
-consecutively in graphics memory.
-Cells are useful for animation.
-By loading the animation sequence into the cells of a single bitmap handle,
-you can animate an object by changing its cell number.
+每个位图句柄最多能够控制 $128$ 张位图单元，而这些位图单元在显存中是连续存放的。
+位图单元对于显示动画是十分实用的。
+只需将动画每一帧的图片按顺序存储为一个位图句柄控制的位图单元，
+用户就可以只改变位图单元号码来控制相应的动画显示。
 
-Using the same eight-frame animated sequence,
-the \textit{walk} demo animates 256 sprites in a walk cycle crossing the screen.
+使用相同的8帧动画序列，
+例程 \textit{walk} 在屏幕上显示出 $256$ 组走路的循环动画。
 \index{demos!walk}
-Each sprite has a counter that controls its $x$ position and its animation frame.
-The color of the sprites changes from black (\mach{0x000000}) at the top of the screen to white (\mach{0xffffff}) at the bottom.
+每组动画都有一个计时器控制它的 $x$ 坐标以及对应动画的帧数。
+同时动画图片的颜色从屏幕顶端的黑色（ \mach{0x000000} ）渐进变化成屏幕低端的白色。
 
 \newpage
 \png{walk}
@@ -804,7 +771,7 @@ The color of the sprites changes from black (\mach{0x000000}) at the top of the 
 % \section{Zoom and shrink}
 
 \newpage
-\section{旋转, 拉伸和收缩}
+\section{旋转，拉伸和收缩}
 \index{rotation}
 \index{zoom}
 \index{bitmaps!rotating}
@@ -812,58 +779,50 @@ The color of the sprites changes from black (\mach{0x000000}) at the top of the 
 \png{0043}
 \eg{examples-rot1}
 
-Bitmap rotation and zooming is controlled by the
-\term{bitmap transform matrix}.
-This matrix is part of the graphics state.
-It controls the mapping of the bitmap's image pixels onto the screen.
-Fortunately, much of the math of the transform matrix is handled by the hardware, so
-we can use higher-level operations like rotate and scale.
+位图的旋转和拉伸是由位图变换矩阵（ \term{bitmap transform matrix} ）所控制。
+这一矩阵是图片属性的一部分。
+它控制着位图图像在屏幕上如何绘制。
+值得欣慰的是，变换矩阵的数学计算大部分由设备硬件处理，由此用户可以轻松的实现像旋转和缩放这样的高级操作。
 
-Here the bitmap is being drawn three times,
-with 0$^\circ$, 
-22.5$^\circ$,
-and finally 45$^\circ$ clockwise rotation,
-because \cmd{rotate} operations are cumulative.
-Parts of the bitmap disappear as it rotates around its top-left corner.
-This version shows what is happening more clearly
-because transparency has been turned off using a \dcmd{BlendFunc} of
-\mach{(SRC\_ALPHA, ZERO)}:
+由于 \cmd{rotate} 是累计操作，所以下例中将一幅位图分别以顺时针旋转 $0^\circ$、
+$22.5^\circ$ 和 $45^\circ$ 绘制了 $3$ 次。
+部分图像没有显示是因为旋转指令是以图片的左上角为中心进行旋转的。
+由于使用了 \mach{(SRC\_ALPHA, ZERO)} 这一 \dcmd{BlendFunc} 将透明度设置取消，
+这一现象在此例中表现的更加明显：
 \png{0044}
 
 \noindent
-Each \dcmd{Vertex2ii} draws 128$\times$128 pixels, because that is the size of the bitmap.
-However, the source image pixels are determined by the current bitmap transform matrix, and as it
-changes the source image rotates.
+\dcmd{Vertex2ii} 每次只绘制 $128 \times 128$ 像素的图像，是因为这就是图片的尺寸。
+不过当位图变换矩阵将原图片进行旋转后，原图片图像将显示当前位图变换矩阵变换后的图像。
 
-This rotation is centered on the top-left pixel of the bitmap, pixel $(0, 0)$.
-A more useful effect is rotation about the image center,
-which in this case is at bitmap pixel $(64, 64)$.
-To do this, the steps are:
+旋转的中心是位图图像的左上角，即例中图像 $(0, 0)$ 的坐标位置。
+但对于旋转操作，通常将图片中心作为旋转中心，即例中图像 $(64, 64)$ 的坐标位置。
+这个效果要分步骤实现：
 \begin{enumerate}
-\item \textit{translate} the image so that $(64, 64)$ is moved to $(0, 0)$
-\item rotate the image around $(0, 0)$ using \cmd{rotate}
-\item translate the image back, returning pixel $(0, 0)$ to $(64, 64)$
+\item 对图像进行平移变换（ \textit{translate} ），使原坐标 $(64, 64)$ 移至 $(0, 0)$ 处
+\item 调用 \cmd{rotate} ，以当前 $(0, 0)$ 为中心旋转图像
+\item 对图像进行平移变换回原位置，即将现坐标 $(0, 0)$ 移回 $(64, 64)$ 处
 \end{enumerate}
 
+
 \noindent
-This function \mach{rotate\_64\_64} performs these three steps:
+下面这个函数 \mach{rotate\_64\_64} 展示了上述三个步骤：
 
 \samepage{
 \eg{examples-rota}
 }
-It uses the \cmd{translate} command to move the bitmap by 64 pixels in both $x$ and $y$.
-\cmd{translate} uses 16.16 fixed-point values for its arguments, for subpixel precision,
-so here the \mach{F16()} macro does the conversion from integer pixel values.
+上例调用 \cmd{translate} 命令使图像在 $x$ 和 $y$ 方向上各平移了 $64$ 像素。
+\cmd{translate} 使用 $16.16$ 定点值作为其参数，所以对于子像素坐标，
+应参照此例使用 \mach{F16()} 宏函数将整数像素值进行相应转换。
 \png{0045}
 \eg{examples-rot3}
 
 \newpage
-Scaling the image -- either increasing the scale to zoom it,
-or decreasing the scale to shrink it -- uses the \cmd{scale} command.
-Here a similar function \mach{scale\_64\_64()} applies a scale around pixel $(64, 64)$.
-The first bitmap has no scale.
-The second is scaled by a factor of 2.0, doubling it in size.
-The third bitmap is scaled by 0.4, shrinking it.
+使用 \cmd{scale} 指令缩放图像——通过增减比例实现拉伸或收缩图像。
+下面例子中 \mach{scale\_64\_64()} 函数以图像 $(64, 64)$ 像素位置作为中心对图像进行缩放。
+第一张图片没有进行缩放。
+第二张图片以 $2.0$ 作为参数进行缩放，将图片尺寸放大到两倍。
+第三张图片以 $0.4$ 作为参数进行缩放，对图片进行收缩。
 
 \png{0062}
 
@@ -880,25 +839,21 @@ The third bitmap is scaled by 0.4, shrinking it.
 
 \png{lines}
 
-To draw lines, use \mach{Begin(LINES)} or \mach{LINE\_STRIP}.
-\mach{LINES} connects every pair of vertices, whereas \mach{LINE\_STRIP} joins all the
-vertices together.
+绘制直线时将调用 \mach{Begin(LINES)} 或 \mach{LINE\_STRIP} 。
+\mach{LINES} 只成对连接端点绘制线段，而 \mach{LINE\_STRIP} 将所有端点按顺序首尾相接绘制线条。
 
 \eg{lines-a}
 
-The NightStrike game uses \mach{LINES} to draw spark showers
+游戏NightStrike使用 \mach{LINES} 绘制爆炸时``火花四溅''的效果。
 \index{NightStrike}
-that ``pop'' out of each explosion. Each spark is tracked as an
-object with a position \mach{(x,y)}, a velocity \mach{(xv,yv)}, and an age.
-At the start of the explosion each spark is positioned
-at the explosion center, but has a random velocity in \mach{(xv,yv)}.
-Every frame the sparks travel along their path, and are drawn by this code:
+每个火花都是一个附有位置 \mach{(x,y)} 、向量 \mach{(xv,yv)} 和生命周期的对象。
+每当爆炸时，火花以爆炸中心作为起始位置，以一个随机向量作为 \mach{(xv,yv)} 的参数。
+而后火花将始终沿其向量参数的方向发散，代码如下所示：
 
 \eg{nightstrike-sparks}
 
-This draws a line from the spark's current $(x, y)$ position to its \textit{next} position.
-The size of the spark (\dcmd{LineWidth}) uses a sinusoidal formula, so that it starts off thin, gets wide, then
-becomes thin again at the end of its cycle.
+这段代码绘制了一条以火花当前位置坐标点 $(x, y)$ 和下一位置坐标点（ \textit{next} ）作为端点的线段。
+火花的尺寸（ \dcmd{LineWidth} ）使用正弦公式计算相关参数，使其开始时由细变粗，再由粗变细直到消失。
 \index{sinusoidal}
 \index{explosion}
 
@@ -917,9 +872,8 @@ becomes thin again at the end of its cycle.
 \includegraphics[width=0.3\textwidth]{assets/ns-lines-0011.png}
 \end{center}
 
-This 12-frame detail shows the sparks' progress.
-The game runs at 60 fps, so the spark sequence 
-takes about 1/5th of a second.
+如上所示连续 $12$ 帧的图片展现了一个火花四射的完整过程。
+游戏运行帧数为 $60$ fps，所以每个火花的生命周期是 $1/5$ 秒。
 \index{sparks}
 
 \newpage
@@ -930,12 +884,12 @@ takes about 1/5th of a second.
 
 \png{0039}
 
-To draw rectangles, use \mach{Begin(RECTS)} and supply opposite corners of the rectangle.
-The order of the two corners does not matter.
-The rectangles are drawn with round corners,
-using the current line width as the corner radius.\index{corner radius}\index{radius, corner}
-The round corners are drawn \textit{outside} the rectangle, so increasing the corner radius draws more pixels.
-This example draws a 420$\times$20 rectangle three times with increasing corner radius.
+绘制矩形将调用 \mach{Begin(RECTS)} 以及矩形对角端点的坐标作为参数。
+两端点的前后顺序并没有影响。
+另外，绘制的矩形是圆角矩形，其圆角半径是当前设定的直线宽度。\index{corner radius}\index{radius, corner}
+圆角部分的面积是在矩形范围之外（ \textit{outside} ），所以增加圆角半径将会扩大绘制出的矩形面积。
+此例中以不断增加的圆角半径绘制了 $3$ 次 $420 \times 20$ 的矩形。
+
 
 \eg{examples-rects}
 
@@ -944,40 +898,36 @@ This example draws a 420$\times$20 rectangle three times with increasing corner 
 \index{gradient}
 \index{drawing!gradients}
 \png{0012}
-Gradients - smooth color blends across the screen - are a useful graphical element.
-You \textit{could} use a large background image of the gradient,
-but it's more efficient to use \cmd{gradient}.
+渐变色——在屏幕上平滑的实现色彩融合——是一项十分实用的图像功能。
+虽然可以（ \textit{could} ）使用加载一张渐变色图片的方式来实现这一功能，
+不过调用 \cmd{gradient} 会更加方便高效。
 
-\cmd{gradient} draws a smooth gradient on the whole screen, given a starting point and color, and an ending point and color.
-In this example the starting point is top-left $(0, 0)$ and the starting color is deep blue (\mach{0x0060c0}).
-The ending point is bottom-left $(0, 271)$, deep orange (\mach{0xc06000}).
+只需提供起始色和结束色， \cmd{gradient} 就会在全屏范围绘制平滑渐变的背景。
+在下面的例子中，起始点是左上角 $(0, 0)$ ，起始色是深蓝色（ \mach{0x0060c0} ）。
+结束点是左下角 $(0, 271)$ ，结束色是深橙色（\mach{0xc06000} ）。
 
 \eg{examples-grad}
 
-These two points produce a vertical gradient, but \cmd{gradient} can draw gradients at any angle.
-You can get a horizontal or diagonal gradient by appropriate placement of the two control points.
+上例中由两个坐标点生成一个垂直梯度变化的渐变色，不知如此， \cmd{gradient} 能够绘制以任意角度变化的渐变色。
+只要相应设置好两个坐标点的坐标，用户可以绘制出水平变化或是对角线变化的渐变色。
 
-\cmd{gradient} used like this writes every pixel on the screen, so it can be used in place of
-\dcmd{Clear}.
-To draw a gradient on part of the screen, you can use \dcmd{ScissorXY} and \dcmd{ScissorSize} to limit
-drawing to a rectangular area. For more complex shapes, \cmd{gradient} can be used with a stencil test.
+像这样对 \cmd{gradient} 进行调用是对屏幕上所有像素点进行绘制，所以其功能可以用作替换 \dcmd{Clear} 的功能。
+当只要求对屏幕的一部分绘制渐变色时，可以使用 \dcmd{ScissorXY} 和 \dcmd{ScissorSize} 来规定绘制的矩形区域。
+如果要求规定更加复杂形状的区域，可以使用模板测试（stencil test）来调用 \cmd{gradient} 。
 \clearpage
 
-\section{图形混合}
+\section{图像混合}
 \index{blending}
 \png{0040}
 
 \eg{examples-blend1}
 
-Usually each drawn pixel \textit{replaces} the pixel that was on the screen.
-This is useful for layering, but sometimes you need a different mixing operation.
-\dcmd{BlendFunc} controls this operation.
-The first argument to \dcmd{BlendFunc} is the \term{source blend factor}, which controls the incoming
-color pixels.
-The second is the \term{destination blend factor}, which similarly
-controls the pixels that are already in the color buffer.
-After the blend factors have modified the colors,
-the two results are summed to produce the final pixel color.
+每次绘制图像时，通常都是将新图像覆盖（ \textit{replaces} ）在原图像上。
+这种分层的方式十分实用，但有时也需要一种图像混合的操作。
+\dcmd{BlendFunc} 即为控制此类操作的函数。
+\dcmd{BlendFunc} 的第一个参数是源混合因子（ \term{source blend factor} ），负责控制引入的图像。
+第二个参数是目标混合因子（ \term{destination blend factor} ），负责控制当前帧缓冲器中的图像。
+在两个图像因子都经过色彩修正后，两修正成果合并产生最后的图像。
 
 \newpage
 \begin{center}
@@ -1004,20 +954,15 @@ the two results are summed to produce the final pixel color.
 \end{tikzpicture}
 \end{center}
 
-The default mode is
-\mach{BlendFunc(SRC\_ALPHA, ONE\_MINUS\_SRC\_ALPHA)}, which means that the incoming pixel color
-is mixed with the existing screen color in proportion to the alpha channel value.
+默认模式为 \mach{BlendFunc(SRC\_ALPHA, ONE\_MINUS\_SRC\_ALPHA)} ，这种模式将引入图像的色彩与屏幕alpha通道部分的色彩进行混合。
 
-Another frequently used mode is
-\mach{BlendFunc(SRC\_ALPHA, ONE)}. The \mach{ONE} factor for the destination means that the
-incoming pixel color is \textit{added}
-to the existing pixel color.
-This is useful for glows and overlays.
-In the code above you can see this mode means that every disk drawn is added to the existing screen contents,
-so their brightness accumulates.
+另一个常用的模式为 \mach{BlendFunc(SRC\_ALPHA, ONE)} 。
+\mach{ONE} 作为目标混合因子表示将引入图像的色彩叠加（ \textit{added} ）到屏幕上现有图像的色彩。
+这一模式十分适用于光晕和叠加效果。
+如上面的代码所示，这一模式下绘制的每个圆盘都与屏幕现有的图像进行混合，因此重合部分的亮度也是累加的
 
-\mach{BlendFunc(SRC\_ALPHA, ZERO)} is the \term{replace} operation; it disables transparency.
-The \mach{ZERO} factor for the destination means that existing screen pixels are discarded at the blending stage.
+另外还有 \mach{BlendFunc(SRC\_ALPHA, ZERO)} 这一替换（ \term{replace} ）操作；它将禁用透明度设定。
+\mach{ZERO} 作为目标混合因子表示当前屏幕画面在图像混合部分将被删除。
 
 \png{0069}
 
@@ -1025,11 +970,10 @@ The \mach{ZERO} factor for the destination means that existing screen pixels are
 \section{字体}
 \png{fonts0}
 
-The \gdtwos GPU has sixteen built-in fonts, numbered 16-31.
-Numbers 26-31 are the high-quality anti-aliased fonts.
-You can also load TrueType (\mach{.ttf}) fonts
-using the asset converter (see \xref{assets}).
-After loading it, you can use the new font with any of the drawing commands.
+\gdtwo 的GPU内置 $16$ 种字体，字号范围为 $16\sim31$ 。
+其中字号 $26\sim31$ 用于要求边缘平滑的高级字体。
+另外，用户可以使用资源转换器（ \xref{assets} ）加载TrueType格式（ \mach{.ttf} ）的字体。
+加载后，用户可以在任意绘制指令中使用这些新字体。
 
 \eg{fonts-night}
 
@@ -1040,14 +984,11 @@ After loading it, you can use the new font with any of the drawing commands.
 \newpage
 \section{子坐标系}
 
-So far all drawing has used \dcmd{Vertex2ii} to supply the vertices.
-\dcmd{Vertex2ii} can only handle $(x,y)$ that are integers in the range 0-511.
-What if you want to supply a vertex with a negative coordinate,
-or a coordinate that isn't on an exact pixel?
-In these cases, you can use \dcmd{Vertex2f}, which uses a finer scale
-for $x$ and $y$, and has a much larger range.
-\dcmd{Vertex2f} coordinates are in 16ths of a pixel. So this call using
-\dcmd{Vertex2ii}:
+自始至此，所有关于绘制点的指令都是通过调用 \dcmd{Vertex2ii} 实现的。
+但是 \dcmd{Vertex2ii} 只能绘制参数为 $0\sim511$ 的整数的 $(x,y)$ 坐标点。
+那么如何绘制一个负值参数或是并不精确位于某像素点上的坐标点呢？
+这些情况下可以调用 \dcmd{Vertex2f} ，它对于 $x$ 和 $y$ 的坐标参数有着更精细的单位和更大的取值范围。
+\dcmd{Vertex2f} 坐标单位是 $1/16$ 像素。因此，如下所示调用 \dcmd{Vertex2ii} 的代码：
 
 \begin{framed}
 \begin{verbatim}
@@ -1056,7 +997,7 @@ GD.Vertex2ii(1, 100);
 \end{framed}
 
 \noindent
-becomes this call using \dcmd{Vertex2f}:
+当调用 \dcmd{Vertex2f} 实现时将变为：
 
 \begin{framed}
 \begin{verbatim}
@@ -1065,22 +1006,17 @@ GD.Vertex2f(16, 1600);
 \end{framed}
 
 \noindent
-but it is often clearer to multiply by 16 explicitly in the code, like this:
+但通常为了使代码更加简单明了，这一代码会以如下所示乘以 $16$ 的方式进行编写：
 \begin{framed}
 \begin{verbatim}
 GD.Vertex2f(16 * 1, 16 * 100);
 \end{verbatim}
 \end{framed}
 
-\dcmd{Vertex2f} draws
-\mach{POINTS},
-\mach{LINES} and
-\mach{RECTS}
-with much finer precision.
-Each of these 16 points is drawn with a $y$ coordinate that increases by 1/16th of a pixel.
-As you can see, the graphics system adjusts the shading of the pixels very slightly as the point
-moves downwards by 1/16th of a pixel.
-This extra precision means that ``pixel'' effects are much less noticable.
+通过 \dcmd{Vertex2f} 绘制点（ \mach{POINTS} ）、线（ \mach{LINES} ）和矩形（ \mach{RECTS} ）可以更加精细。
+下图中的 $16$ 个圆点是由 $y$ 坐标值依次增加 $1/16$ 像素所绘制的。
+如图所示，当圆点以每次向下运动 $1/16$ 像素时，系统会对像素的阴影部分进行十分微小的调节。
+这种出色的精细度将大大削减``像素颗粒''效应。
 
 \vspace{10pt}
 \noindent
@@ -1102,21 +1038,17 @@ This extra precision means that ``pixel'' effects are much less noticable.
 \cmdidx{atan2}
 \cmdidx{polar}
 
-The GD library refers to angles in several places:
+GD程序库在以下指令中会涉及到角度的应用：
 
 \begin{itemize}
-\item the \cmd{rotate} command, which rotates bitmaps, takes an angle parameter
-\item the \cmd{dial} command draws a dial widget at a particular angle
-\item the widget tracking system, controlled by \cmd{track}, reports the angle of rotary widgets
-\item the
-\nameref{rsin},
-\nameref{rcos},
-\nameref{polar} and
-\nameref{atan2} math functions all use angles
+\item \cmd{rotate} 指令旋转图像时需要用到角度参数
+\item \cmd{dial} 指令会以某一特定的角度绘制表盘控件
+\item 调用 \cmd{track} 控制控件跟踪系统时将会输出转动控件的旋转角度 
+\item 数学函数\nameref{rsin} 、 \nameref{rcos} 、 \nameref{polar} 和 \nameref{atan2} 都需要使用角度参数
 \end{itemize}
 
-In each case, the angle is specified in Furmans, not in degrees or radians.
-A Furman is an angle measure; there are 65536 Furmans in a circle. So
+上列所有情况，角度的单位都特定为Furmans角度，既不是角度也不是弧度。
+Furman是一种角度度量单位；一个圆周是 $65536$ Furmans角度。如下列公式所示
 
 \[
 1 \text{ Furman}
@@ -1128,8 +1060,7 @@ A Furman is an angle measure; there are 65536 Furmans in a circle. So
 \frac{2\pi}{65536} \text{radians}
 \]
 
-Orientations are represented
-by clockwise angles, with an angle of 0 meaning straight down:
+角度的方向是顺时针方向，$0$ 刻度值在正下方：
 
 \begin{center}
 \begin{tikzpicture}[scale=0.75]
@@ -1149,37 +1080,34 @@ by clockwise angles, with an angle of 0 meaning straight down:
 
 \end{tikzpicture}
 \end{center}
-As a convenience, the GD library defines a macro \mach{DEGREES()}, which converts angles in degrees to Furmans:
+为了方便，GD程序库定义了一个宏函数 \mach{DEGREES()} ，它可以将角度转换成相应的Furmans角度：
 \begin{verbatim}
 #define DEGREES(n) ((65536UL * (n)) / 360)
 \end{verbatim}
 
 \newpage
-The advantage of representing angles as Furmans is that they make angular arithmetic significantly cheaper.
-For example, when incrementing angles for a rotating object, normal
-16-bit arithmetic means that the Furman measurement wraps from 65535
-back to zero.
+使用Furmans角度作为单位的优点在于它可以使包含角度的数学运算更加易于计算。
+例如，当增大某个旋转物体的角度时，只需要用普通的 $16$ 位运算就可表示从 $65535$ 到 $0$ 度的Furman角度运算。
 
 \begin{center}
 \includegraphics[width=0.7\textwidth]{assets/angle.png}
 \end{center}
 
 \index{tracking controls}
-In the NightStrike game
+在游戏NightStrike中，
 \index{NightStrike}
-the player's touch controls the angle of the gun turret.
-At startup, the game requests the GPU track angles for any touch on tag number
-\mach{0x01}:
+玩家通过触按屏幕控制炮塔的角度。
+游戏启动时，游戏程序命令GPU跟踪任意触摸标签为 \mach{0x01} 的触击：
 \eg{nightstrike-cmd_track}
 \noindent
-After the \cmd{track} command,
+\cmd{track} 指令完成后，
 \mach{GD.inputs.track\_val}
-holds the angle in Furmans from screen position (240, 271) to the touch location.
-The game copies this value into the turret's angle variable.
+将记录下从屏幕坐标 $(240, 271)$ 到触摸点坐标这一向量的Furmans角度。
+之后程序将这一数据赋值给炮塔的角度变量。
 \eg{nightstrike-track}
-When the turret is drawn, the angle variable is used with \cmd{rotate} to rotate the turret's bitmap,
+当绘制炮塔时， \cmd{rotate} 指令将使用这一角度变量旋转炮塔的图像，
 \cmdidx{cmd\_rotate}
-which is in the ``0 Furmans'' orientation:
+下图所示即为炮塔`` $0$ Furmans角度''时的方向： 
 \begin{center}
 \includegraphics[width=0.10\textwidth]{assets/turret.png}
 \end{center}
@@ -1191,22 +1119,19 @@ which is in the ``0 Furmans'' orientation:
 
 \eg{nightstrike-context}
 
-The function \mach{blocktext}, used in \textit{NightStrike}'s title screen,
+\textit{NightStrike} 的标题界面使用函数 \mach{blocktext}
 \index{NightStrike}
-draws the string \mach{s} with a black outline around the text.
-To do this, it changes the color to black using \dcmd{ColorRGB}, and draws the text four times slightly offset.
-Now it needs to draw the text itself, in the original color.
-But the original color is lost, because it was changed to black.
+来绘制带有黑色轮廓的字符串 \mach{s} 。
+实现这一效果时，要使用 \dcmd{ColorRGB} 将颜色变为黑色，然后分别以左上、左下、右上、右下四个方向微小的位置偏差将文本绘制四遍。而后需要再次以文本原有的颜色绘制文本。
+但先前的操作将文本的颜色变为黑色，使文本原有的颜色信息丢失。
 
-The \dcmd{SaveContext} preserves all the graphics state -- including the color -- in a private storage area.
-When \dcmd{RestoreContext} executes, it copies this saved state back.
-Hence the color is restored to the value it had at the original \dcmd{SaveContext}.
+因此在绘制前调用 \dcmd{SaveContext} 将所有的图片属性——包括颜色信息——存储在一个私立的存储区。
+而当执行 \dcmd{RestoreContext} 时将恢复为先前存储的所有属性。
+由此文本的颜色恢复为先前调用 \dcmd{SaveContext} 时存储的颜色。
 
-Using \dcmd{SaveContext} or \dcmd{RestoreContext}, functions can change graphics state,
-and then restore it afterwards.
-As far as any caller is concerned, the function leaves the state untouched.
-The GPU has enough internal storage to preserve three extra copies of the graphics state in this way.
-
+调用 \dcmd{SaveContext} 或 \dcmd{RestoreContext} 函数可以实现改变图片属性后还原为原有属性的功能。
+就用户而言，函数所存储的属性信息是无法修改影响的。
+另外，GPU的内存空间可以支持存储3份像这样的图片属性备份。
 
 % \section{Color, tag and stencil}
 % \section{Clock}
@@ -1217,71 +1142,68 @@ The GPU has enough internal storage to preserve three extra copies of the graphi
 
 \section{读取触摸屏的输入}
 
-The function \nameref{getinputs} reads all the Gameduino 2's inputs, including the touch sensors.
-After making this call, you can read the touch coordinates from
-\mach{GD.inputs.x} and
-\mach{GD.inputs.y}.
-The best time in the game cycle to sense inputs is just before starting to draw the screen,
-so a frequent pattern is:
+函数 \nameref{getinputs} 的功能是读取Gameduino 2的所有输入数据，包括触摸传感器。
+调用此函数后, 你可以通过 
+\mach{GD.inputs.x} 和
+\mach{GD.inputs.y} 得到按击位置的相应坐标。 
+而在程序中检测输入的最佳时间应刚好设定在开始绘制游戏界面之前，如下所示：
+
 \eg{simon-touch}
 
-If there is no touch, then both \mach{GD.inputs.x} and \mach{GD.inputs.y} are set to -32768.
-The touch $(x,y)$ are \term{screen pixel coordinates}, so they range $(0 \le x \le 479)$ and $(0 \le y \le 271)$.
-To convert these pixel coordinates into subpixel coordinates, multiply by 16.  For example:
+没有触摸信号时， \mach{GD.inputs.x} 和 \mach{GD.inputs.y} 的值为 $-32768$ 。
+因为触摸所得的坐标值 $(x,y)$ 是 屏幕的像素坐标（ \term{screen pixel coordinates} ），所以其范围分别是
+ $(0 \le x \le 479)$  和  $(0 \le y \le 271)$ 。
+将此类像素坐标转换为子坐标系坐标时只需将相应数值乘以 $16$ 。如下所示：
 \eg{blobs-xy}
 
 \newpage
 \section{设计实例: blobs}
 \index{demos!blobs}
 \png{blobs}
-The ``blobs'' demo lets you sketch a trail of groovy expanding colored circles with a finger or stylus.
-The code keeps track of 128 points, animating each with radius and alpha to create a pleasing
-``fade out'' effect.
+在``blobs''中，你可以用手指或是手写笔绘制出一连串五颜六色不断扩散的圆点。
+这段代码支持连续捕捉 $128$ 个点，每个点都配合改变半径和透明度的动画以呈现出一个有趣的``淡隐''效果。 
 
-At startup, \mach{begin()} sets all the blobs' positions to off screen.
+启动时， \mach{begin()} 将所有blobs的坐标设定在屏幕外。
 
 \eg{blobs-a}
 
-If the screen is being touched, the subpixel coordinates of the touch are added into the \mach{blobs} ring.
-Each blob's transparency and radius depends on its age.
-The ``random'' color is actually computed using modulo arithmetic.
+当屏幕被点击时，点击位置的子坐标系坐标将被送至 \mach{blobs} 结构体中。
+各个blob的透明度和半径取决与其出现的先后顺序。
+所谓``随机''的颜色实际上是用核运算计算出来的。 
 
 \eg{blobs-b}
 
 \section{触摸标签}
 
-Tagging is a GPU feature that makes touch detection easier.
-In many situations the exact coordinates of the touch are not important -- you are only interested in \textit{what} has been touched.
-As you draw each object on the screen, you can tag its pixels with a byte value.
-For example, to create a 'OK' button, you can tag its pixels with code 44.
-Then each time the user touches the button, the number 44 appears in the tag register.
-Tag values are a single byte, ranging from
-0 to 255.
-However, the hardware uses a tag value of 255 to indicate ``no touch", so the usable range of values is 0 to 254.
+作为GPU的一项特色功能,触摸标签使触摸检测变得更加轻松。
+在多数情况下，对触摸位置坐标的精确度要求不是很严格——你只需关注触摸的对象（ \textit{what} ）。
+你可以对在屏幕上绘制的每个对象所包含的像素点赋予一个字节值。
+例如，创建一个`OK'按钮，并对其所包含的像素点赋予代码值 $44$ 。
+此后，每当用户点击这个按钮，标签寄存器中的值就会变为 $44$ 。
+触摸标签值均为单字节数值，范围从 $0\sim255$ 。
+不过，设备将 $255$ 这一标签值视为``无触摸''，因此标签值的可用范围为 $0\sim254$ 。
 
 \png{0005}
 
-This example sets the \dcmd{Tag} value before drawing each number. % using \cmd{number}.
-Because the pixels belonging to each number are then ``tagged'', \mach{GD.inputs.tag} is set to the number being currently touched,
-and the Arduino can access it and print it on the serial output.
+下面这个例子在绘制每个数字之前对其设定标签值（ \dcmd{Tag} ）。% using \cmd{number}.
+由于每个数字所含像素点被改数字``标记''， \mach{GD.inputs.tag} 则被设定为当前点击的数字，
+可以通过Arduino获取它并通过串口输出将它显示出来。
 
 \eg{examples-h}
 
 \newpage
-\section{Sketching}
+\section{绘图}
 \label{sketching}
 \index{sketching}
 \cmdidx{cmd\_sketch}
 
 \png{sketching}
 
-Sketching here means taking touch input and plotting pixels.
-The \gdtwo GPU has built-in sketching  so you can `paint'
-pixels into the bitmap without any input from the Arduino.
-The \cmd{sketch} command starts sketching.
-When you want sketching to stop, call \cmd{stop}.
-Note the call to \mach{GD.flush()}.
-This forces any buffered commands to the GPU immediately.
+绘图在这里表示采用触击屏幕进行绘图。
+\gdtwo 的GPU已内置绘图功能，因此你无需通过Arduino输入指令即可在位图中`绘制'图像。
+\cmd{sketch} 指令用于启动绘图功能。
+\cmd{stop} 指令用于停止绘图。
+注意，对于 \mach{GD.flush()} 的调用将使缓冲区的指令立即强制送入GPU中。
 
 \eg{sketch-a}
 
@@ -1294,19 +1216,15 @@ This forces any buffered commands to the GPU immediately.
 
 \png{widgets3d}
 
-\gdtwo has a rich set of widgets: dials, buttons, gauges, sliders and scroll bars.
-To help manage the user interactions with the adjustable widgets, a feature called \textit{tracking controls}
-extends the simple tag system.
-Using tags, the program can know when an object is touched.
-With a tracking control, the program can also know the relative position of the touch.
+\gdtwo 有丰富的控件设定：表盘、按钮、量规、滑动条和滚动条。
+以便更好的管理这些可调控件的用户交互，可以通过跟踪控制（ \textit{tracking controls} ）这一特色功能拓展基础标签系统。
+利用标签，每当相应对象被点击，程序都能够立刻得知。
+而利用跟踪控制，程序可以得知触摸的相对位置。
 
 \index{demos!widgets}
-The \mach{widgets} demo draws all widget types, and
-for the three adjustable widgets -- the dial, slider and toggle -- uses tracking controls to manage their touches.
-Each adjustable widget is drawn with a unique tag value, here
-\mach{200},
-\mach{201} and
-\mach{202}.
+\mach{widgets} 例程绘制出了所有的控件类型，
+并且对于 $3$ 个可调控件——表盘，滑动条和拨动开关——利用跟踪控制管理对它们的触按。
+每个可调控件都被赋予独立的标签值， \mach{200} 、 \mach{201} 和 \mach{202} 。
 
 \vspace{10pt}
 
@@ -1338,39 +1256,37 @@ Each adjustable widget is drawn with a unique tag value, here
 \end{tikzpicture}
 
 \newpage
-The program then tells the GPU to track touches on the three regions. First it draws the dial with tag 200.
-Then it calls \cmd{track} so that the GPU will track touches for that particular tag, and compute the position
-relative to pixel position (68, 68), the center of the dial:
+而后该程序命令GPU跟踪对于这 $3$ 个可调控件区域的触按。首先程序先对表盘赋予值为 $200$ 的标签。
+之后调用 \cmd{track} 令GPU跟踪对于这个特殊标签的触按，并计算其对于表盘中心（屏幕坐标位置为 $(68, 68)$ ）的相对位置：
 \eg{widgets-dial}
 \index{angles!rotary tracking}
 
-Similarly for the linear widgets, the slider and toggle:
+线性控件的情况类似，对于滑动条和拨动开关：
 \eg{widgets-linear}
 
-With these set up, the program can detect a relative touch on any widget by reading
-\mach{GD.inputs.track\_tag} and
-\mach{GD.inputs.track\_val}.
-The value in \mach{GD.inputs.track\_val} is an unsigned 16-bit number in the range 0-65535.
-For the rotary track -- the dial -- this is the touch angle in Furmans.
-For the linear tracks, it is the touch position within the rectangle.
-0 means far left and 65535 means far right.
+通过这些设定，程序能够通过读取
+\mach{GD.inputs.track\_tag} 和
+\mach{GD.inputs.track\_val} 检测对于任意控件的相关触按。
+\mach{GD.inputs.track\_val} 中的值为无符号 $16$ 位整型数值，范围为 $0\sim65535$。
+对于转动跟踪——表盘——该值代表对应的Furmans触按角度。
+对于线性跟踪，该值代表在矩形中的触按位置。
+$0$ 代表最左端，$65535$ 代表最右端。
 \eg{widgets-track}
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{声音}
 
-Gameduino 2 has two sound systems.
-The first -- the \term{synthesizer} -- can generate a set of fixed sounds and musical notes.
-The synthesizer is useful for quickly adding audio to a project, but because the sound set is fixed, is not very flexible.
-The second is the \term{sample playback}.
-It plays sampled audio from main memory in a variety of formats.
-This system is much more flexible but you will need to prepare and load samples into RAM.
+\gdtwo 有两个声音系统。
+第一个声音系统——频率合成器（ \term{synthesizer} ）——能够生成一系列固定的声音和音符。
+该系统对于在程序中添加音频十分实用和便捷，但由于声音素材是固定的，因此所添加的音频灵活可变性相对较差。
+第二个声音系统是采样回放（ \term{sample playback} )
+该系统能够播放存放在主存储器中多种格式的音频素材。
+只要提前在RAM中载入所需音频，其功能相较前者将更加多样和实用。
 
-\section{Clicks and pops}
+\section{敲击音效}
 
-The synthesizer provides several short ``percussive'' sounds, mostly for use in user interfaces.
-To trigger the sound, call \mach{GD.play()} with the sound ID.
-The full list of available sounds is:
+频率合成器提供若干短促的``敲击''音效，主要是为用户交互界面提供音效素材。
+通过调用 \mach{GD.play()} 和音效素材的ID可以触发对应音效。
+相关音效列表如下所示：
 
 \vspace{10pt}
 \begin{tabular}{l}
@@ -1386,11 +1302,10 @@ The full list of available sounds is:
 \end{tabular}
 \vspace{10pt}
 
-\section{Instrument playback}
+\section{乐音音符}
 
-The synthesizer can also produce musical instrument notes.
-Again, calling \mach{GD.play()} triggers the sound, and the first parameter
-is an instrument:
+频率合成器也能够生成乐音音符。
+同样通过调用 \mach{GD.play()} 来触发这些音符，第一个参数即为乐音的名称：
 
 \index{instruments}
 \label{instruments}
@@ -1411,34 +1326,34 @@ is an instrument:
 \vspace{10pt}
 
 \noindent
-In this case \mach{GD.play()} also accepts an optional second argument that specifies a MIDI note number 
-in the range 21 to 108. If this argument is omitted then it plays in C4, MIDI note 60.
+这种情况下， \mach{GD.play()} 还需要为MIDI音符号设定另一个变量参数，范围为 $21\sim108$。
+当该参数空缺时，将会播放C4的音效，同时MIDI音符号为 $60$ 。
 
-The synthesizer can also play a few other miscellaneous sounds.
-Instruments
-\mach{SQUAREWAVE},
-\mach{SINEWAVE},
-\mach{SAWTOOTH} and
-\mach{TRIANGLE}
-generate continuous simple waves, useful for retro effects.
-Instruments
-\mach{BEEPING},
-\mach{ALARM},
-\mach{WARBLE} and
+频率合成器还可以播放部分混合音效。
+乐音
+\mach{SQUAREWAVE}，
+\mach{SINEWAVE}，
+\mach{SAWTOOTH} 和
+\mach{TRIANGLE} 
+能够合成简单的波形音效，这对于合成怀旧音效十分实用。
+乐音
+\mach{BEEPING}，
+\mach{ALARM}，
+\mach{WARBLE} 和
 \mach{CAROUSEL}
-generate various alarm tones.
-And the ASCII codes '0' - '9', '*' and '\#' generate the corresponding touch-tone DTMF tones.
+能够合成各种警报音效。
+另外，ASCII代码 `0'——`9'， `*' 和 `\#' 能够生成对应的触击DTMF音效。
 
-To detect when a note has finished playing, read the hardware's \mach{PLAY} register.
-When it is zero, the note is finished:
+通过读取设备的 \mach{PLAY} 寄存器可以检测声音是否播放结束。
+当此寄存器内数值为 $0$ 时，代表声音已经播放结束：
 \eg{examples-waitnote}
 
 \tablefirsthead{%
-MIDI note & ANSI note & freq. (Hz) \\
+MIDI 音符 & ANSI 音符 & 频率. (Hz) \\
 \hline
 }
 \tablehead{%
-MIDI note & ANSI note & freq. (Hz) \\
+MIDI 音符 & ANSI 音符 & 频率. (Hz) \\
 \hline
 }
 \footnotesize
@@ -1540,17 +1455,15 @@ MIDI note & ANSI note & freq. (Hz) \\
 \onecolumn
 \normalsize
 
-\section{Samples}
+\section{采样回放}
 \index{samples}
 
-\gdtwos audio system can also play back samples.
-The sample playback system is independent -- you can play a sample while playing a fixed sound, and the
-hardware will mix the two sounds together, according to their assigned volumes.
+\gdtwo 的声音系统还可以进行采样回放。
+采样回放系统是独立的——你可以在播放固定音符的同时播放音频素材，
+而设备将会通过分配好的音量将它们混合在一起进行播放。
 
-To play back a sample from memory, call \mach{GD.sample} with the
-sample's base address, length, frequency and format as arguments.
-So if you have a ULAW sample at address 0, of length 22050 bytes,
-with frequency 44100 Hz, you play it by calling:
+对内存中的音频进行采样回放时，调用 \mach{GD.sample} ，参数分别为音频的基准地址，音频文件大小，频率以及格式。
+例如，若要播放一段位于地址 $0$ ，音频文件大小为 $22050$ 字节，频率为 $44100$ Hz的ULAW格式的音频，程序如下：
 
 \begin{framed}
 \begin{verbatim}
@@ -1558,59 +1471,54 @@ GD.sample(0, 22050, 44100, ULAW_SAMPLES);
 \end{verbatim}
 \end{framed}
 
-Three sample formats are supported:
+采样回放系统支持3种音频格式：
 
 \vspace{10pt}
 \begin{tabular}{ccl}
-format & bit per sample & encoding \\
+格式 & 音频文件位数 & 编码 \\
 \hline \\
-\mach{LINEAR\_SAMPLES} & 8 & signed 8-bit linear, -128 to 127 \\
-\mach{ULAW\_SAMPLES} & 8 & standard 8-bit encoded $\mu$-law \\
+\mach{LINEAR\_SAMPLES} & 8 & signed $8$-bit linear, $-128$ to $127$ \\
+\mach{ULAW\_SAMPLES} & 8 & standard $8$-bit encoded $\mu$-law \\
 \mach{ADPCM\_SAMPLES} & 4 & standard IMA ADPCM \\
 \end{tabular}
 \vspace{10pt}
 
-\gdtwos asset converter tool (see \xref{assets}) converts mono \mach{.wav}
-files to any of these formats.
-The hardware supports playback rates up to 48 kHz, and at this rate
-the sound quality of ADPCM samples is similar to AM radio.
-Of course this rate uses 24 kBytes/s of memory.
-To save memory, use ADPCM with a low sample rate. The \mach{noisy} demo
-plays back voice samples of the digits 0-9, encoded in ADPCM at 8 kHz.
-The samples are quite intelligible, and together take about 26 kBytes of
-graphics memory.
+\gdtwo 的资源转换器（ \xref{assets} ）可以将momo \mach{.wav} 文件转换成上述任意格式。
+设备最高可以支持 $48$ kHz的采样率，在此频率下，ADPCM格式音频素材的声音质量就像是AM收音机一样。
+当然，在此频率下的音频所占内存的大小为 $24$ kBytes/s。
+为了节省内存，最好采用较低采样率的ADPCM音频。 \mach{noisy} 例程播放了数字 $0$ 至 $9$ 的音频采样，
+以采样率为 $8$ kHz的ADPCM格式进行编码。
+采样声音简单明了，总共只占了 $26$ kBytes的显存。
 
-Note that there is a hardware-imposed restriction on the arguments to \mach{GD.sample()}.
-The base address and length must be multiples of 8.
-However, the asset converter tool aligns and pads samples automatically,
-so that you don't need to do anything special.
+注意，对于 \mach{GD.sample()} 的参数有一个强制限制。
+基准地址的长度必须是 $8$ 的倍数。
+另外，资源转换器会自动对采样音频进行校准和保护，所以用户对此不需再做什么。
 
 \newpage
 \eg{noisy-A}
 
 \newpage
-\section{Continuous playback}
+\section{持续播放}
 
 \png{song}
 
-For long samples, keeping the entire sample in graphics memory is usually not practical.
-Instead the hardware's sample playback system can continuously play back a loop of samples, while the Arduino keeps the loop fed with
-fresh samples from SDcard.
-The \mach{Streamer} class in the GD2 library conveniently handles these details.
-To use it, call its \mach{begin()} method with the name of a music file on the microSD card.
-\mach{Streamer} defaults to a sample rate of 44.1 kHz, and IMA ADPCM sample encoding.
-It uses a 4K buffer for the streaming samples, located at the very top of graphics memory.
+对于较长的音频，将整个音频采样存入内存通常不现实。
+取而代之，使用采样回放系统不间断的播放一段循环音频，同时Arduino通过SD卡不断的更新这段音频。
+可以通过GD2程序库中的 \mach{Streamer} class十分轻松的实现。
+首先，调用它的 \mach{begin()} 函数，并以microSD卡上音频文件的名字作为参数。
+\mach{Streamer} 默认情况下采用采样率为 $44.1$ kHz的IMA ADPCM的采样编码。
+另外，串流音频将使用 $4$K缓存，即位于显存中的较高位置。
 
-Calling \mach{Streamer}'s \mach{feed()} method reads samples from the file into the buffer.
-Your application should call \mach{feed()} often enough to prevent the buffer running out of samples.
-Here the code calls \mach{stream.feed()} once per frame.
+而后，调用 \mach{Streamer} 的 \mach{feed()} 函数从文件中读取音频采样至缓存中。
+而应用程序应时常调用 \mach{feed()} 以防止缓存中的音频采样耗尽。
+在下例中，程序每一帧都会调用一次 \mach{stream.feed()} 。
 
-\mach{Streamer} can also tell how far the file has progressed.
-\mach{progress()} returns a pair of 16-bit numbers,
-\mach{val} and \mach{range}, which represent progress as a fraction $(\mach{val} / \mach{range})$.
-This example passes \mach{val} and \mach{range} directly to a \cmd{slider} widget.
+\mach{Streamer} 还可以获知音频播放进程已经进行到什么位置。
+\mach{progress()} 将会返回一对16位的数字，
+\mach{val} 和 \mach{range} ，它们用以表示已经播放的进程比例为 $(\mach{val} / \mach{range})$。
+在下面的例程中，程序直接将 \mach{val} 和 \mach{range} 作为滑动条（ \cmd{slider} ）的控件参数。
 
-If you have the \mach{sox} audio utility installed, you can convert \mach{.wav} samples to ADPCM IMA format on the command-line like this:
+如果有已安装的 \mach{sox} 音频编辑工具, 可以将 \mach{.wav} 格式的音频转换为 ADPCM IMA格式， 相应命令行如下所示：
 
 \begin{framed}
 \begin{verbatim}
@@ -1619,8 +1527,8 @@ $ play -r 44100 mesmeriz.ima
 \end{verbatim}
 \end{framed}
 
-The \mach{play} plays back the converted file.
-Because \mach{.ima} is a headerless format, \mach{play} needs to know the sample rate, in this case 44100 Hz.
+最后，\mach{play} 将播放转换后的音频文件。
+由于 \mach{.ima} 是无标头文件格式，而 \mach{play} 需要采样率进行播放，在此设定为 $44100$ Hz。
 
 \eg{song-A}
 
@@ -1645,11 +1553,11 @@ GD.get_accel(x, y, z);
 \mach{get\_accel()} 函数对输出结果进行了矫正，在这种情况下重力(1G)在
 \mach{x},
 \mach{y} 或
-\mach{z} 轴上的分量大小是256。
+\mach{z} 轴上的分量大小是 $256$ 。
 如果将 \gdtwo 完全倾向左侧，就会得到以下数值：
-\mach{x} = -256,
-\mach{y} = 0,
-\mach{z} =0。
+\mach{x} = $-256$,
+\mach{y} = $0$,
+\mach{z} =$0$。
 因为该加速度传感器是模拟量输入，所以这些值会存在一些误差。
 在示例程序 \mach{tilt} 中，你将看到在加速度传感器的输出中就会存在一些微小的 ``噪声''。
 
@@ -1676,8 +1584,8 @@ GD.load("kitten.jpg");
 \end{framed}
 
 \noindent
-函数\cmd{loadimage} 告知GPU准备接收一个JPEG图片，之后 \nameref{load} 函数将图片数据全部读取到GPU中。
-下面是另外一个例子，演示了如何从SD卡的``\mach{mem.raw}"文件中读取16KB的原始数据：
+函数 \cmd{loadimage} 告知GPU准备接收一个JPEG图片，之后 \nameref{load} 函数将图片数据全部读取到GPU中。
+下面是另外一个例子，演示了如何从SD卡的`` \mach{mem.raw} ''文件中读取 $16$KB的原始数据：
 
 \begin{framed}
 \begin{verbatim}
@@ -1689,7 +1597,7 @@ GD.load("mem.raw");
 \noindent
 同样的，此处 \cmd{memwrite} 告知GPU准备接收数据，之后由 \nameref{load} 函数将数据装载至GPU中。
 
-由对象转化器(\xref{assets})生成的 \mach{.gd2} 格式文件为纯命令流，也可以通过 \nameref{load}
+由对象转化器( \xref{assets} )生成的 \mach{.gd2} 格式文件为纯命令流，也可以通过 \nameref{load}
 函数载入：
 
 \begin{framed}
@@ -1739,17 +1647,13 @@ GD.load("frogger.gd2");
 
 }
 
-\input{drawcommands-en.tex}
+\input{drawcommands-cn.tex}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{高级指令}
 
-This section describes some of the high-level commands
-that Gameduino 2's GPU 
-supports.
-Each of these commands runs on the GPU itself, freeing up the main MCU to
-run game or application code.
-
+这一部分主要介绍 \gdtwo 的GPU支持的一些高级指令。
+这些指令都在GPU中运行，以便释放主控MCU运行游戏及程序代码。
 % \cmd{append},
 % \cmd{bgcolor},
 % \cmd{button},
@@ -1784,16 +1688,13 @@ run game or application code.
 % \cmd{track},
 % \cmd{translate},
 
-Some of these commands 
-are for creating widgets, useful for UI elements.
+其中一些指令用于创建控件，对于UI部分的设计十分有帮助。
 \index{user interface}
-Others provide efficient ways to initialize and manage GPU memory,
+其它指令对于初始化和管理GPU内存、加载图片及其它资源提供了高效的方法。
 \index{memory}
-and load graphic and other resources.
 
-This section only includes the hardware commands
-most useful for games and interactive applications.
-For a complete list, consult the FT800 programming guide.
+这一部分将精选对于游戏以及交互式程序设计最有帮助的一部分设备指令。
+如需高级指令的完整清单，请参见FT800编程手册。
 \index{FT800}
 
 \newcommand{\highcmd}[2]{
@@ -1803,7 +1704,7 @@ For a complete list, consult the FT800 programming guide.
 \index{cmd\_#1@\mach{cmd\_#1()}|boldindex}
 }
 
-\input{highcommands-en.tex}
+\input{highcommands-cn.tex}
 
 % \newcommand{\cmd}[1]{
 % % \newpage
@@ -1822,8 +1723,8 @@ void begin();
 \end{verbatim}
 \end{framed}
 
-Initialise the \gdtwo object.
-This method must be called one at program startup, before any other \mach{GD} methods.
+初始化 \gdtwo 对象。
+在程序启动之初，调用其他 \mach{GD} 指令之前，必须执行这一指令。
 
 \lightcmd{finish}{finish}
 
@@ -1833,8 +1734,8 @@ void finish();
 \end{verbatim}
 \end{framed}
 
-Send all pending commands to the GPU, then wait for them to complete.
-See \nameref{finish}.
+将所有待命指令发送到GPU，之后等待这些指令执行完毕。
+参见 \nameref{finish} 。
 
 \newpage
 \lightcmd{flush}{flush}
@@ -1845,9 +1746,9 @@ void flush();
 \end{verbatim}
 \end{framed}
 
-Sends all pending commands to the GPU.
-This command only ensures that all preceding commands are sent to the GPU.
-It does not wait for the commands to execute. See \nameref{flush}.
+将所有待命指令发送到GPU。
+这条指令只是确保将所有待命指令发送到GPU，而不会等待这些指令执行完毕。
+参见 \nameref{flush} 。
 
 \lightcmd{get\_accel}{getaccel}
 
@@ -1857,10 +1758,9 @@ void get_accel(int &x, int &y, int &y);
 \end{verbatim}
 \end{framed}
 
-Samples the values from the 3-axis accelerometer.
-The return values are scaled so that 1G gives a count of 256.
-The axes are oriented so that positive \mach{x} is right,
-positive \mach{y} is down, and positive \mach{z} is \emph{into} the screen.
+对三轴加速度传感器的数值进行采样。
+返回值是经过比例缩小的，1G的返回值为 $256$ 。
+轴的默认方向是确定的： \mach{x} 轴的正向为右， \mach{y} 轴的正向为下， \mach{z} 轴的正向为指向（ \emph{into} ）屏幕内部。
 
 \lightcmd{get\_inputs}{getinputs}
 
@@ -1870,21 +1770,20 @@ void get_inputs();
 \end{verbatim}
 \end{framed}
 
-Calls \nameref{finish}, then
-collects all touch and sensor input in \mach{GD.inputs}.
-These inputs are:
+调用 \nameref{finish} ，之后检测收集所有触摸及传感器输入数据，并存入 \mach{GD.inputs}。
+这些输入数据包括：
 
 \vspace{10pt}
 \begin{tabular}{rl}
-\mach{x} & touch $x$ pixel coordinate, or -32768 if no touch \\
-\mach{y} & touch $y$ pixel coordinate, or -32768 if no touch \\
-\mach{rz} & touch pressure, or 32767 if no touch \\
-\mach{tag} & touch tag 0-255 \\
-\mach{tag\_x} & touch tag $x$ pixel coordinate \\
-\mach{tag\_y} & touch tag $y$ pixel coordinate \\
-\mach{track\_tag} & touched tag for tracking controls \\
-\mach{track\_value} & value for tracking controls \\
-\mach{ptag} & Software tag result \\
+\mach{x} & 触按位置的 $x$ 轴坐标，没有触摸时，值为 $-32768$ \\
+\mach{y} & 触按位置的 $y$ 轴坐标，没有触摸时，值为 $-32768$ \\
+\mach{rz} & 触按压力值，没有触摸时，值为 $32767$ \\
+\mach{tag} & 触摸标签，数值范围为 $0\sim255$ \\
+\mach{tag\_x} & 触摸标签位置的 $x$ 轴坐标 \\
+\mach{tag\_y} & 触摸标签位置的 $y$ 轴坐标 \\
+\mach{track\_tag} & 用于跟踪控制的触摸标签 \\
+\mach{track\_value} & 用于跟踪控制的数值\\
+\mach{ptag} & 软件标签结果 \\
 \end{tabular}
 
 \lightcmd{load}{load}
@@ -1896,12 +1795,10 @@ byte load(const char *filename,
 \end{verbatim}
 \end{framed}
 
-Reads the contents of \mach{filename} from the microSD card and
-feeds it to the GPU.
-If the file is not found then returns nonzero.
-As the file is loading, calls \mach{progress} with the current file position,
-and the total file size.
-The function for \mach{progress} can use these numbers to display a progress indicator.
+从microSD卡中读取名为 \mach{filename} 的文件内容，并将其加载入GPU中。
+如果没有找到相应文件将返回一个非零值。
+而当相应文件正在加载时，可以调用 \mach{progress} 并以其当前存储位置及文件总体大小为参数。
+\mach{progress} 的功能是通过其参数来计算显示加载过程的进程。
 
 \lightcmd{play}{play}
 
@@ -1911,8 +1808,9 @@ void play(uint8_t instrument, uint8_t note = 0);
 \end{verbatim}
 \end{framed}
 
-Play a sound. \mach{instrument} is one of the defined instruments (p. \pageref{instruments}).
-\mach{note} is a MIDI note number (p. \pageref{MIDI}).
+播放一段音频。其中 \mach{instrument} 是从设备内置的众多乐器中挑选其一\\
+（ p. \pageref{instruments} ）。
+\mach{note} 是MIDI音符号（ p. \pageref{MIDI} ）。
 
 \lightcmd{self\_calibrate}{selfcalibrate}
 
@@ -1922,7 +1820,7 @@ void self_calibrate(void);
 \end{verbatim}
 \end{framed}
 
-Run the built-in touch-screen calibration sequence.
+运行内置的触摸屏校定序列程序。
 
 \lightcmd{sample}{sample}
 
@@ -1936,17 +1834,17 @@ void sample(uint32_t start,
 \end{verbatim}
 \end{framed}
 
-Starts playback of an audio sample from main GPU memory.
-\mach{start} is the starting address of the sample,
-\mach{len} is its length in bytes.
-\mach{freq} is the frequency of the sample in Hertz.
-\mach{format} is the audio format, one of
-\mach{LINEAR\_SAMPLES},
-\mach{ULAW\_SAMPLES}, or
-\mach{ADPCM\_SAMPLES}.
-If \mach{loop} is 1, then the sample repeats indefinitely.
-To stop sample playback immediately, call \mach{sample} with a zero \mach{len}.
-Note that \mach{start} and \mach{len} must be multiples of 8.
+启动播放GPU主存储器中的一段音频文件。
+\mach{start} 为音频文件的开始存储位置。
+\mach{len} 为音频文件大小，单位为字节。
+\mach{freq} 为音频文件采样率，单位为Hz。
+\mach{format} 为音频文件的格式，
+\mach{LINEAR\_SAMPLES} ，
+\mach{ULAW\_SAMPLES} 或
+\mach{ADPCM\_SAMPLES} 其中之一。
+如设定 \mach{loop} 值为1，音频文件将无限循环播放。
+如需立即停止采样回放，调用 \mach{sample} ，并以0作为 \mach{len} 参数的值。
+值得注意的是， \mach{start} 和 \mach{len} 参数的值应为8的倍数。
 
 \lightcmd{swap}{swap}
 
@@ -1956,21 +1854,18 @@ void swap(void);
 \end{verbatim}
 \end{framed}
 
-Swaps the working and displayed images.
-This command must be called at the end of frame drawing.
+以将要绘制的图像替换当前显示图像。
+这一指令必须在图像绘制代码结束后进行调用。
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{数学函数}
 
-The GD library's main business is as a thin
-interface to the Gameduino 2's hardware.
-But it also includes a handful of small, useful functions for games writing.
-These functions don't deal with hardware -- but they do some common
-things that games often need.
+GD程序库的主要功能是作为 \gdtwo 硬件的一个小接口。
+但它也包含了一小部分对于游戏程序编写十分有帮助的小函数。
+这些函数并不对硬件设备进行操作控制——但它们可以实现游戏程序经常需要的基本运算。
 
-These math functions are all carefully implemented in integer only 
-8-bit code, so you can enjoy intense high-speed arcade action on a CPU that really
-ought to be running a toaster.
+这些数学函数都仅使用8位整型数据代码进行精确的运算，这使用户可以像操作面包机一样
+十分轻松地实现极高速的街机动作效果。
 
 \lightcmd{atan2}{atan2}
 
@@ -1989,9 +1884,9 @@ uint16_t atan2(int16_t y, int16_t x);
 \end{cases}
 \]
 
-\mach{atan2} returns the angle in Furmans from $(0,0)$ to the point $(x, y)$.
-The range of the result is 0-65535.
-This function is the inverse of \nameref{polar}.
+\mach{atan2} 函数返回值为从坐标位置 $(0,0)$ 指向坐标位置 $(x, y)$ 的Furmans角度。
+返回值范围为 $0\sim65535$ 。
+此函数为 \nameref{polar} 的逆运算。
 \newpage
 
 \lightcmd{polar}{polar}
@@ -2013,10 +1908,9 @@ void polar(int &x, int &y, int16_t r, uint16_t th);
 \end{tikzpicture}
 \end{center}
 
-Returns the $(x,y)$ coordinates of a point that is distance \mach{r} from the origin,
-at angle \mach{th}.
-\mach{th} is in Furmans.
-This function is the inverse of \nameref{atan2}.
+返回值为以屏幕原点为起点，角度为 \mach{th} ，距离为 \mach{r} 的点 $(x,y)$ 的坐标位置。
+\mach{th} 为Furmans角度。
+此函数为 \nameref{atan2} 的逆运算。
 
 \lightcmd{random}{random}
 
@@ -2027,14 +1921,13 @@ uint16_t random(uint16_t n);
 \end{verbatim}
 \end{framed}
 
-Returns a random number. If no argument is given then the number is in the range 0-65535.
-With an argument \mach{n}, returns a random number $x$ such that $(0 \le x < \mach{n})$.
-\mach{random()} returns \textbf{low-quality} random numbers \textbf{quickly}.
-This is useful for graphics and games, where performance is often more important than true randomness.
+返回一个随机数。如果没有设定参数，则返回值范围为 $0\sim65535$ 。
+当设定参数为 \mach{n} ，函数将返回一个随机数值 $x$ ，其范围为 $(0 \le x < \mach{n})$ 。
+\mach{random()} 会迅速（ \textbf{quickly} ）返回一个假（ \textbf{low-quality} ）随机数。
+但这对图像显示及游戏程序设计十分有益，因为性能往往比真正的随机性更重要。
 
-An old trick to improve the quality of the random numbers is to call \mach{random()} while waiting 
-for user input.
-This means that when the game starts, the random number generator is in a much less predictable state.
+对于提升随机数的随机性的传统技巧是在等待用户输入的同时调用 \mach{random()} 。
+这意味着当游戏开始时，产生的随机数值更不易于预测。
 % People are an excellent source of entropy.
 
 \newpage
@@ -2046,14 +1939,14 @@ int16_t rcos(int16_t r, uint16_t th);
 \end{verbatim}
 \end{framed}
 
-Returns an integer approximation to the cosine of \mach{th} (which is in Furmans) multiplied by \mach{r}:
+返回值为 \mach{r} 与 \mach{th} （单位为Furmans角度）余弦值的整数近似值的乘积：
 
 \[
   \left\lfloor \mach{r} \cos \frac{2 \pi \mach{th}}{65536} \right\rfloor
 \]
 
 \noindent
-See also \nameref{rsin}, \nameref{polar}.
+参见 \nameref{rsin} ， \nameref{polar} 。
 
 \lightcmd{rsin}{rsin}
 
@@ -2063,66 +1956,60 @@ int16_t rsin(int16_t r, uint16_t th);
 \end{verbatim}
 \end{framed}
 
-Returns an integer approximation to the sine of \mach{th} (which is in Furmans) multiplied by \mach{r}:
+返回值为 \mach{r} 与 \mach{th} （单位为Furmans角度）正弦值的整数近似值的乘积：
 
 \[
   \left\lfloor \mach{r} \sin \frac{2 \pi \mach{th}}{65536} \right\rfloor
 \]
 
 \noindent
-See also \nameref{rcos}, \nameref{polar}.
+参见 \nameref{rcos} ， \nameref{polar} 。
 
 \part{设计实例}
 
 \chapter{图形元素}
 
-This chapter covers some ways of using Gameduino 2's graphics
-features to create effects for games.
+本章主要讲述了如何使用Gameduino 2的图形功能来创造更复杂的游戏特效。
 
 \newpage
-\section{Tiled backgrounds}
+\section{平铺背景}
 \index{bitmaps!tiling}
 \png{tiled}
 \eg{tiled-a}
-The source image is this 256 $\times$ 256 seamless texture, created by Patrick Hoesly\footnote{
-One of the hundreds that he has made available on Flickr, all under a  Creative Commons licence.}.
+原始素材是一个 256 $\times$ 256 的无缝纹理, 该素材由 Patrick Hoesly\footnote{
+在Flickr网站上还有他成百个作品， 全部基于CC协议。}创作。
 \begin{center}
 \includegraphics[width=0.5\textwidth]{assets/metal.png}
 \end{center}
-tiling the image across the entire 480 $\times$ 272 screen using \dcmd{BitmapSize} gives:
+使用命令 \dcmd{BitmapSize} 将该图案平铺到整个 480 $\times$ 272 大小的屏幕上，得到以下结果： 
 \png{tiled-norot}
-Which is nice but the repetition is clearly visible.
-Rotating the bitmap
-using \cmd{rotate}
+整个结果还算尽人意，不过还是能看出很明显的重复部分。
+将这个位图使用函数 \cmd{rotate}
 \cmdidx{cmd\_rotate}
-by an odd angle -- 3333 Furmans is about 18$^\circ$ --
-makes the repetition much less obvious.
+旋转一个奇数角度 -- 比如3333 Furmans角度，大约为18$^\circ$ --
+就可以让重复的部分不显得那么突兀。
 
 \newpage
-\section{Drop shadows}
+\section{绘制阴影}
 \index{shadows}
 \index{drawing|shadows}
 \png{0025}
-To give text a drop shadow,
-first draw the text in the shadow color, offset by a short distance in both $x$ and $y$.
-Then draw the text a second time in the foreground color.
+为了实现阴影的效果，需要绘制两次图形。首先使用阴影的颜色在目标位置附近($x$和$y$上各进行一段偏移)绘制一遍图形，之后使用
+前景色再次绘制一遍图形。
 \eg{examples-dropshadow}
-This example uses a 3-pixel offset, which works well with a large font.
-A smaller font looks better with a 2- or 1-pixel offset.
+这个例子使用了3像素的偏移值来绘制阴影，可见这种方法对较大字体比较有效。而对于小一点的字体，1到2像素的偏移看上去会更好一些。
 
 \noindent
 \begin{minipage}[][][t]{0.45\textwidth}
 \includegraphics[width=1.0\textwidth]{assets/logodrop.png}
 \end{minipage}
 \begin{minipage}[][][t]{0.55\textwidth}
-A similar technique works for bitmaps: draw the bitmap in black for the shadow, then draw the bitmap
-offset by a few pixels.
-Here the logo's shadow is lightened by drawing it with 50\% transparency.
+同样的方法也可以用在绘制位图上：首先用黑色将原位图绘制出来，之后用正常的颜色在附近再绘制一次。左图利用这种方法绘制了Gameduino的Logo，采用了50\%的透明来起到阴影的效果。
 \index{logo}
 \end{minipage}
 
 \newpage
-\section{Fade in and out}
+\section{淡入与淡出}
 
 \begin{center}
 \includegraphics[width=0.3\textwidth]{fade/0.png}
@@ -2136,179 +2023,148 @@ Here the logo's shadow is lightened by drawing it with 50\% transparency.
 \includegraphics[width=0.3\textwidth]{fade/8.png}
 \end{center}
 
-A \term{fade} is when the whole screen gradually turns to one color.
-Fades to black and white are most common, but of course any color is possible.
-One way of creating a fade is to draw an alpha-blended rectangle covering the whole screen.
-The value of the alpha controls how much of the original screen is replaced by the solid rectangle.
-By animating alpha from 0 to 255 a fade happens.
+\term{淡入} 是一种逐渐改变屏幕颜色的技术。淡入到黑色或者白色是最常见的两种情况，当然淡入到其他颜色也是可能的。
+其中一种制造出淡入效果的方法是绘制一个屏幕大小的矩形，通过不断改变矩形的alpha值来实现过渡的效果。
+于是Alpha的大小就决定了原图像有多大程度被矩形覆盖了，这样只要逐渐将alpha大小从0上升到255，就可以实现场景过渡的效果。
 
-Here is \textit{NightStrike}'s code that fades the title screen to black.
+以下是 \textit{NightStrike} 的一段代码，该代码演示了如何实现将标题画面逐渐过渡到黑色的方法。
 \index{NightStrike}
 
 \eg{nightstrike-fade}
 
-Note the \dcmd{TagMask} command, which disables writes
-to the tag buffer.
-Without this command,
-the full-screen rectangle would overwrite all the tag values on the screen.
+注意一开始的 \dcmd{TagMask} 命令旨在取消写入触摸标签的缓冲。
+如果没有这条命令，绘制整个屏幕的矩形将会覆盖所有已存的其他触摸标签。
+
 
 \newpage
-\section{Motion blur}
+\section{动态模糊}
 \index{motion blur}
 \index{chess}
 \index{demos!chess}
 \png{chess}
 
-Motion blur is a graphics technique that smooths out the 
-appearance of moving objects, to give a more realistic motion.
-The white knight moving in the chess board above is rendered with
-motion blur. In freeze-frame the piece looks smeared, but as part of
-an animation your eye-brain interprets the blurs as
-a fast-moving object.
+动态模糊技术被用于平滑物体的运动，从而使物体的运动过程更为自然。
+图中在棋盘上运动的白色棋子用动态模糊进行了渲染。
+如果从单帧上看，物体会很不清晰。但如果把帧与帧之间连接起来播放，
+对于你的视觉系统来说就会认为是一个快速移动的物体。
 
-One way of rendering motion blur on \gdtwo is to draw the object 
-multiple times with transparency. In the ``chess'' demo the number of passes
-is controlled by \mach{OVERSAMPLE}, which is set to 8.
-The renderer makes multiple passes, each time computing a slightly different
-position for the piece.  
-The eight stacked transparent pieces give a nicely blurred motion along the movement path.
+其中一个在 \gdtwo 中渲染出动态模糊效果的办法是，同一时间用多个不同的透明度绘制同一个物体。 
+在这个 ``chess'' 的演示程序中，用于渲染的数量是由 \mach{OVERSAMPLE}变量控制的，其值被设置为8。
+渲染器按照采样数量同时绘制多次图形，每一个图形之间存在细微距离差。
+如此一来，八个堆砌在一起的透明部分就在运动路径上形成了模糊的视觉效果。
 
 \eg{chess-a}
 
 \newpage
-\section{Colors for additive blending}
+\section{更多关于颜色混合}
 \index{blending}
 
 \begin{center}
 \includegraphics[width=0.55\textwidth]{assets/0048.png}
 \includegraphics[width=0.55\textwidth]{assets/0049.png}
 \end{center}
+ 
+以上两个图片都是由下方的代码完成的。
+这段代码绘制了1000个直径为8像素的圆形，在绘制时使用了 \dcmd{BlendFunc} 函数，该函数设置了将每个像素的颜色与背景的颜色进行混合。
+这两幅图的区别在于，顶上的图片使用的颜色为纯绿 (\mach{0x00ff00})
+而底部使用的是一个稍浅的绿色(\mach{0x60c030})。
 
-Both of these images are drawn by the code below.
-The code draws 1000 8-pixel radius circles with a \dcmd{BlendFunc}
-set so that each pixel's colors are added to the background's.
-The difference is the drawing color: the top image uses a color of pure green
-(\mach{0x00ff00})
-but the bottom image uses a more subtle greenish shade
-(\mach{0x60c030}).
-
-When the color is pure green, any pixels that get drawn more than once simply stay green.
-But using the color \mach{0x60c030}
--- which contains a lot of green, some red and a little blue --
-means that pixels get brighter each time they are drawn.
-A pixel that gets drawn 6 times reaches
-\mach{0xffffff},
-pure white, and cannot get any brighter.
+对于纯绿色来说，任何多次绘制的图形依然是绿色的。
+而对于浅绿色来说 \mach{0x60c030} -- 包含了绿色，红色和少量蓝色 --， 每一次绘制都会让颜色更为明亮一些。
+当一个像素被绘制6次之后，就达到了纯白色 \mach{0xffffff}，此后就无法变得更明亮了。
 
 \eg{examples-additive}
 
 \newpage
-\section{Efficient rectangles}
+\section{高效率的矩形绘制}
 \index{drawing!rectangles}
 \png{0052}
-The code sets up an \mach{L8} bitmap that is sized 1$\times$1 pixel.
-The blend function \mach{(ONE, ZERO)} is a straight replace operation: pixels are copied from the bitmap into the color buffer.
+这段代码首先设置了一个大小为 1$\times$1 像素的 \mach{L8} 位图。
+混合函数 \mach{(ONE, ZERO)} 仅仅是一个直接的替换操作：像素从位图中拷出，被复制到颜色缓冲中。
 % The source address for the bitmap is set to \mach{ROM\_PIXEL\_FF}, which is an address in the GPU's ROM that has value 255.
-For an \mach{L8} bitmap, the RGB pixel values are the current color.
+对一个 \mach{L8} 位图而言，RGB像素的值就是其当前的颜色。
 
-The code sets the bitmap drawn size to 60$\times$30 pixels.
-This means that the 60$\times$30 bitmap will be filled with the current color,
-so the result is a solid rectangle for each vertex drawn.
+之后的代码将位图的绘制大小设置为了60$\times$30像素。
+这个意味着 60$\times$30 大小的位图都会被当前颜色覆盖。
+这样的话，每次使用vertex绘制的时候都会是一个矩形了。
 
-Using this method for drawing rectangles differs from 
-using \mach{RECTS} in a couple of ways.
-Firstly, these rectangles are not anti-aliased: in this example they are exact
-60$\times$30 blocks of pixels with no edge smoothing.
-The second difference is that here every \dcmd{Vertex2ii} draws one rectangle,
-but when drawing with \mach{RECTS} two vertices define each rectangle.
+使用这种方式绘制的矩形在多个方面有别于使用 \mach{RECTS} 绘制。
+首先，这些矩形没有反走样的特点：它们的大小完完全全是60$\times$30，而没有任何的边缘平滑处理。
+第二个不同之处在于，此处每一个 \dcmd{Vertex2ii} 都将绘制一个矩形，
+而在 \mach{RECTS} 中，每一个矩形需要调用两次vertex。
 \eg{examples-1x1}
 
 \newpage
-\section{1D bitmaps}
+\section{一维位图}
 \index{bitmaps!1D}
 \png{0053}
 
 \eg{examples-1d}
 
-The code uses this 512$\times$1 ``spectrum'' image, loaded into graphics memory as an
-\mach{RGB565} bitmap
+这段代码使用了以下的 512$\times$1 像素的``光谱'' 图像。这个图像作为一个\mach{RGB565} 位图被载入到图形缓存中。
 \begin{center}
 \includegraphics[width=1.0\textwidth]{assets/spectrum.png}
 \end{center}
 
 \noindent
-The \dcmd{BitmapSize} command with \mach{REPEAT}
-tiles the bitmap, and since the bitmap height is one pixel, it repeats on every pixel line.
+\dcmd{BitmapSize} 指令配合 \mach{REPEAT} 参数可以将位图进行平铺。
+由于位图的高度是一个像素，它在每一行都进行了重复。
 \index{bitmaps!tiling}
 % \eg{examples-1d-twist}
-As with any bitmap, the 1D bitmap can be rotated and scaled.
-Here is the same bitmap scaled by 0.3 and rotated by 80$^\circ$
+对于任何一维位图来说都可以进行伸缩和旋转。以下就是同一个位图经过0.3倍的伸缩与80$^\circ$ 旋转之后得到的结果。
 
 \begin{center}
 \includegraphics[width=0.5\textwidth]{assets/0054.png}
 \end{center}
 
 \newpage
-\section{Drawing polygons}
+\section{多边形绘制}
 \index{drawing!polygons}
 
 \png{0050}
 
-The GD library has a helper object for drawing polygons.
-To draw a polygon, first call its
-\mach{begin()} method, then supply the vertices of the polygon in order
-to the \mach{v()} method, using subpixel coordinates.
-Calling \mach{draw()} draws the polygon, using the current color.
+GD图形库有一个专门用于绘制多边形的辅助对象。
+如果需要绘制一个多边形，首先需要调用 \mach{begin()} 方法，
+之后再将多边形的顶点按照子像素坐标依次传递给 \mach{v()} 方法。
+最后使用 \mach{draw()} 用当前颜色完成多边形的绘制。
 
-This example uses only four vertices, but
-a polygon can have up to 16 vertices, and can be any shape.
-The vertices do not all need to be on the screen.
+这个例子中只使用了4个顶点，但实际上多边形最多可以支持16个顶点。
+多边形可以是任何形状，并且顶点不一定都需要在屏幕可见范围。
 
-The \mach{Poly} object uses a sequence of stencil buffer operations to
-compute the outline of the polygon.
-It then draws the interior using
-the current color and alpha, much like \mach{POINTS} or \mach{LINES} do.
+\mach{Poly} 对象使用了一系列的模板缓冲操作来计算多边形的轮廓。
+最后它使用当前颜色和Alpha值绘制出多边形的内部，整个过程和 \mach{POINTS} 或者 \mach{LINES} 十分类似。
 
 \eg{examples-polygon}
 
 \newpage
-Unlike \mach{POINTS} or \mach{LINES}, the polygon's edges are not smoothed --
-you can see jagged pixels along the boundary.
-One remedy is to outline the polygon with a line.
-Here a broad black outline is drawn using
-\mach{Poly}'s handy
-\mach{outline()} method, which draws the perimeter vertices with
-\mach{LINE\_STRIP}
+但是和 \mach{POINTS} 或者 \mach{LINES} 方法不同，多边形并没有对边缘进行平滑处理。这导致了多边形的边缘上会出现锯齿。
+解决方法之一就是在多边形的边缘上再次勾勒直线边缘。
+此处利用\mach{Poly} 对象的方法 \mach{outline()}，一个宽黑色边缘通过
+\mach{LINE\_STRIP} 方法绘制了出来。
 
 \eg{examples-polygon2}
 
 \png{0051}
 
 \index{demos!cobra}
-Using a similar technique, the \textit{cobra} example
-first draws all the panels of the spacecraft using
-\mach{Poly},
-then draws the glowing blue edges.
+例程 \textit{cobra} 使用了类似的方法，首先用 \mach{Poly} 绘制了多边形，
+之后再绘制了蓝色发光的外边界。
 \index{edges}
 \png{cobra}
 
 \newpage
-\section{Lines everywhere}
+\section{无所不在的直线}
 \index{lines}
 
-Because of their round end-caps, wide lines can be used as convenient graphic elements.
-The background for the text in the \textit{sprites} demo is a 28 pixel wide line,
-drawn in black with about 50\% alpha transparency.
+因为直线顶端有宽圆角的存在，宽直线可以作为非常实用的图形元素存在。
+在例程 \textit{sprites} 中，一个宽28像素、50\% Alpha的黑色宽直线就被用于了文本框的背景。
 \png{lines-el}
 \eg{sprites-line}
 
-\textit{NightStrike} draws the power meter at the top of the screen
+\textit{NightStrike} 程序中在画面顶端使用了三个水平放置的宽直线来绘制能量槽。
 \index{NightStrike}
-using three horizontal wide lines.
-First a 10 pixel wide transparent black line makes a background bar for the power meter.
-Two lines draw the power display.
-The first is 10 pixels wide in pale orange, the second is 4 pixels wide in bright orange.
-Together they give a pleasing glow effect.
+首先一个10像素的浅黑色长条作为能量条的背景，而当钱能量的指示由两条直线配合完成：
+一条为10像素的淡橘色，另一条为4像素的亮橙色。这样配合下来就得到了令人满意的发光特效。
 \index{glow effect}
 
 \begin{center}
@@ -2324,7 +2180,7 @@ Together they give a pleasing glow effect.
 \end{center}
 
 \newpage
-\section{Vignette}
+\section{晕映(vignetting)}
 \index{photography}
 
 \begin{center}
@@ -2332,12 +2188,8 @@ Together they give a pleasing glow effect.
 \includegraphics[width=0.48\textwidth]{assets/vignette-1.png}
 \end{center}
 
-In photography,
-\term{vignetting} is a darkening
-towards the edges of an image.
-The image on the right has a vignette applied as an extra layer.
-The vignette image itself is a 480$\times$272 \mach{L8} radial gradient,
-becoming more opaque towards the edge:
+\term{晕映} 是摄影学中一种将图片边角暗化的技术。
+上方右图中就是使用了一个晕映作为额外的图层。晕映图片本身是一个 480$\times$272 像素的 \mach{L8} 放射渐变图形，越至边缘透明度越低：
 
 \begin{center}
 \setlength{\fboxsep}{0pt}
@@ -2345,20 +2197,15 @@ becoming more opaque towards the edge:
 \fbox{\includegraphics[width=0.6\textwidth]{assets/vignette.png}}
 \end{center}
 
-Drawing this bitmap in white will produce a milky transparency towards the edges of the screen.
-But drawing this bitmap in black darkens the screen towards the edges.
-The amount of darkening can be controlled either by changing the original bitmap, or by 
-making the bitmap less opaque with \mach{ColorA}.
+如果用白色绘制这个位图，边缘会得到乳白色的透明效果。而用黑色绘制该位图，则会让边缘更加暗化。暗化的程度即可以通过修改原位图控制，也可通过 \mach{ColorA} 方法改变位图的不透明度。
 
 \eg{abstract3-vignette}
 
-Because the vignette bitmap does not contain any fine detail, it can be reduced in resolution without
-affecting image quality.
-A 240$\times$136 vignette bitmap is almost indistinguishable from the 480$\times$272 version, and 
-uses one fourth of the memory.
+因为晕映图像自身并没有太多细节，所以降低分辨率也不会对图像质量造成很多的影响。
+比如一个 240$\times$136 像素的晕映位图和一个 480$\times$272 像素的位图相比并没有太多可观的差别，但是前者只占用了后者四分之一的内存。
 
 \newpage
-\section{Mirroring sprites}
+\section{镜像的图元}
 \label{mirror}
 \index{bitmaps!mirroring}
 \index{sprites}
@@ -2366,12 +2213,11 @@ uses one fourth of the memory.
 \noindent
 \png{mirror}
 
-\textit{Mirroring} a sprite -- flipping it so that it faces in the opposite direction -- is
-very useful in 2D games.
-The Gameduino 2's GPU can perform complex bitmap transforms, so a simple flip is no problem at all.
-You can think of a left-right flip as a scale by -1 in the $x$ axis, which is done by \cmd{scale}.
-The two \cmd{translate} calls adjust the bitmap's position so that the flip happens across the halfway point of the sprite.
-In this case, the sprite is 32 pixels wide, so the halfway point is at $x = 16$:
+\textit{镜像} 一个图元，把它调整它到相对的方向上，是在2D游戏中十分有用的操作。
+Gameduino 2的GPU单元可以处理复杂的位图变换，自然简单的翻转更不会存在问题。
+你可以设想一个左右的翻转实际上就是x轴被乘以了-1倍，该操作用 \cmd{scale} 就可以完成。
+两次 \cmd{translate} 调用仅仅是修改了位图的位置，以保证翻转的中心轴在图元的中心处。
+在这个例子中，图元是32像素宽的，所以翻转是在 $x = 16$处完成的：
 
 \begin{center}
 \begin{tikzpicture}
@@ -2383,18 +2229,16 @@ In this case, the sprite is 32 pixels wide, so the halfway point is at $x = 16$:
 \eg{examples-mirror}
 
 \newpage
-\section{Silhouettes and edges}
+\section{轮廓与边缘}
 \index{silhouettes}
 \index{drawing!silhouettes}
 \index{edges}
 \png{outline1}
 
-The Gameduino 2's hardware primitives only draw solid circles and lines.
-To draw an edge around a circle -- like the dark slightly transparent edges above --
-draw the circle twice.
-The first circle is drawn in the edge color and the second, slightly smaller, circle is drawn the with the center color.
-For clusters of objects, the drawing order affects the final image.
-Here the outlines are all drawn first, which gives a common outline to the whole cluster of circles.
+Gameduino 2的硬件底层只支持实心圆和直线的绘制。那么如何实现上图中，在圆的周围绘制勾勒线条呢？答案非常简单 -- 绘制圆形两次。
+
+一个稍大的圆首先用边界的颜色绘制出来，之后稍小一点的圆再使用圆内部的颜色绘制。
+对于一群绘制的物体来说，绘制顺序将影响最终的图像。此处外轮廓的圆先绘制，这样可以给整个集群一个共有的边界。
 
 % \eg{abstract3-outline}
 
@@ -2403,68 +2247,57 @@ Here the outlines are all drawn first, which gives a common outline to the whole
 \includegraphics[width=0.48\textwidth]{assets/outline2.png}
 \end{center}
 
-This button graphic is drawn with two wide lines.
-The first line is white, and four pixels wider than the blue inner line.
-Edges like this can be drawn with
-\mach{POINTS},
-\mach{LINES} and
-\mach{RECTS}.
+这个按钮的边缘效果也是依靠两个直线绘制的 -- 一个白色直线和一个比它宽4个像素的蓝色直线。
+
+这种边缘绘制方法也可以用于
+\mach{POINTS}， \mach{LINES} 和
+\mach{RECTS} 中。
 
 \begin{center}
 \includegraphics[width=0.6\textwidth,trim=120 100 120 100,clip=true]{assets/0057.png}
 \end{center}
 
 \newpage
-\section{Chunky pixels}
+\section{粗糙的像素感}
 \cmdidx{cmd\_scale}
 \index{retro}
 \index{Zardoz}
 
 \png{zardoz}
 
-For the \textit{Zardoz} project by artist and designer Nick Criscuolo, we wanted a
-more chunky, 8-bit look from the Gameduino 2's graphics.
-So all graphics are drawn at double-size.
-At the start of every frame, the game does
+对于艺术家和设计师 Nick Criscuolo 来说，他更希望用Gameduino 2的图形系统实现更加粗糙、8位像素的复古感。在 \textit{Zardoz} 项目中，所有的图形都是以两倍伸展的方式绘制的。在每一帧开始之前，都会调用以下代码
 
 \eg{zardoz-double}
 
 \noindent
-to double up the size of every bitmap it draws.
-The result is that every pixel in the bitmap becomes 2$\times$2 pixels
-on the screen.
-This makes the effective screen resolution a suitably retro 240$\times$136.
+来把其绘制的每个位图扩展两倍。结果就是原图中的每个像素都变成了屏幕上 2$\times$2 个像素。这导致了游戏的等效分辨率变为了 240$\times$136 (Gmaeduino 2的原始分辨率为480 $\times$136)。
 \index{emulating!low resolution displays}
 
 \newpage
-\section{Vector graphics}
+\section{矢量图形}
 \index{vector displays}
 
 \png{vector}
 
 \index{drawing!vectors}
-Vector graphics games from the 70s, 80s and 90s used special-purpose hardware
-to draw bright, colored lines onto a CRT display.
+
+矢量图形游戏起源于70, 80, 90年代，因为当时特殊的硬件条件，可以在CRT显示器上绘制出明亮、彩色的线条。
 \index{emulating!CRT}
 \index{CRT, emulating}
-As a graphics technology, the main benefit was a lack of pixels: everything was drawn with
-smooth, bright lines and points.
-\gdtwo has excellent smooth line and point support, so can easily emulate the vector style of graphics.
+作为一个图形技术，这种绘制方式的优势在于不需要像素的概念：所有的一切都是由平滑明亮的直线和点构建而成的。
+\gdtwo 有非常完善的平滑线条和点的绘制支持，所以可以轻易模拟出这种矢量绘图方法。
 
-However a straight line-drawing game looks a little too `clean'.
-The original displays produced a nice glowing look to the lines, which the code below mimics using two passes.
-The function \mach{drawgame()} draws the whole of the screen, using \mach{LINES}.
+然后如果仅仅用直线来绘制游戏，恐怕看上去太“干净”了。原来的图形显示看上去还会有些微亮的效果，这个特效将分成两步实现。 \mach{drawgame()} 函数的作用是绘制屏幕上所有的直线。
 \defidx{LINES}
-The first pass draws the background glow for all the lines, so it calls \mach{drawgame()}
-with wide, dim lines.
-The second pass draws exactly the same screen, but with bright, thin lines.
-This two-pass drawing gives an appropriate subtle glow to all the lines.
+第一步的绘制中，配置直线为稍宽，使用背景亮光的颜色来绘制所有直线，之后调用 \mach{drawgame()}。
+第二步绘制的直线位置完全相同，但是在样式上使用了更为明亮，且线宽较细的直线。
+这两步绘制之后，所有的直线都得到了一点微光的效果。
 \index{glow effect}
 
 \eg{tempest-draw}
 
 \newpage
-\section{Handmade graphics}
+\section{手绘图形}
 \index{handmade}
 \index{weave}
 \index{binary}
@@ -2474,13 +2307,10 @@ This two-pass drawing gives an appropriate subtle glow to all the lines.
 \includegraphics[height=0.3\textwidth,trim=100 60 100 60,clip=true]{assets/0067.png}
 \end{center}
 
-Early humans didn't have the sophisticated tools we enjoy today.
-They had to draw graphics on paper, then turn them into data by hand.
-You can still make graphics the same way today.
-\cmd{memwrite} writes the 8-byte pattern into memory starting at address zero.
-The 1-bit graphic data is coded in \mach{picture[]} -- The ``\mach{0b}'' prefix means binary.
-Then it sets up the bitmap parameters, again by hand, for an 8$\times$8 \mach{L1} bitmap, repeating
-in $x$ and $y$.
+早期人们并没有像我们一样复杂的设计工具，所有的图形都是首先绘于纸稿之上，最后再徒手转换成数据的。如今，你也可以试着用同样的方法设计图形。
+\cmd{memwrite} 函数将8个字节的图案写入在起始地址为0的内存地址之中。
+一位编码的图形被存放在 \mach{picture[]} 中 -- ``\mach{0b}'' 前缀表示数据为二进制表示。
+之后，这个程序将这个 8$\times$8 \mach{L1} 格式的位图在整个屏幕的 $x$ 和 $y$ 上重复。
 
 \eg{examples-handmade}
 
@@ -2488,84 +2318,69 @@ in $x$ and $y$.
 \chapter{图形混合}
 
 \index{compositing}
-This chapter covers some more 
-sophisticated graphics techniques that
-push the GPU hardware a little further.
-They all use compositing -- controlling the color pipeline using the alpha channel.
+本章介绍了更为复杂的图形技术，挖掘GPU硬件的潜力。
+他们无一例外的使用了合成技术 -- 使用Alpha通道控制颜色通道。
 
 \newpage
-\section{Alpha compositing}
+\section{Alpha合成}
 
 \png{comp1}
 
 \index{drawing!clock}
-This stylish clock graphic is drawn using a white circle, a smaller black circle,
-then a \cmd{clock} widget to draw the hands.
+这个有型的时钟是由一个白色圆圈，一个小的黑色圆圈和一个 \cmd{clock} 控件绘制的时针组成的。
 
 \eg{examples-comp1}
 
-But adding a JPEG background image gives an unfortunate result
+但是如果想添加一个JPEG格式的背景的的话，结果就会是悲剧的：
 
 \begin{center}
 \includegraphics[width=0.4\textwidth]{assets/comp2.png}
 \end{center}
 \newpage
 
-The huge black disk spoils the look.
-It would be much better to make the central area transparent.
-Here is one way of doing that, using the \term{alpha buffer}.
+黑色的大圆盘毁掉了整个设计感，如果能将中心圆盘变为透明色，整个画面感就能大幅提升。
+其中之一的解决之道是使用\term{alpha缓冲}。
 
 \index{alpha!buffer}
-Every pixel on the screen has an alpha value 0-255 that is usually updated at the same time 
-as the color buffer.
-Normally this alpha buffer is not important, because it is not visible and its contents do not
-affect the final image.
-But \dcmd{ColorMask} can enable and disable writes to the color and alpha buffers.
-This technique ``paints'' the graphic into the alpha buffer, then draws every pixel on the screen
-using a blend mode of
-\mach{BlendFunc(DST\_ALPHA, ONE)},
-which draws the pixels where the alpha buffer is non-zero.
+屏幕上每个像素都有一个0-255的alpha值，这个alpha值通常和颜色缓冲同时更新。
+一般来说alpha缓冲的存在并非必要，因为它并不可见，而且不会影响最终图像。
+而 \dcmd{ColorMask} 命令可以允许或禁止对颜色缓冲和alpha缓冲的写入。
+这个技术首先将图形``绘制''至alpha缓冲中，之后使用 \mach{BlendFunc(DST\_ALPHA, ONE)}
+实现对屏幕上所有像素的混合模式绘制。在绘制时，只有alpha缓冲非零时才会被绘制出来。
 
-After drawing the tree background image, the first step is to
-use \dcmd{ColorMask} to disable color buffer updates,
-and set the \dcmd{BlendFunc} to a value that writes incoming alpha
-directly into the alpha buffer, by specifying a \term{source blend
-factor} of \mach{ONE}:
+绘制完绿树的背景之后，首先用 \dcmd{ColorMask} 函数禁止对颜色缓冲写入，之后向 \dcmd{BlendFunc} 
+写入一个可以把之后的alpha值直接写入alpha缓冲的参数。设置方法是将 \term{源混合因子} 设置为 \mach{ONE}:
 
 \eg{examples-comp2a}
 
-Now draw the outer circle just as before
+现在和之前一样绘制出外部圆形：
 
 \eg{examples-comp2b}
 
-Nothing appears on the screen yet, because the drawing is only
-affecting the alpha buffer, which is -- so far -- invisible.
-Drawing the inner circle requires a blend mode that
-clears any drawn pixels to zero, so the source blend factor is \mach{ZERO}:
+这样之后，并没有图形真正出现在屏幕上，因为上述操作实际上只会影响alpha缓冲，目前为止还是不可见的。
+绘制内部圆时需要将混合模式设置为覆盖之前已经绘制的所有像素，即将源混合因子设置为 \mach{ZERO}：
 
 \eg{examples-comp2c}
 
 \newpage
-Finally the clock widget itself is drawn, again using a source blend factor of \mach{ONE}:
+最后时钟控件的本体使用 \mach{ONE} 的混合因子进行了绘制：
 
 \eg{examples-comp2d}
 
-After these operations, nothing has been drawn on the visible screen yet --
-because the \dcmd{ColorMask} disabled writes to R,G and B.
-But the alpha buffer now contains this image:
+经过以上的操作之后，目前还没有任何内容能在屏幕上可见 -- 
+因为 \dcmd{ColorMask} 命令静止了对R，G，B通道的绘制。
+但是在alpha缓冲上，已经有了以下的图像：
 \begin{center}
 \includegraphics[width=0.8\textwidth]{assets/comp1.png}
 \end{center}
 
-The final step is to make the alpha buffer visible.
-The code does this by drawing a gray rectangle over the entire screen.
-Of course, this would simply result in a gray screen,
-but the source blend factor is set to \mach{DST\_ALPHA}, so the transparency values come from
-the alpha buffer.
+最后一步就是让整个alpha缓冲变为可见，代码通过绘制一个整屏的灰色矩形实现。
+当然，如果仅仅简单这么做自然不行，不同之处在于此处将源混合因子设置为了 \mach{DST\_ALPHA}，
+这样一来，透明值的大小就来自于alpha缓冲了。
 
 \eg{examples-comp2e}
 \png{0042}
-The complete code is
+完整的代码如下：
 \eg{examples-comp2}
 
 \newpage
@@ -2583,33 +2398,30 @@ The complete code is
 \includegraphics[width=0.32\textwidth]{assets/slotgag/16.png}
 \end{center}
 
-\term{Slot gags} are a very old animation technique for 
+\term{Slot gags} 是一个非常古老用于将两个元素合成在一起的动画技术
 masking two elements together\footnote{
 \index{masking}
-See ``Digital Compositing for Film and Video'' by Steve Wright.
-}.
-In this example of a slot gag, drawing the Gameduino logo bitmap sets the alpha
+见 Steve Wright 的 ``Digital Compositing for Film and Video'' 一书。
+}。
+在这个slot gag的例子中，我们将Gameduino的位图logo的alpha缓冲设为了
 \index{logo}
-buffer to 255 in the logo's pixels, and 0 elsewhere. Then by drawing a wide diagonal line
-with \dcmd{BlendFunc} set to \mach{(DST\_ALPHA, ONE)} the line is masked with the alpha buffer,
-so only draws pixels where the alpha buffer is 255.
-The result is an animated glint effect.
+255，而将其他地方设置为0。 之后设置一个宽的对角线，并且将 \dcmd{BlendFunc} 的参数设置为 \mach{(DST\_ALPHA, ONE)}。 如此一来，alpha缓冲就会作为蒙板来绘制直线，这样只有在alpha缓冲为255
+的地方才会绘制像素。最终的效果就是得到一个如图的闪光动画效果。
 \index{glint effect}
 \index{drawing!glint}
 
 \eg{slotgag-a}
 
 \newpage
-\section{Patterned text}
+\section{有图案的文本}
 \index{drawing!patterned text}
 \index{text, patterned}
 
 \png{0060}
 
-Patterned text uses a similar technique to slot gags.
-First the text is drawn into the alpha buffer \textit{only}.
-Then a full-screen repeating 8$\times$8 bitmap pattern is drawn using the alpha buffer
-to control the amount of opacity.
+有图案的文本使用了和之前slot gags相似的技术。
+首先，文本\textit{仅}在alpha缓冲中绘制。之后一个 8$\times$8 的位图图案在整个屏幕上绘制出来，
+绘制的不透明度由aplha缓冲决定。
 
 \begin{center}
 \includegraphics[width=0.1\textwidth]{previews/examples2-EX2_STRIPE-00.png}
@@ -2617,30 +2429,28 @@ to control the amount of opacity.
 \eg{examples-stripe2}
 
 \newpage
-\section{Alpha operators}
+\section{Alpha操作}
 \index{alpha}
 \png{0063}
-You can make alpha-compositing code easier to read 
-by using a more expressive name for the blend modes.
-Here \mach{PAINT\_ALPHA()} means ``draw something into the alpha buffer''.
-\mach{CLEAR\_ALPHA()} means ``erase something from alpha buffer''.
+你可以设置一个宏操作让冗长的alpha合成函数的可读性更好。
+此处， \mach{PAINT\_ALPHA()} 表示 ``在alpha缓冲中绘制''；
+而 \mach{CLEAR\_ALPHA()} 则表示 ``从alpha缓冲中删除''。
 
 \eg{examples-alpha1}
 
 \newpage
-\section{Round-cornered images}
+\section{圆角图片}
 \index{corners, round}
 \index{round corners}
 \png{0064}
 
-On the left is a 128$\times$128 bitmap drawn using a single \dcmd{Vertex2ii} call.
-On the right is the same bitmap drawn using beautiful anti-aliased round corners.
-The technique is to draw a round-cornered rectangle into the alpha buffer,
-then use this rectangle to control the bitmap transparency, using \dcmd{BlendFunc}.
+上方左图是一个使用 \dcmd{Vertex2ii} 绘制的 128$\times$128 位图。
+右边的图在左图的基础上增加了漂亮的圆角外边。
+绘制这种图形的技巧在于，首先在alpha缓冲中绘制一个圆角矩形，之后利用这个矩形来控制位图的透明度，依然使用\dcmd{BlendFunc} 函数。
 \index{RECTS}
 
-The corner radius \mach{r} controls how round the corners are, in pixels.
-A value of 1 is no rounding, higher values give a more rounded look.
+圆角半径 \mach{r} 控制了圆角的圆滑度，单位为像素。
+\mach{r} 设置为1是为方形，数值越大，圆角度也会越大。
 % For batches of round-corners images, for example in a gallery or menu,
 % is is a good idea to draw all the rectangles before switching to color buffer drawing
 % and rendering the bitmaps themselves.
@@ -2649,39 +2459,34 @@ A value of 1 is no rounding, higher values give a more rounded look.
 \eg{examples-corners}
 
 \newpage
-\section{Transparent buttons}
+\section{透明的按钮}
 \png{keypad}
-The code first draws a full-screen background image,
-then the buttons are each drawn into the alpha buffer by the function \mach{button()}.
-Finally, the last six lines make the alpha buffer visible.
+这段代码首先绘制了全屏大小的背景图片，然后所有的按钮首先通过函数\mach{button()} 绘制在了alpha缓冲中。而代码的最后六行让alpha通道变为可见。
 \eg{examples-keypad}
 
 \newpage
-The \mach{button()} function first paints a white rectangle, then a slightly smaller one with partial transparency.
-Lastly it draws the label using \cmd{number}
-with \mach{OPT\_CENTER} to center the text.
+\mach{button()} 函数首先绘制了一个白色矩形，然后是略小透明的另一个矩形。
+最后使用 \cmd{number} 命令显示数字值，\mach{OPT\_CENTER} 参数将文本设置为居中显示。
 
 \eg{examples-button}
 
 \newpage
-\section{Reflections}
+\section{反射}
 \index{reflections}
 \index{drawing!reflections}
 \png{reflection0}
 
-After drawing the top bitmap,
-the code draws a 1D vertical 128$\times$1 gradient bitmap into the alpha buffer, repeated horizontally so it covers the screen:
+首先绘制好logo的位图，之后程序在alpha缓冲中绘制了一个 128$\times$1 的渐变位图，
+该渐变在水平方向上重复，直到全部覆盖屏幕：
 
 \begin{center}
 \includegraphics[width=0.5\textwidth]{assets/reflection1.png}
 \end{center}
 
-The code then sets a bitmap transform that flips the logo in the Y axis,
-using a method similar to the one in \xref{mirror}.
-It then draws the logo's alpha channel into the alpha buffer,
-\term{masked}
-with the existing alpha contents.
-Masking uses macro \mach{MASK\_ALPHA()}, which multiplies the logo's alpha channel with the existing alpha buffer values:
+之后的代码利用位图变换将logo在Y轴方向上进行了翻转，所用的技术和 \xref{mirror} 中使用的类似。
+之后的代码将logo的alpha通道连同现有的alpha内容全部写入到alpha缓冲中。
+
+蒙版的操作使用了宏 \mach{MASK\_ALPHA()}， 该宏的作用是将logo的alpha通道和现在的alpha缓冲值进行乘法操作：
 \index{matte}
 \index{masking, alpha}
 \index{alpha!masking}
@@ -2694,46 +2499,37 @@ $=$
 $\vcenter{\hbox{\includegraphics[width=0.3\textwidth]{assets/reflection2.png}}}$
 
 \newpage
-The final step is to draw the mirrored logo using the alpha buffer to control transparency.
+最后一步是将镜像后的logo通过alpha缓冲绘制出来。
 
 \eg{reflection-A}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\chapter{节约内存}
+\chapter{内存的节约}
 
 \newpage
-\section{Two-color images}
+\section{双色位图}
 \png{mono}
 \eg{mono-a}
-The source image is this seamless texture, created by Patrick Hoesly
+此处所用的源图像来自于 Patrick Hoesly 设计的无缝纹理：
 \begin{center}
 \includegraphics[width=0.3\textwidth]{assets/tile_green.jpg}
 \end{center}
-It would be fine to encode this image in
-\mach{RGB565} format.
-But because it only uses two colors -- and shades in-between --
-with some manipulation it can be loaded as an
-\mach{L4} bitmap, saving 75\% of the graphics memory.
-(See \dcmd{BitmapLayout} for a list of available pixel formats and their memory usage.)
-
-The first step is to load the original image into a graphics program and
-measure the two colors, in this case dark green is 
-\mach{0x375e03}
-and light green is 
-\mach{0x68b203}. Then convert the image to monochrome and stretch the contrast
-so that it ranges from pure black to pure white
+一般情况下，这样的图片会用 \mach{RGB565} 编码。然而此处因为这张图片只使用了两种颜色，经过适当处理就可以使用
+\mach{L4} 位图格式来存储，如此一来可以节约 $75\%$ 的 图形内存  
+（具体图片格式与对应的内存占用情况请参见命令 \dcmd{BitmapLayout} ）。
+首先将原始图片载入到图片处理软件中，用色彩取样工具分别得到两个颜色的具体RGB数值。此处经过测量，深绿色为
+\mach{0x375e03}，而浅绿色为
+\mach{0x68b203}。 
+之后将位图转换为单色位图，并调整对比度，使其在纯黑与纯白之间自然过渡。
 \begin{center}
 \includegraphics[width=0.3\textwidth]{assets/tile_greenm.png}
 \end{center}
 
-The code first clears the screen to the dark green color,
-then draws the \mach{L4} bitmap in light green color.
-The result is looks very like the original, but uses much less graphics
-memory. This 128 $\times$ 128 bitmap \mach{L4} bitmap uses 8 Kbytes.
+该程序的代码首先将屏幕清除成深绿色，之后将 \mach{L4} 的位图用浅绿的颜色绘制出来。
+所得到的结果和最初的图片没有太大区别，但却节约了大量的内存。
+这个 128 $\times$ 128 的 \mach{L4} 位图只是用了KB的内存。
 
-As a bonus, you can recolor the bitmap at runtime by adjusting the
-foreground and background colors,
-\textit{strictly} guided by the rules of good taste, of course.
+除此之外，你还可以在程序运行阶段随意调整前景色和背景色，完全按照你自己的审美标准来就行了。
 \begin{center}
 \includegraphics[width=0.3\textwidth]{assets/mono1.png}
 \includegraphics[width=0.3\textwidth]{assets/mono2.png}
@@ -2741,40 +2537,32 @@ foreground and background colors,
 \end{center}
 
 \newpage
-\section{The missing \mach{L2} format}
+\section{潜藏的 \mach{L2} 格式}
 \label{twobit}
 \index{L2@\mach{L2} bitmap format, emulating}
 
 \png{0055}
 
-Gameduino 2's GPU supports three monochrome formats:
-\mach{L1},
-\mach{L4} and
-\mach{L8}.
-The is no \mach{L2} format,
-but by drawing in two passes the format can be simulated.
-The trick is to split the original 2-bit image into two 1-bit \mach{L1} bitmaps, one for the high bit and one for the low bit:
+Gameduino 2的GPU支持三种单色格式： \mach{L1}， \mach{L4}和 \mach{L8}。
+这里虽然没有 \mach{L2} 格式，但是通过两次绘制却可以仿真出来。
+此处的技巧就是将原图片转换成两个1位 \mach{L1} 位图，其中一个存储低位，另一个存储高位：
 
 \begin{center}
 \includegraphics[width=0.35\textwidth]{assets/abe1.png}
 \includegraphics[width=0.35\textwidth]{assets/abe0.png}
 \end{center}
 
-The
-\mach{ABE}
-graphic is loaded into bitmap handle \mach{ABE\_HANDLE} in cells 0 and 1. Cell 0 contains bit 0, and cell 1 contains bit 1.
-The code draws the image in three passes. The first two passes draw the two
-bits of the bitmap into the alpha buffer. The third pass makes the alpha buffer visible.
+以上名为 \mach{ABE} 图片被载入到了位图单元0和1中，位图的句柄为 \mach{ABE\_HANDLE}。 
+位图单元0中存储位0，位图单元1中存储位1。
+代码总共绘制了三次图片。前两次分别将两个位图载入到alpha缓冲中，而第三次操作将alpha缓冲变为可见。
 
-The drawing code first disables color buffer writes using
-\dcmd{ColorMask}.
-Then it draws the high bit with alpha \mach{0xaa},
-and the low bit with \mach{0x55}.
-This gives the following values in the alpha buffer for the four 2-bit pixel codes:
+绘制代码首先使用 \dcmd{ColorMask} 禁用了颜色缓冲的写入。
+之后将高位用alpha值 \mach{0xaa} 表示，而低位则用 \mach{0x55} 表示。
+这就得到了alpha值和2位像素之间的转换关系：
 
 \begin{center}
 \begin{tabular}{ccc}
-high bit & low bit & alpha \\
+高位 & 低位 & alpha值 \\
 \hline
 0 & 0 & \mach{0x00} \\
 0 & 1 & \mach{0x55} \\
@@ -2785,58 +2573,50 @@ high bit & low bit & alpha \\
 
 \eg{examples-2bit}
 
-The final \dcmd{Vertex2ii} draws the same pixels as the two earlier \dcmd{Vertex2ii} commands.
-But because the \dcmd{BlendFunc} is \mach{(DST\_ALPHA, ONE\_MINUS\_DST\_ALPHA)} the bitmap pixels
-are ignored -- instead only the contents of the alpha buffer pixels affect the pixel color.
+最后的 \dcmd{Vertex2ii} 和之前两个绘制指令绘制的图形完全相同，但是由于 \dcmd{BlendFunc} 的参数设置成为了\mach{(DST\_ALPHA, ONE\_MINUS\_DST\_ALPHA)}，图片的原始像素全部被忽略了，取而代之的仅仅是alpha缓冲中的像素会影响最终的颜色内容。
 
 \newpage
-\section{Separated mattes}
+\section{分离的形板(matte)}
 \index{bitmaps!mattes}
 \label{mattes}
 
 \png{nightstrike_1-DEFENSOR_FRONT-00}
 
-The base graphic in
 \textit{NightStrike}
 \index{NightStrike}
-is monochrome with an alpha channel.
-There is no direct support in the hardware for a monochrome-with-alpha format, but it
-can be emulated by splitting the bitmap into a
-\term{matte} -- the original alpha channel -- and a foreground bitmap.
+游戏中所使用的基座是一个包含alpha通道的单色位图。
+硬件系统中并没有办法直接支持单色含alpha通道的位图格式，但是可以通过将原始位图分离成一个
+\term{形板(matte)}
+来解决。其中一个是原来的alpha通道，另一个是前景图片。
 
 \begin{center}
 \includegraphics[width=0.4\textwidth]{previews/nightstrike_1-DEFENSOR_FRONT-00.png}
 \includegraphics[width=0.4\textwidth]{previews/nightstrike_1-DEFENSOR_FRONT-01.png}
 \end{center}
 
-Both images are loaded as \mach{L4} bitmaps.
-The matte bitmap is drawn first, with \dcmd{ColorRGB} set to black.
-This clears every pixel covered by the matte.
-Then the foreground bitmap is drawn as usual.
+以上两个位图都以 \mach{L4} 格式被载入系统/
+形板位图首先被绘制出来，绘制时将 \dcmd{ColorRGB} 设置为黑色。
+这个操作将所有被形板覆盖的区域清空，之后前景图片按照通常的方法被绘制。
 \begin{center}
 \includegraphics[width=0.3\textwidth]{assets/ns-matteA-0000.png}
 \includegraphics[width=0.3\textwidth]{assets/ns-matteB-0000.png}
 \end{center}
 
 \newpage
-\section{Half-resolution bitmaps}
+\section{减半分辨率}
 \index{bitmaps!half-resolution}
 
-For \textit{NightStrike}, the helicopter animation is two frames, 100 pixels wide
+在 \textit{NightStrike} 游戏中，直升机的动画使用了两帧100像素宽的 \mach{RGBA4} 图片：
 \index{NightStrike}
-in format \mach{RGBA4}.
 
 \begin{center}
 \includegraphics[width=150pt]{previews/nightstrike_1-HELI-00.png}
 \includegraphics[width=150pt]{previews/nightstrike_1-HELI-01.png}
 \end{center}
 
-There is another four frame animation, used when the stricken helicopter is crashing to the ground.
-Because this animation is seen only briefly, when the sprite is moving fast,
-a loss of detail is not too noticable.
-This version is half the resolution, less than 50 pixels wide, but is scaled by \cmd{scale} so that it
-appears 100 pixels wide on the screen.
-Halving the resolution of a bitmap reduces its memory usage by 75\%.
+而直升机从空中坠落到地面的过程则使用了另外一个四帧的动画。因为下落的过程很快，这个动画只是转瞬即逝，一些细节上的损失并不会引起用户的注意。
+所以在这个动画中使用的分辨率只有之前的一半：小于50像素。在屏幕上显示之前，只要用 \cmd{scale} 将该位图缩放到同样的尺寸就可以了。
+使用这种方法减半分辨率，可以节约75\%的内存使用量。
 
 \begin{center}
 \includegraphics[width=135pt]{previews/nightstrike_1-COPTER_FALL-00.png}
@@ -2846,27 +2626,25 @@ Halving the resolution of a bitmap reduces its memory usage by 75\%.
 \end{center}
 
 \newpage
-\section{8-bit formats}
+\section{8位图片格式}
 \label{eightbit}
 
 \begin{center}
 \includegraphics[width=0.6\textwidth]{assets/0034.png}
 \end{center}
 
-For most images, the 16-bit per pixels formats --
-\mach{RGB565},
-\mach{ARGB1555} and
-\mach{ARGB4} -- 
-are appropriate. But sometimes the 8-bit per pixel formats can be used instead with little noticable loss in quality.
+对于大部分图片来说，16位的位图格式如
+\mach{RGB565}，
+\mach{ARGB1555} 和
+\mach{ARGB4} 才是合适的。
+但有时8位位图可以替代它们，在起到同样的效果的情况下不会产生明显的失真。
 
-The playing cards above are encoded in
-\mach{RGB332} format, so only use one byte per pixel. The explosion animation below uses
-\mach{ARGB2} format.
+上图中的纸牌就是用 \mach{RGB332} 格式编码的，每个像素仅占用1个字节（8位）。
+而下图中的爆炸动画则使用了 \mach{ARGB2} 格式。
 \index{playing cards}
 \index{cards}
-The playing cards use bold colors, so the reduced color range of \mach{RGB332} is not very noticable.
-The explosion animates very fast -- the whole sequence below takes 1/4th of a second --
-and this rapid motion conceals the reduced color range.
+对于纸牌来说，其用了大胆鲜明的颜色搭配，所以将颜色下降到 \mach{RGB332} 并不会引人注意；
+而对于爆炸动画来说，因为整个过程只有0.25秒的时间，快速的动作掩饰掉了颜色范围的缺失。
 \index{explosion}
 \index{animation}
 
@@ -2899,19 +2677,17 @@ and this rapid motion conceals the reduced color range.
 \includegraphics[width=0.48\textwidth]{assets/dxt1.png}
 \end{center}
 
-DXT is a texture compression system -- it squeezes a bigger image into less graphics memory.
-The image on the left is the artist's original rendering of the \textit{NightStrike} welcome screen. On the right is a screenshot
-from the DXT1-compressed version on the running \gdtwo. As you can see, the differences are quite small.
-But because it uses DXT1,
-the image on the right uses \textit{one fourth} of the graphics memory of the image on the left.
+DXT 是一个贴图压缩系统，它将较大的图片压缩成为更小的位图从而节约图形内存。
+左方的截图是由原艺术家设计、渲染的 \textit{NightStrike} 欢迎界面，而在右边是在Gameduino2上实际运行着的，并经过DXT1压缩后的版本。
+两幅图片用肉眼难分差别，但是用DXT1压缩后的图片只使用了原始大小四分之一的内存。
 
-Roughly, DXT1 works by splitting the image into 4$\times$4 pixel tiles. Each tile is given two colors, call them
-$C_0$ and $C_1$. Then each pixel in the tile is specified only as a mixture of $C_0$ and $C_1$.
-DXT1 uses \mach{RGB565} format for the colors $C_0$ and $C_1$, and for each pixel it uses a two bit code:
+总体上来说，DXT1的工作原理是将原始图片分割成 4$\times$4 像素的区域。每一个区域被赋予两种颜色，名曰 $C_0$ 和 $C_1$。
+之后区域内的每个像素都被表示成 $C_0$ 和 $C_1$ 的混合值。
+DXT1 使用 \mach{RGB565} 格式表示颜色 $C_0$ 和 $C_1$，而对每个像素使用两位的编码：
 
 \vspace{10pt}
 \begin{tabular}{cl}
-code & final color \\
+编码 & 颜色 \\
 \hline \\
 00 & $C_0$ \\
 01 & $0.666 \times C_0 + 0.333 \times C_1$ \\
@@ -2921,28 +2697,26 @@ code & final color \\
 \vspace{10pt}
 
 \noindent
-so the storage for each 4$\times$4 tile, in bits, is:
+如此一来，每个 4$\times$4 单元所占用的位大小就是：
 
 \vspace{10pt}
 \begin{tabular}{cl}
 $C_0$ & 16 \\
 $C_1$ & 16 \\
-pixels & 16 $\times$ 2 = 32 \\
+像素点 & 16 $\times$ 2 = 32 \\
 \end{tabular}
 \vspace{10pt}
 
-Each tile uses 64 bits, and there are sixteen pixels in each tile, so the \textit{per pixel}
-storage is only 4 bits. If the bitmap were encoded in plain \mach{RGB565} it would need 16 bits per pixel,
-so the graphics memory saving is 75\%!
+计算得知每一个区域单元占用的大小为64位，因为一个单元中有16个像素点，平均下来每一个像素点所占用的内存仅为4位。
+设想如果这个位图是用 \mach{RGB565} 编码的，那么每个像素将占用16位，用DXT1压缩可以节约75\%的图形内存！
 
-\gdtwo's graphics hardware does not directly support DXT1, but by using multiple drawing passes and multiple bitmaps, it can
-simulate the DXT1 format.
+可惜的是Gameduino 2的硬件并不直接支持DXT1，但是通过多次绘制和相乘的方法可以将其模拟出来。
 
 \clearpage
 
-Taking the \textit{NightStrike} welcome screen as an example, the source image is 480$\times$272 pixels.
-Hence the width in 4$\times$4 tiles is 120$\times$68. So the $C_0$ and $C_1$ images are both encoded in \mach{RGB565} at a resolution of
-120$\times$68:
+以 \textit{NightStrike} 的欢迎界面为例，源图片的大小为 480$\times$272 像素。
+因为DXT1以 4$\times$4 大小为一个单元，于是整个图像为 120$\times$68 单元。
+将所有单元的 $C_0$ 和 $C_1$ 分别保存在两个大小为 120$\times$68 像素、编码为\mach{RGB565}的图片中：
 
 \vspace{10pt}
 $C_0=$
@@ -2952,8 +2726,7 @@ $C_1=$
 $\vcenter{\hbox{\includegraphics[width=0.9\textwidth]{previews/nightstrike_welcome-WELCOME_BACKGROUND_COLOR-01.png}}}$
 
 \newpage
-Because the hardware does not directly support 2-bit bitmaps, the two bit layer is split into two 1-bit images,
-using the same technique as \xref{twobit}. 
+因为硬件缺乏对两位图片的支持，两位的编码位图被拆分为两张一位编码的图片，具体作法见 \xref{twobit} 。
 
 $b_0=$
 $\vcenter{\hbox{\includegraphics[width=0.32\textwidth]{previews/nightstrike_welcome-WELCOME_BACKGROUND_BITS-00.png}}}$
@@ -2962,9 +2735,7 @@ $\vcenter{\hbox{\includegraphics[width=0.32\textwidth]{previews/nightstrike_welc
 \vspace{10pt}
 
 \noindent
-\textit{NightStrike's} DXT1 background drawing function first builds the 2-bit image in the alpha buffer.
-It then
-writes the $C_0$ and $C_1$ bitmaps (zoomed 4$\times$ using \cmd{scale}) into the color buffer, with the blend values from the alpha buffer.
+\textit{NightStrike} DXT1 的背景绘制函数首先在alpha缓冲中构建了二位的位图，之后再将 $C_0$ 和 $C_1$位图使用 \cmd{scale} 命令放大4位并写入颜色缓冲中，最终将其与alpha缓冲的内容进行了混合。
 
 \eg{nightstrike-dxt1}
 
@@ -2981,27 +2752,21 @@ writes the $C_0$ and $C_1$ bitmaps (zoomed 4$\times$ using \cmd{scale}) into the
 
 \png{kenney}
 
-The \textit{kenney} demo uses public domain artwork\footnote{\url{http://opengameart.org/content/platformer-art-deluxe}}
-by artist Kenney.nl
+\textit{kenney} 演示程序使用了艺术家 Kenney.nl
 \footnote{\url{http://www.kenney.nl/}}
-.
-It draws six scrolling layers,
-and runs smoothly at 60Hz.
-Most layers are drawn using bitmaps, all encoded with format \mach{ARGB4}.
-The first layer is a vertical gradient, with carefully chosen sky-blue colors.
+的开放艺术作品\footnote{\url{http://opengameart.org/content/platformer-art-deluxe}}。
+整个程序绘制了六个图层，可以以60Hz的速度流畅运行。
+其中大部分的图形都是以位图的方式绘制的，所有的位图都是以 \mach{ARGB4} 编码的。
+第一层是一个垂直方向的渐变，精心挑选了天空蓝作为颜色。
 
 \png{kenney_0}
 \eg{kenney-gradient}
 
 \noindent
-The next layer uses a single sprite loaded in \mach{CLOUD\_HANDLE}
-drawn in the random positions in \mach{state.clouds[]}.
-The clouds all move downwards at slightly different rates,
-and slower-moving clouds are more transparent.
-As clouds reach the bottom of the screen, they wrap around to the top.
-The clouds' positions are subpixel coordinates, in 1/16th of a pixel.
-This extra precision means that as the clouds move, they don't ``snap''
-between integer pixel coordinates.
+下一个图层使用了一个云朵图元，这个图元被保存在 \mach{CLOUD\_HANDLE} 中。这些云朵的初始位置是随机的，位置信息保存在 \mach{state.clouds[]} 中。
+所有的云朵以不同的速度向下方运动，速度越慢的云朵越透明。
+当云朵到达屏幕顶部之后，它们重新从屏幕上方卷动出现。
+云朵的位置是以1/16像素为单位的子像素坐标表示的，使用精确的位置可以保证云朵不会在像素之间``跳动''。
 
 \szpng{0.2}{previews/kenney-CLOUD-00}
 \png{kenney_1}
@@ -3010,15 +2775,10 @@ between integer pixel coordinates.
 
 % \szpng{0.15}{kenney_tiles}
 \sbs{kenney_tiles}{
-The next layer is the tile map.
-The tile map was created using the ``tiled''
-editor (\url{http://www.mapeditor.org/}), and imported 
-using the asset converter into character array 
-\mach{layer1\_map}.
-The 20 tiles are each 32$\times$32 bitmaps, encoded as \mach{ARGB4}
-in handle \mach{TILES\_HANDLE}.
-Tile code zero is the blank cell, and the code checks for this and only
-draws tiles with non-zero codes.
+下一个图层是网格地图，网格地图是由网格编辑器生成的 (\url{http://www.mapeditor.org/})。
+这个地图之后通过元素转换器被写入字符数组 \mach{layer1\_map}。
+20个平铺网格单元每一个都是 32$\times$32 \mach{ARGB4} 编码的位图，句柄保存在 \mach{TILES\_HANDLE}。
+平铺单元位置0处是一个空白单元，程序会检查这一点并且只绘制非0单元。
 \szpng{1.0}{assets/kenney_2}
 }
 \begin{center}
@@ -3046,29 +2806,26 @@ draws tiles with non-zero codes.
 \eg{kenney-tiles}
 
 \newpage
-The foreground characters are \mach{ARGB4} bitmaps, rotated at random
-and following gentle sinusoidal paths.
-Their coordinates are in \mach{state.p}.
+在前景中的角色是 \mach{ARGB4} 的位图，以正弦路径运动并随机旋转。
+它们的坐标值被保存在 \mach{state.p} 中。
 \begin{center}
 \includegraphics[width=0.2\textwidth]{previews/kenney-PLAYER1-00.png}
 \includegraphics[width=0.2\textwidth]{previews/kenney-PLAYER1-01.png}
 \includegraphics[width=0.2\textwidth]{previews/kenney-PLAYER1-02.png}
 \end{center}
-The trails of colored ``bubbles'' following each character are transparent
-\mach{POINT}s, handled in the code by three \mach{state.trail} objects.
+跟随角色的彩色``泡泡''是透明的 \mach{POINT} ， 在代码中由三个 \mach{state.trail} 对象管理。
 \png{kenney_3}
 \eg{kenney-player}
 
-The ``sunburst'' graphic is drawn between the sky and cloud layers.
-It uses a series of stencil operations to create the ray objects.
-The function \mach{burst()} draws a complete sunburst, and
-\mach{sunrise()} draws both the orange and yellow \mach{burst()}s, and animates their bouncing expansion.
+``阳光普照''的图形是在云朵图层和天空的图层之间绘制的。
+通过使用一系列蒙版操作实现了射线状物体的绘制。
+函数 \mach{burst()} 绘制了整个阳光普照，而函数
+\mach{sunrise()} 绘制了黄色和橘色的 \mach{burst()}， 并且将它们跳跃的扩展做成动画效果。
 
 \png{kenney_4}
 
-The final layer is the shower of hearts falling down the screen.
-These are handled like the ``cloud'' layer.
-Array \mach{state.hearts[]} tracks their position, and they move downwards, wrapping around from bottom to top.
+最后一个图层是从天而降的爱心雨，这部分的处理方法和处理云所在的图层基本相似。
+数组 \mach{state.hearts[]} 记录爱心的位置，当它们落入到屏幕底部时，会从顶部卷动出现。
 \szpng{0.2}{previews/kenney-HEART-00}
 
 \png{kenney_5}
@@ -3080,18 +2837,11 @@ Array \mach{state.hearts[]} tracks their position, and they move downwards, wrap
 
 \png{nightstrike}
 
-The \textit{NightStrike} game uses public domain artwork
-\footnote{\url{http://opengameart.org/content/nightstrike-png-assets}}
-by artist MindChamber.
-It uses the touch screen to track dozens of independent objects,
-and plays smoothly at 60Hz.
-The game uses some special techniques to fit its graphics into the available 256 KBytes of memory.
-
-The game has five levels, and each level is a separate asset file, containing all the background and foreground graphics
-for the level, as well as sound effects.
-The backgrounds for each level are 480$\times$272 images, encoded using DXT1-like compression
-(see \xref{dxt1})
-so they only use 65 Kbytes of video memory.
+\textit{NightStrike} 的游戏素材来自艺术家 MindChamber 的开放艺术作品 \footnote{\url{http://opengameart.org/content/nightstrike-png-assets}}。
+这个游戏使用触屏操作追踪大量的移动物体，游戏可以流畅运行在60Hz。
+游戏运用了很多技巧使其适应图形系统仅有的${256}$ KB内存。
+整个游戏共有五个关卡，每一个关卡都有一个独立的元素文件。这个文件保存了对应关卡所有需要的前景、背景图片以及音效内容。
+每关卡的背景都是 480$\times$272 的图片，使用类似DXT1的压缩编码 (\xref{dxt1})，使其仅占用65 KB的图形缓存。
 
 \begin{center}
 \includegraphics[width=0.3\textwidth]{assets/nightstrike/backgrounds/welcome.jpg}
@@ -3104,7 +2854,7 @@ so they only use 65 Kbytes of video memory.
 
 \newpage
 
-The sprites in the game have smooth transparency, so most are encoded in \mach{ARGB4} format.
+游戏中的图元有很平滑的透明处理，所以大部分都是以 \mach{ARGB4} 格式编码的。
 
 \begin{center}
 \includegraphics[width=150pt]{previews/nightstrike_1-HELI-00.png}
@@ -3127,8 +2877,7 @@ The sprites in the game have smooth transparency, so most are encoded in \mach{A
 \includegraphics[width=0.1\textwidth]{previews/nightstrike_0-SOLDIER_RUN-07.png}
 \end{center}
 
-The explosions in the game animate quickly and have bright colors, so can
-use \mach{ARGB2} format to save memory (see \xref{eightbit}).
+爆炸的动画快速且有明亮的颜色，所以可以使用 \mach{ARGB2} 格式节约内存 (见\xref{eightbit})。
 
 \begin{center}
 \includegraphics[width=0.18\textwidth]{previews/nightstrike_0-EXPLODE_BIG-00.png}
@@ -3143,7 +2892,7 @@ use \mach{ARGB2} format to save memory (see \xref{eightbit}).
 \includegraphics[width=0.18\textwidth]{previews/nightstrike_0-EXPLODE_BIG-09.png}
 \end{center}
 
-The player's ``defensor'' is monochrome, so it is drawn using two \mach{L4} bitmaps (see \xref{mattes}).
+玩家的``炮台''是黑白的，所以用了两个 \mach{L4} 位图存储 (见\xref{mattes})。
 
 \begin{center}
 \includegraphics[width=0.4\textwidth]{previews/nightstrike_1-DEFENSOR_FRONT-00.png}
@@ -3152,9 +2901,8 @@ The player's ``defensor'' is monochrome, so it is drawn using two \mach{L4} bitm
 
 \newpage
 
-As well as using animated bitmaps for explosions,
-the game draws exploding sparks using wide lines (see \xref{lines}).
-Because they use \mach{LINES}, the sparks require no graphics memory
+除了使用运动的位图来实现爆炸效果，游戏还使用了宽线条来模拟爆炸的火花 (见\xref{lines})。
+因为它们仅仅使用 \mach{LINES} 功能，所以这些火花不需要使用任何图形缓存。
 \begin{center}
 \includegraphics[width=0.3\textwidth]{assets/ns-lines-0006.png}
 \includegraphics[width=0.3\textwidth]{assets/ns-lines-0007.png}
@@ -3165,9 +2913,8 @@ Because they use \mach{LINES}, the sparks require no graphics memory
 \end{center}
 
 \noindent
-In game text uses a small 12$\times$19 pixel font, converted from an
-original TrueType font.
-This font's bitmaps are in \mach{L4} format, to preserve its smooth edges.
+游戏中的所有文字使用了12$\times$19像素的字体，该字体库由原始的TrueType字体转换而来。
+字体的位图保存为 \mach{L4} 格式从而保存平滑的边缘过渡。
 
 \begin{center}
 \includegraphics[width=0.04\textwidth]{previews/nightstrike_2-INFOFONT-00.png}
@@ -3263,51 +3010,42 @@ This font's bitmaps are in \mach{L4} format, to preserve its smooth edges.
 \includegraphics[width=0.04\textwidth]{previews/nightstrike_2-INFOFONT-94.png}
 \end{center}
 
-The game code uses a class for each kind of visble object in the game.
-These class are:
+游戏代码中对每一个可见物体设立了一个类对象进行管理，这些类包括：
 \mach{Fires},
 \mach{Explosions},
 \mach{Sparks},
 \mach{SoldierObject},
 \mach{MissileObject}, \\
 \mach{Rewards},
-\mach{BaseObject}, and
-\mach{HeliObject}.
-Each object has a \mach{draw()} method to draw the object on the screen,
-and an \mach{update()} method to animate, move and compute any collisions.
-Object collision testing uses a simple overlapping box scheme.
-
-\textit{NightStrike} uses 20 Kbytes of the Arduino's 32 Kbytes of flash, and
-the game loop runs in about 7ms on a standard 16MHz Arduino.
+\mach{BaseObject}, 以及
+\mach{HeliObject}。
+每一个对象有一个 \mach{draw()} 方法将物体在屏幕上绘制出来，另有一个 \mach{update()} 方法用于实现动画、移动以及处理碰撞。
+物体的碰撞处理仅仅使用了矩形测试法。
+\textit{NightStrike} 使用了Arduino 32KB Flash中的20 KB，整个游戏在标准16MHz
+的Arduino上运行的周期约为7 ms。
 
 \newpage
 \section{Invaders}
 
 \png{invaders}
 
-\textit{Invaders} is a port of the original Gameduino game \footnote{
-\url{http://artlum.com/gameduino/gameduino.html}}.
-But to make it more authentic, it includes the original arcade cabinet artwork.
-The original `70s arcade cabinet only had a monochrome CRT screen,
-but to jazz it up the designers used a cunning mirror arrangement to project a suitable
-space picture behind the graphics.
-If you look closely you can see that the pixels are slightly transparent because of this.
-Their other trick was to put a colored overlay on the CRT screen with a green band at the bottom and a red one at the top.
-In the original game you can see the missiles and bombs change color as they pass through the colored zones.
+\textit{Invaders} 是从Gameduino 1而来的一个移植版本 \footnote{
+\url{http://artlum.com/gameduino/gameduino.html}}。
+为了让其更为真实，它使用了街机版本中的艺术手段。
+传统的70年代游戏机只有一个单色的CRT显示器，为了让它炫酷起来，设计师绞尽脑汁用了一个反射镜将一张太空图片投影到了图形的后方。
+如果离近些看，你就会发现像素变得有些透明就是这样因为这个原因。
+他们用的另一个小技巧就是在CRT屏幕的底部覆盖了一个绿色的矩形薄膜，并且在顶部覆盖了红色的薄膜。
+在原始版本的游戏中，你可以发现导弹在通过这些区域时改变了颜色。
 
-\gdtwo \textit{invaders} loads the background image as a 248$\times$272 JPEG.
-Because it only uses 6K it fits easily in the Arduino's flash memory.
+\gdtwo \textit{invaders} 读取了一个 248$\times$272 的JPEG图片作为背景，该图片仅占6 KB内存，所以可以轻易装入Arduino的Flash存储中。
 % The background image itself is \term{contrast stretched} - it uses the full range
 % of colors from black to white.
 % Doing this means that the image compresses well in JPEG and also 
-Encoding the full-brightness image then drawing a darker version in the game helps to
-conceal some of the JPEG compression artefacts in the sky gradient.
+首先对全亮度的图像进行编码，之后在游戏中再绘制一个稍暗的版本，这样可以适当掩藏JPEG压缩带来的不自然。
 
-The game's pixel action is drawn into the alpha buffer.
-To make it visible, the 28$\times$32 overlay bitmap
-is drawn zoomed 8X so that its size is 248$\times$256,
-with \dcmd{BlendFunc} \mach{(DST\_ALPHA, ONE\_MINUS\_DST\_ALPHA)}.
-This paints the game's pixels, using the color from the overlay.
+游戏的像素动作首先都是绘制在alpha缓冲中的，之后用覆盖位图让其可见。
+覆盖位图是 28$\times$32 的位图，被放大8倍到 248$\times$256 后用 \dcmd{BlendFunc} \mach{(DST\_ALPHA, ONE\_MINUS\_DST\_ALPHA)}绘制。
+如此一来就绘制了游戏的像素，而颜色全部来自于覆盖图层。
 
 \newpage
 \begin{center}
@@ -3327,18 +3065,15 @@ This paints the game's pixels, using the color from the overlay.
 % \section{Zardoz}
 
 \appendix
+
 \chapter{对象转换器}
 
-The latest \gdtwo asset converter is available at
-
-\url{http://gameduino.com/code}
-
-\noindent
-Detailed documentation is available online.
+最新的 \gdtwo 对象转换器可以在 \url{http://gameduino.com/code} 进行下载。相关的文档与帮助详见官方网站。
 
 \clearpage
 \addcontentsline{toc}{chapter}{Index}
 \printindex
 
 \end{CJK}
+
 \end{document}
