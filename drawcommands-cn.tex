@@ -1,0 +1,805 @@
+\drawcmd{AlphaFunc}{透明度检测功能}
+
+\begin{framed}
+\begin{verbatim}
+void AlphaFunc(byte func,
+               byte ref);
+\end{verbatim}
+\end{framed}
+
+\begin{tabular}{lp{0.8 \textwidth}}
+
+\\ \mach{func} & 检测采用的比较方式，
+        \mach{NEVER} ， \mach{LESS} ， \mach{LEQUAL} ， \mach{GREATER} ， \mach{GEQUAL} ，
+         \mach{EQUAL} ， \mach{NOTEQUAL} 或 \mach{ALWAYS} 中选择其一\\
+
+\\ \mach{ref} & 比较时参考的数值 \\
+
+\end{tabular}
+
+\vspace{10pt}
+透明度检测功能用于检测所有像素点的透明度值，并只绘制出满足条件的像素点。
+例如：
+\begin{verbatim}
+  GD.AlphaFunc(GEQUAL, 160);
+\end{verbatim}
+表示只选择绘制透明度值满足 $(A \ge 160)$ 的像素点。
+默认状态下的比较方式是 \mach{ALWAYS} ，即绘制所有像素点。
+\minipng{0032}
+\eg{examples-alphafunc}
+
+\drawcmd{Begin}{选取图元绘制}
+
+\begin{framed}
+\begin{verbatim}
+void Begin(byte prim);
+\end{verbatim}
+\end{framed}
+
+\begin{tabular}{lp{0.8 \textwidth}}
+
+\\ \mach{prim} & \mach{BITMAPS} ，
+\mach{POINTS} ，
+\mach{LINES} ，
+\mach{LINE\_STRIP} ，
+\mach{EDGE\_STRIP\_R} ，
+\mach{EDGE\_STRIP\_L} ，
+\mach{EDGE\_STRIP\_A} ，
+\mach{EDGE\_STRIP\_B} 或
+\mach{RECTS} 中选择其一\\
+\end{tabular}
+
+\vspace{10pt}
+\mach{Begin} 指令用于设置当前绘制图元。
+这一指令并不绘制任何图像——绘制命令由之后会介绍的 \nameref{Vertex2f} 或 \nameref{Vertex2ii} 指令实现。
+其中绘制图元包括：
+
+\vspace{10pt}
+
+\begin{tabular}{lp{0.8 \textwidth}}
+\mach{BITMAPS     } & 每次调用vertex指令时将绘制一幅位图图片\\
+\mach{POINTS      } & 每次调用vertex指令时将绘制一个平滑边缘的点\\
+\mach{LINES       } & 每次调用一对vertex指令时将绘制一条平滑线段\\
+\mach{RECTS       } & 每次调用一对vertex指令时将绘制一个平滑边缘的矩形\\
+\mach{LINE\_STRIP  } & 调用一组vertex指令时将按顺序绘制一条首尾相接的折线\\
+\mach{EDGE\_STRIP\_A} & 同 \mach{LINE\_STRIP} 类似， 不过是对指定线上方的像素点进行绘制 \\
+\mach{EDGE\_STRIP\_B} & 同 \mach{LINE\_STRIP} 类似， 不过是对指定线下方的像素点进行绘制 \\
+\mach{EDGE\_STRIP\_L} & 同 \mach{LINE\_STRIP} 类似， 不过是对指定线左侧的像素点进行绘制 \\
+\mach{EDGE\_STRIP\_R} & 同 \mach{LINE\_STRIP} 类似， 不过是对指定线右侧的像素点进行绘制
+\end{tabular}
+
+\png{0047}
+
+\drawcmd{BitmapHandle}{设置位图句柄}
+
+\begin{framed}
+\begin{verbatim}
+void BitmapHandle(byte handle);
+\end{verbatim}
+\end{framed}
+
+\begin{tabular}{lp{0.8 \textwidth}}
+
+\\ \mach{handle} & 整型句柄号码，$0\sim15$ \\
+
+\end{tabular}
+
+\vspace{10pt}
+\mach{BitmapHandle} 指令用于设置位图句柄，位图句柄可用于
+\nameref{Vertex2f} ，
+\nameref{BitmapSource} ，
+\nameref{BitmapLayout} 和
+\nameref{BitmapSize} 。
+
+位图句柄是图形环境的一部分，其默认值为 $0$ 。
+
+\drawcmd{BitmapLayout}{设定位图布局}
+
+\begin{framed}
+\begin{verbatim}
+void BitmapLayout(byte format,
+                  uint16_t linestride,
+                  uint16_t height);
+\end{verbatim}
+\end{framed}
+
+\begin{tabular}{lp{0.8 \textwidth}}
+
+\\ \mach{format} & 位图像素的格式，
+\mach{ARGB1555} ，
+\mach{L1} ，
+\mach{L4} ，
+\mach{L8} ，
+\mach{RGB332} ，
+\mach{ARGB2} ，
+\mach{ARGB4} ，
+\mach{RGB565} ，
+\mach{PALETTED} ，
+\mach{TEXT8X8} ，
+\mach{TEXTVGA} ，
+\mach{BARGRAPH} 中选择其一。
+\\
+
+\\ \mach{linestride} & 位图图像中每一行数据在存储器中的大小，单位为字节 \\
+
+\\ \mach{height} & 位图的高度，单位为像素 \\
+
+\end{tabular}
+
+\vspace{10pt}
+\mach{BitmapLayout} 指令用于设定位图在存储器中的布局。
+\mach{format} 用于控制存储器数据如何转化为图像。
+每像素图像的位数可以为 $1$、$4$、$8$ 或是 $16$ 位。色彩信息从这每像素图像的数据中抽取得到，对应为数如下所示，
+其中``v''表示每像素图像数据。
+
+\vspace{10pt}
+\begin{tabular}{cccccc}
+格式           & 每像素图像 & alpha        & 红   & 绿 & 蓝 \\
+                 &的位数     &              &       &       &      \\
+\hline
+\mach{L1}        &    1     & v$_0$        &  1.0  &  1.0  &  1.0 \\
+\mach{L4}        &    4     & v$_{3..0}$   &  1.0  &  1.0  &  1.0 \\
+\mach{L8}        &    8     & v$_{7..0}$   &  1.0  &  1.0  &  1.0 \\
+\hline
+\mach{RGB332}    &    8     & 1.0          &  v$_{7..5}$   &  v$_{4..2}$  &  v$_{1..0}$ \\
+\mach{RGB565}    &    16    & 1.0          &  v$_{15..1}$  &  v$_{10..5}$ &  v$_{4..0}$ \\
+\hline
+\mach{ARGB2}     &    8     & v$_{7..6}$   &  v$_{5..4}$   &  v$_{3..2}$  &  v$_{1..0}$ \\
+\mach{ARGB4}     &    16    & v$_{15..12}$ &  v$_{11..8}$  &  v$_{7..4}$  &  v$_{3..0}$ \\
+\end{tabular}
+\vspace{10pt}
+
+$1$ 位和 $4$ 位图像由左至右进行图像压缩，因此位图图像中最左侧的图像信息占据一个字节中最重要的一位。
+$16$ 位图像在显存中以小端存储格式存储，必须以偶数内存边界对齐的方式进行存储。
+
+\mach{PALETTED} 格式每像素图像占 $8$ 位数据，每一像素数据都对应 \mach{RAM\_PALETTE} 存储的 $32$ 位色表中 $256$ 项之一。
+% \mach{TEXT8X8} interpret each byte in the bitmap as an index into a character array, with a character size of 8x8 pixels.
+% \mach{TEXTVGA} interprets memory in the same format as an IBM PC VGA graphic controller, 8 bits of character attribute and an 8-bit character code. The character size is 8x16.
+
+
+\drawcmd{BitmapSize}{设置位图的尺寸及显示}
+
+\begin{framed}
+\begin{verbatim}
+void BitmapSize(byte filter,
+                byte wrapx,
+                byte wrapy,
+                uint16_t width,
+                uint16_t height);
+\end{verbatim}
+\end{framed}
+
+\begin{tabular}{lp{0.8 \textwidth}}
+
+\\ \mach{filter} & 位图图像过滤方式，\mach{NEAREST} 或 \mach{BILINEAR} \\
+
+\\ \mach{wrapx} & $x$ 轴方向延伸绘制模式， \mach{BORDER} 或 \mach{REPEAT} \\
+
+\\ \mach{wrapy} & $x$ 轴方向延伸绘制模式， \mach{BORDER} 或 \mach{REPEAT} \\
+
+\\ \mach{width} & 屏幕上绘制的宽度，单位为像素 \\
+
+\\ \mach{height} & 屏幕上绘制的高度，单位为像素 \\
+
+\end{tabular}
+
+\vspace{10pt}
+\mach{BitmapSize} 指令用于设置当前位图在屏幕上的显示方式。
+
+
+\drawcmd{BitmapSource}{设置图片源地址}
+
+\begin{framed}
+\begin{verbatim}
+void BitmapSource(uint32_t addr);
+\end{verbatim}
+\end{framed}
+
+\begin{tabular}{lp{0.8 \textwidth}}
+
+\\ \mach{addr} & 图片基地址，取值范围为 \mach{0x00000} $\sim$ \mach{0x3ffff} \\
+
+\end{tabular}
+
+\vspace{10pt}
+\mach{BitmapSource} 指令用于设置图片源的基地址。
+对于 $16$ 位数据格式的位图文件，这个地址必须为偶数。
+
+\drawcmd{BlendFunc}{设定图像混合功能}
+
+\begin{framed}
+\begin{verbatim}
+void BlendFunc(byte src,
+               byte dst);
+\end{verbatim}
+\end{framed}
+
+\begin{tabular}{lp{0.8 \textwidth}}
+
+\\ \mach{src} & 源混合因子，
+\mach{ZERO} ，
+\mach{ONE} ，
+\mach{SRC\_ALPHA} ，
+\mach{DST\_ALPHA} ，
+\mach{ONE\_MINUS\_SRC\_ALPHA} ，
+\mach{ONE\_MINUS\_DST\_ALPHA} 中选择其一  \\
+
+\\ \mach{dst} & 目标混合因子，
+\mach{ZERO} ，
+\mach{ONE} ，
+\mach{SRC\_ALPHA} ，
+\mach{DST\_ALPHA} ，
+\mach{ONE\_MINUS\_SRC\_ALPHA} ，
+\mach{ONE\_MINUS\_DST\_ALPHA} 中选择其一 \\
+
+\end{tabular}
+
+\vspace{10pt}
+\mach{BlendFunc} 指令用于将指定图像与当前帧缓冲器的内容进行图像混合。
+引入图像的色彩与源混合因子相结合，而当前帧缓冲器中的图像与目标混合因子相结合。
+再将两结合成果相加得到最终图像的色彩。
+
+\minipng{0031}
+\eg{examples-blendfunc}
+
+
+% \drawcmd{Call}{Something}
+% 
+% \begin{framed}
+% \begin{verbatim}
+% void Call(uint16_t dest);
+% \end{verbatim}
+% \end{framed}
+% 
+% \begin{tabular}{lp{0.8 \textwidth}}
+% 
+% \\ \mach{dest} & something \\
+% 
+% \end{tabular}
+% 
+% \vspace{10pt}
+% The \mach{Call} command
+
+\drawcmd{Cell}{设置位图单元}
+
+\begin{framed}
+\begin{verbatim}
+void Cell(byte cell);
+\end{verbatim}
+\end{framed}
+
+\begin{tabular}{lp{0.8 \textwidth}}
+
+\\ \mach{cell} & 位图单元号，取值范围为 $0\sim127$ \\
+
+\end{tabular}
+
+\vspace{10pt}
+\mach{Cell} 指令用于设定当前 \nameref{Vertex2f} 指令使用的位图单元。
+
+\png{0034}
+\eg{examples-cell}
+
+
+\drawcmd{ClearColorA}{设定清屏背景色的alpha通道分量}
+
+
+\begin{framed}
+\begin{verbatim}
+void ClearColorA(byte alpha);
+\end{verbatim}
+\end{framed}
+
+\begin{tabular}{lp{0.8 \textwidth}}
+
+\\ \mach{alpha} & 清屏背景色的alpha通道分量，取值范围为 $0\sim255$ \\
+
+\end{tabular}
+
+\vspace{10pt}
+\mach{ClearColorA} 指令用于设定清屏背景色的Alpha通道值。
+随后调用 \nameref{Clear} 将此数值写入当前帧缓冲器的alpha通道中。
+
+
+\drawcmd{Clear}{清屏}
+
+\begin{framed}
+\begin{verbatim}
+void Clear(byte c = 1,
+           byte s = 1,
+           byte t = 1);
+\end{verbatim}
+\end{framed}
+
+\begin{tabular}{lp{0.8 \textwidth}}
+
+\\ \mach{c} & 设定该位时，清空颜色缓冲区 \\
+
+\\ \mach{s} & 设定该位时，清空模板缓冲区 \\
+
+\\ \mach{t} & 设定该位时，清空标签缓冲区 \\
+
+\end{tabular}
+
+\vspace{10pt}
+\mach{Clear} 指令用于清空指定的帧缓冲器。
+
+\png{0035}
+\eg{examples-clear}
+
+
+\drawcmd{ClearColorRGB}{设定清屏背景色的红绿蓝色彩通道分量}
+
+\begin{framed}
+\begin{verbatim}
+void ClearColorRGB(byte red,
+                   byte green,
+                   byte blue);
+void ClearColorRGB(uint32_t rgb);
+\end{verbatim}
+\end{framed}
+
+\begin{tabular}{lp{0.8 \textwidth}}
+
+\\ \mach{red} & 红色通道值，取值范围为 $0\sim255$ \\
+
+\\ \mach{green} & 绿色通道值，取值范围为 $0\sim255$ \\
+
+\\ \mach{blue} & 蓝色通道值，取值范围为 $0\sim255$ \\
+
+\\ \mach{rgb} & 24位色，顺序依次为红绿蓝，\\
+              & 取值范围为 \mach{0x000000} $\sim$ \mach{0xffffff} \\
+
+\end{tabular}
+
+\vspace{10pt}
+\mach{ClearColorRGB} 指令用于设定清屏背景色的红绿蓝色彩通道分量值。
+随后调用 \nameref{Clear} 将这些设定值写入当前帧缓冲器的红绿蓝色彩通道中。
+\minipng{0030}
+\eg{examples-clearcolorrgb}
+
+
+
+\drawcmd{ClearStencil}{设定需要清除的模板值}
+
+\begin{framed}
+\begin{verbatim}
+void ClearStencil(byte s);
+\end{verbatim}
+\end{framed}
+
+\begin{tabular}{lp{0.8 \textwidth}}
+
+\\ \mach{s} & 需要清除模板缓冲区中的模板值，取值范围为 $0\sim255$ \\
+
+\end{tabular}
+
+\vspace{10pt}
+\mach{ClearStencil} 指令用于设定需要清除的模板值。
+随后调用 \nameref{Clear} 将这一值写入当前模板缓冲器中。
+
+
+\drawcmd{ClearTag}{设定需要清除的标签值}
+
+\begin{framed}
+\begin{verbatim}
+void ClearTag(byte s);
+\end{verbatim}
+\end{framed}
+
+\begin{tabular}{lp{0.8 \textwidth}}
+
+\\ \mach{s} & 标签值，取值范围为 $0\sim255$ \\
+
+\end{tabular}
+
+\vspace{10pt}
+\mach{ClearTag} 指令用于设定需要清除的标签值。
+随后调用 \nameref{Clear} 将这一值写入当前标签缓冲器中。
+
+
+\drawcmd{ColorA}{设定当前色彩设置的Alpha通道值}
+
+\begin{framed}
+\begin{verbatim}
+void ColorA(byte alpha);
+\end{verbatim}
+\end{framed}
+
+\begin{tabular}{lp{0.8 \textwidth}}
+
+\\ \mach{alpha} & alpha通道值，取值范围为 $0\sim255$ \\
+
+\end{tabular}
+
+\vspace{10pt}
+\mach{ColorA} 指令用于设定当前绘制色彩设置的Alpha通道值。
+\png{0029}
+\eg{examples-colora}
+
+\drawcmd{ColorMask}{设定色彩通道的图层蒙板}
+
+\begin{framed}
+\begin{verbatim}
+void ColorMask(byte r,
+               byte g,
+               byte b,
+               byte a);
+\end{verbatim}
+\end{framed}
+
+\begin{tabular}{lp{0.8 \textwidth}}
+
+\\ \mach{r} & 设定该位时，激活用于控制对红色色彩通道编写的图层蒙板 \\
+
+\\ \mach{g} & 设定该位时，激活用于控制对绿色色彩通道编写的图层蒙板 \\
+
+\\ \mach{b} & 设定该位时，激活用于控制对蓝色色彩通道编写的图层蒙板 \\
+
+\\ \mach{a} & 设定该位时，，激活用于控制对alpha通道编写的图层蒙板 \\
+
+\end{tabular}
+
+\vspace{10pt}
+\mach{ColorMask} 指令用于设定色彩通道的图层蒙板，激活用于控制在当前帧缓冲器中对红绿蓝色彩及alpha通道进行编写的图层蒙板。
+\minipng{0033}
+\eg{examples-colormask}
+
+
+\drawcmd{ColorRGB}{设定当前色彩设置的红绿蓝色彩通道值}
+
+\begin{framed}
+\begin{verbatim}
+void ColorRGB(byte red,
+              byte green,
+              byte blue);
+
+void ColorRGB(uint32_t rgb);
+\end{verbatim}
+\end{framed}
+
+\begin{tabular}{lp{0.8 \textwidth}}
+
+\\ \mach{red} & 红色通道值，取值范围为 $0\sim255$ \\
+
+\\ \mach{green} & 绿色通道值，取值范围为 $0\sim255$ \\
+
+\\ \mach{blue} & 蓝色通道值，取值范围为 $0\sim255$ \\
+
+\\ \mach{rgb} & $24$ 位色，顺序依次为红绿蓝，\\
+              & 取值范围为 \mach{0x000000} $\sim$ \mach{0xffffff} \\
+
+\end{tabular}
+
+\vspace{10pt}
+\mach{ColorRGB} 指令用于设定当前色彩设置。
+这一设置用于所有绘操作。
+
+\minipng{0028}
+\eg{examples-colorrgb}
+
+
+\drawcmd{LineWidth}{设定绘制线条宽度}
+
+\begin{framed}
+\begin{verbatim}
+void LineWidth(uint16_t width);
+\end{verbatim}
+\end{framed}
+
+\begin{tabular}{lp{0.8 \textwidth}}
+
+\\ \mach{width} & 线宽，单位为 $1/16$ 像素 \\
+
+\end{tabular}
+
+\vspace{10pt}
+\mach{LineWidth} 指令用于设定绘制 \mach{LINES} 和 \mach{LINE\_STRIP} 时的线条宽度。
+宽度单位为 $1/16$ 像素，即 \mach{LineWidth(16)} 表示 $1$ 像素的线宽。
+值得注意的是，此线宽代表线条从其宽的中心到外边缘的距离，概念类似圆的半径。因此线条的实际宽度是指定值的两倍。
+
+最大线宽值为 $4095$ 即 $255 \frac{15}{16}$ 像素。
+\png{0026}
+\eg{examples-linewidth}
+
+\drawcmd{PointSize}{设定点的大小}
+
+\begin{framed}
+\begin{verbatim}
+void PointSize(uint16_t size);
+\end{verbatim}
+\end{framed}
+
+\begin{tabular}{lp{0.8 \textwidth}}
+
+\\ \mach{size} & 点的大小，单位为 $1/16$ 像素 \\
+
+\end{tabular}
+
+\vspace{10pt}
+\mach{PointSize} 指令用于设定绘制 \mach{POINTS} 时点的大小。
+其大小单位为 $1/16$ 像素，即 \mach{PointSize(16)} 表示 $1$ 像素的点大小。
+值得注意的是，此大小代表从点的中心到其外边缘的距离，即半径。因此点的直径是指定值的两倍。
+
+最大值为 $4095$ 即 $255 \frac{15}{16}$ 像素。
+\png{0027}
+\eg{examples-pointsize}
+
+
+\drawcmd{RestoreContext}{恢复绘制设置环境为先前保存的状态}
+
+\begin{framed}
+\begin{verbatim}
+void RestoreContext(void);
+\end{verbatim}
+\end{framed}
+
+\begin{tabular}{lp{0.8 \textwidth}}
+
+\end{tabular}
+
+\vspace{10pt}
+图形显示的属性集合统称为图形环境（ \textit{graphics context} ）。
+由 \mach{SaveContext} 将这一属性集合存储一份备份， 而 \mach{RestoreContext} 指令用于将图形环境恢复为这一备份的状态。
+
+设备支持存储最多4份备份。其图形环境内容包括：
+\vspace{10pt}
+
+\begin{tabular}{rl}
+属性 & 相应绘图指令 \\
+\hline
+\\
+透明度检测功能   &  \nameref{AlphaFunc} \\
+位图句柄         &  \nameref{BitmapHandle} \\
+图像混合功能        &  \nameref{BlendFunc} \\
+位图单元           &  \nameref{Cell} \\
+清屏背景色彩值     & \nameref{ClearColorA}, \nameref{ClearColorRGB} \\
+清除模板值   & \nameref{ClearStencil} \\
+清除标签值       & \nameref{ClearTag} \\
+色彩图层蒙版      & \nameref{ColorMask} \\
+绘图色彩                 & \nameref{ColorA}, \nameref{ColorRGB} \\
+线宽            & \nameref{LineWidth} \\
+点的大小            & \nameref{PointSize} \\
+裁切矩形窗口     & \nameref{ScissorSize}, \nameref{ScissorXY} \\
+模板检测功能 & \nameref{StencilFunc} \\
+模板图层蒙板    & \nameref{StencilMask} \\
+模板操作     & \nameref{StencilOp} \\
+标签图层蒙板        & \nameref{TagMask} \\
+标签值             & \nameref{Tag}
+\end{tabular}
+
+
+
+\drawcmd{SaveContext}{保存图形环境}
+
+\begin{framed}
+\begin{verbatim}
+void SaveContext(void);
+\end{verbatim}
+\end{framed}
+
+\begin{tabular}{lp{0.8 \textwidth}}
+
+\end{tabular}
+
+\vspace{10pt}
+图形显示的属性集合统称为图形环境（ \textit{graphics context} ）。
+\mach{SaveContext} 指令用于将这一属性集合存储一份备份， 而 \mach{RestoreContext} 将图形环境恢复为这一备份的状态。
+
+\png{0036}
+\eg{examples-context}
+
+\drawcmd{ScissorSize}{设定裁切矩形窗口的尺寸}
+
+\begin{framed}
+\begin{verbatim}
+void ScissorSize(uint16_t width,
+                 uint16_t height);
+\end{verbatim}
+\end{framed}
+
+\begin{tabular}{lp{0.8 \textwidth}}
+
+\\ \mach{width} & 裁切矩形窗口的宽度，单位为1像素，取值范围为 $0\sim512$ \\
+
+\\ \mach{height} & 裁切矩形窗口的高度，单位为1像素，取值范围为 $0\sim512$ \\
+
+\end{tabular}
+
+\vspace{10pt}
+\mach{ScissorSize} 指令用于设定裁切矩形窗口的尺寸规格。
+裁切矩形窗口用于将绘图指令限制在指定的一个矩形区域中。
+
+\png{0037}
+\eg{examples-scissor}
+
+
+\drawcmd{ScissorXY}{设定裁切矩形窗口的左上角的坐标位置}
+
+\begin{framed}
+\begin{verbatim}
+void ScissorXY(uint16_t x,
+               uint16_t y);
+\end{verbatim}
+\end{framed}
+
+\begin{tabular}{lp{0.8 \textwidth}}
+
+\\ \mach{x} & 裁切矩形窗口的左上角的 $x$ 轴坐标，取值范围为 $0\sim511$ \\
+
+\\ \mach{y} & 裁切矩形窗口的左上角的 $y$ 轴坐标，取值范围为 $0\sim511$ \\
+
+\end{tabular}
+
+\vspace{10pt}
+\mach{ScissorXY} 指令用于设定裁切矩形窗口的左上角的坐标位置。
+裁切矩形窗口用于将绘图指令限制在指定的一个矩形区域中。
+
+\drawcmd{StencilFunc}{设定模板检测功能}
+
+\begin{framed}
+\begin{verbatim}
+void StencilFunc(byte func,
+                 byte ref,
+                 byte mask);
+\end{verbatim}
+\end{framed}
+
+\begin{tabular}{lp{0.8 \textwidth}}
+
+\\ \mach{func} & 设定模板检测操作的比较方式，
+        \mach{NEVER} ， \mach{LESS} ， \mach{LEQUAL} ， \mach{GREATER} ， \mach{GEQUAL} ， \mach{EQUAL} ， \mach{NOTEQUAL} 或 \mach{ALWAYS} 中选择其一\\
+
+\\ \mach{ref} & 设定用于比较的模板参考值，取值范围为 $0\sim255$ \\
+
+\\ \mach{mask} & an 8-bit mask that is anded with both \mach{ref} and the pixel's stencil value before comparison, 0-255 \\
+\\ \mach{mask} & 检测前加入 \mach{ref} 和图像模板值的 $8$ 位蒙板，取值范围为 $0\sim255$ \\
+
+\end{tabular}
+
+\vspace{10pt}
+\mach{StencilFunc} 指令用于控制模板检测操作。
+绘制期间，模板检测应用于每一像素的图像，如果检测失败，该像素图像将不被绘制。
+设定 \mach{func} 为 \mach{ALWAYS} 表示绘制所有像素点。
+
+\drawcmd{StencilMask}{设定用于控制对模板进行编写的图层蒙板}
+
+\begin{framed}
+\begin{verbatim}
+void StencilMask(byte mask);
+\end{verbatim}
+\end{framed}
+
+\begin{tabular}{lp{0.8 \textwidth}}
+
+\\ \mach{mask} & 每一位对应控制激活模板缓冲区的对应位的写入操作 \\
+
+\end{tabular}
+
+\vspace{10pt}
+\mach{StencilMask} 指令用于控制向模板缓冲区写入数据。
+由于模板缓冲区有 $8$ 位空间， \mach{mask} 中的每一位对应控制激活模板缓冲区的对应位的写入操作。
+因此 \mach{mask} 为 \mach{0x00} 时将禁止模板写入，而 \mach{mask} 为 \mach{0xff} 时将激活模板写入。
+
+\drawcmd{StencilOp}{设定模板更新操作}
+
+\begin{framed}
+\begin{verbatim}
+void StencilOp(byte sfail,
+               byte spass);
+\end{verbatim}
+\end{framed}
+
+\begin{tabular}{lp{0.8 \textwidth}}
+
+\\ \mach{sfail} & 当某像素点的模板测试失败时对其进行的操作。
+\mach{ZERO} ， \mach{KEEP} ， \mach{REPLACE} ， \mach{INCR} ， \mach{DECR} 或 \mach{INVERT} 中选择其一
+
+\\ \mach{spass} & 当某像素点的模板测试通过时对其进行的操作。
+\mach{ZERO} ， \mach{KEEP} ， \mach{REPLACE} ， \mach{INCR} ， \mach{DECR} 或 \mach{INVERT} 中选择其一
+
+\end{tabular}
+
+\vspace{10pt}
+\mach{StencilOp} 指令用于控制对像素点进行绘制操作时如何修改模板缓冲区。
+当某像素点的模板测试失败时，将执行 \mach{sfail} 指定的操作。
+通过测试时，将执行 \mach{spass} 指定的操作。
+
+\minipng{0038}
+\eg{examples-stencil}
+
+
+\drawcmd{TagMask}{设定标签图层蒙板}
+
+\begin{framed}
+\begin{verbatim}
+void TagMask(byte mask);
+\end{verbatim}
+\end{framed}
+
+\begin{tabular}{lp{0.8 \textwidth}}
+
+\\ \mach{mask} & 设定该位时， 绘制的图像将向标签缓存中写入数据 \\
+
+\end{tabular}
+
+\vspace{10pt}
+\mach{TagMask} 指令用于控制向标签缓存中写入数据。
+当 \mach{mask} 为 $1$ 时，每当有像素点有绘图操作， \nameref{Tag} 将向标签缓存写入一字节值作为其标签值。
+当 \mach{mask} 为 $0$ 时，绘制操作对标签缓存不会产生影响。
+
+\drawcmd{Tag}{设定绘制对象的标签值}
+
+\begin{framed}
+\begin{verbatim}
+void Tag(byte s);
+\end{verbatim}
+\end{framed}
+
+\begin{tabular}{lp{0.8 \textwidth}}
+
+\\ \mach{s} & 标签值，取值范围为 $0\sim255$ \\
+
+\end{tabular}
+
+\vspace{10pt}
+\mach{Tag} 指令用于指定一字节值为绘制对象的标签值并存入标签缓存中。
+
+
+\drawcmd{Vertex2f}{在子坐标系坐标下绘制图像}
+
+\begin{framed}
+\begin{verbatim}
+void Vertex2f(int16_t x,
+              int16_t y);
+\end{verbatim}
+\end{framed}
+
+\begin{tabular}{lp{0.8 \textwidth}}
+
+\\ \mach{x} & 绘制图像位置的 $x$ 坐标值，精确度为 $1/16$ 像素，\\
+            & 取值范围为 $-16384\sim16383$ \\
+
+\\ \mach{y} & 绘制图像位置的 $y$ 坐标值，精确度为 $1/16$ 像素，\\
+            & 取值范围为 $-16384\sim16383$ \\
+
+\end{tabular}
+
+\vspace{10pt}
+\mach{Vertex2f} 指令用于指定绘制图像的屏幕位置。
+而绘制的图像由当前 \nameref{Begin} 指定的图像对象决定。
+\mach{Vertex2f} 指定子坐标系（ \textit{subpixel} ）坐标，所以其精确度是 $1/16$ 像素。
+除此以外，其支持的坐标范围要大于实际屏幕的范围——这对于绘制尺寸大于屏幕的图像对象十分有帮助。
+
+绘制 \mach{BITMAP} 时， \mach{Vertex2f} 将调用由当前 \nameref{BitmapHandle} 和 \nameref{Cell} 指定的位图句柄和位图单元。
+
+\drawcmd{Vertex2ii}{在整型坐标值像素点处绘制图像}
+
+\begin{framed}
+\begin{verbatim}
+void Vertex2ii(uint16_t x,
+               uint16_t y,
+               byte handle = 0,
+               byte cell = 0);
+\end{verbatim}
+\end{framed}
+
+\begin{tabular}{lp{0.8 \textwidth}}
+
+\\ \mach{x} & 绘制图像位置的 $x$ 坐标值，取值范围为 $0\sim511$ \\
+
+\\ \mach{y} & 绘制图像位置的 $y$ 坐标值，取值范围为 $0\sim511$ \\
+
+\\ \mach{handle} & 位图句柄，取值范围为 $0\sim31$ \\
+
+\\ \mach{cell} & 位图单元，取值范围为 $0\sim127$ \\
+
+\end{tabular}
+
+\vspace{10pt}
+\mach{Vertex2ii} 指令用于指定绘制图像的屏幕位置。
+而绘制的图像由当前 \nameref{Begin} 指定的图像对象决定。
+
+绘制 \mach{BITMAP} 时， \mach{Vertex2ii} 将调用由 \mach{handle} 和 \mach{cell} 指定的位图句柄和位图单元。
+而对于指令 \nameref{BitmapHandle} 和 \nameref{Cell} 中的图形属性信息，该指令既不会调用到也不会对其进行修改。
+

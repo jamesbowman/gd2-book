@@ -1,0 +1,615 @@
+
+\newcommand\aspect{
+当 $w>h$ 时，这一控件将自动水平绘制，否则将竖直绘制。
+}
+\newcommand\threed{
+默认状态下，这一控件的外观显示呈3D效果。将 \mach{options} 设置为 \mach{OPT\_FLAT} 可令其显示2D效果。
+}
+\newcommand\fsixteen{
+上述参数的格式为 $16.16$ 定点值，即 $65536$ 表示 $1.0$ 。
+方便起见，调用宏函数 \mach{F16()} 可将浮点型数据转换为有符号型 $16.16$ 定点值。
+}
+\newcommand\style{
+该指令对绘制所有控件均适用；对于非交互式部件使用背景色（ \nameref{cmd:bgcolor} ）绘制，
+对于交互式部件使用前景色（ \nameref{cmd:fgcolor} ）绘制。
+通常情况下最好使用较深的颜色作为背景色（ \nameref{cmd:bgcolor} ），较浅的颜色作为前景色（ \nameref{cmd:fgcolor} ）。
+}
+\newcommand\centeropts{
+当 \mach{options} 设置为 \mach{OPT\_CENTERX} 时，文本将水平居中显示，
+为 \mach{OPT\_CENTERY} 时，文本将竖直居中显示，
+为 \mach{OPT\_CENTER} 时，文本既水平居中，又竖直居中显示。
+添加 \mach{OPT\_SIGNED} 设置时， \mach{val} 的值将被识别为有符号型数据，
+即其值为负数时，在数值前将显示一个负号。 
+}
+\newcommand{\sbs}[2]{
+\begin{minipage}[][][t]{0.70\textwidth}
+#2
+\end{minipage}
+\begin{minipage}[][][t]{0.30\textwidth}
+\begin{center}
+\includegraphics[width=0.9\textwidth]{assets/#1.png}
+\end{center}
+\end{minipage}
+}
+\newcommand\example[2]{
+关于 \mach{cmd\_#1()} 的具体例程请参见 \nameref{#2} 的内容。
+}
+
+\highcmd{append}{Something}
+
+\begin{framed}
+\begin{verbatim}
+void cmd_append(uint32_t ptr,
+                uint32_t num);
+\end{verbatim}
+\end{framed}
+
+\mach{append} 指令用于调用显存地址 \mach{ptr} 开始，长度为 \mach{num} 字节的绘图指令并执行。
+这一方式相当于把显存作为高速缓存来使用，对于频繁调用同一段绘图指令的操作十分适用，很像OpenGL中的显示列表。
+
+
+\highcmd{bgcolor}{Something}
+
+\begin{framed}
+\begin{verbatim}
+void cmd_bgcolor(uint32_t c);
+\end{verbatim}
+\end{framed}
+
+\mach{bgcolor} 指令用于设定用于绘制控件时的背景色。
+\style
+
+\highcmd{button}{Something}
+
+\begin{framed}
+\begin{verbatim}
+void cmd_button(int16_t x,
+                int16_t y,
+                uint16_t w,
+                uint16_t h,
+                byte font,
+                uint16_t options,
+                const char *label);
+\end{verbatim}
+\end{framed}
+
+\sbs{0024}{
+\mach{button} 指令用于绘制按钮控件，其位置位于屏幕像素坐标 $(x, y)$ 处，大小为$w \times h$。
+\mach{label} 用于设置文本标签。
+\threed
+}
+
+\highcmd{calibrate}{Something}
+
+\begin{framed}
+\begin{verbatim}
+void cmd_calibrate(void);
+\end{verbatim}
+\end{framed}
+
+\mach{calibrate} 指令用于运行GPU内置的交互式触摸屏校准程序。
+
+
+\highcmd{clock}{Something}
+
+\begin{framed}
+\begin{verbatim}
+void cmd_clock(int16_t x,
+               int16_t y,
+               int16_t r,
+               uint16_t options,
+               uint16_t h,        // hours 0-23
+               uint16_t m,        // minutes 0-59
+               uint16_t s,        // seconds 0-59
+               uint16_t ms);      // milliseconds 0-999
+\end{verbatim}
+\end{framed}
+
+\sbs{0013}{
+\mach{clock} 指令用于绘制一个模拟时钟，其位置位于屏幕像素坐标 $(x, y)$ 处，半径为 \mach{r} ，单位为像素。
+可以设置其显示时间，\mach{h} 、 \mach{m} 、 \mach{s} 和 \mach{ms} 分别对应时分秒和毫秒。
+\threed
+}
+
+\highcmd{coldstart}{Something}
+
+\begin{framed}
+\begin{verbatim}
+void cmd_coldstart(void);
+\end{verbatim}
+\end{framed}
+
+\mach{coldstart} 指令用于将所有控件属性重置，恢复其默认值。
+
+\highcmd{dial}{Something}
+
+\begin{framed}
+\begin{verbatim}
+void cmd_dial(int16_t x,
+              int16_t y,
+              int16_t r,
+              uint16_t options,
+              uint16_t val);
+\end{verbatim}
+\end{framed}
+
+\sbs{0014}{
+\mach{dial} 指令用于绘制一个标度盘，其位置位于屏幕像素坐标 $(x, y)$ 处，半径为 \mach{r} ，单位为像素。
+\mach{val} 用于设定标度盘上显示的角度位置，单位为Furmans角度。
+\threed
+}
+
+\highcmd{fgcolor}{Something}
+
+\begin{framed}
+\begin{verbatim}
+void cmd_fgcolor(uint32_t c);
+\end{verbatim}
+\end{framed}
+
+\mach{fgcolor} 指令用于设定用于绘制控件时的前景色。
+\style
+
+\highcmd{gauge}{Something}
+
+\begin{framed}
+\begin{verbatim}
+void cmd_gauge(int16_t x,
+               int16_t y,
+               int16_t r,
+               uint16_t options,
+               uint16_t major,
+               uint16_t minor,
+               uint16_t val,
+               uint16_t range);
+\end{verbatim}
+\end{framed}
+
+\sbs{0015}{
+\mach{gauge} 指令用于绘制一个模拟仪表盘，
+其位置位于屏幕像素坐标 $(x, y)$ 处，半径为 \mach{r} ，单位为像素。
+\mach{major} 和 \mach{minor} 用于设定仪表盘上最大和最小刻度值。
+分数值（ \mach{val} / \mach{range} ） 为仪表盘指针显示值。
+\threed
+}
+
+
+\highcmd{getprops}{Something}
+
+\begin{framed}
+\begin{verbatim}
+void cmd_getprops(uint32_t &ptr,
+                  uint32_t &w,
+                  uint32_t &h);
+\end{verbatim}
+\end{framed}
+
+\mach{getprops} 指令用于询问GPU上一张由 \nameref{cmd:loadimage} 指令加载的图片属性。
+\mach{ptr} 为这一图片的基地址， 而 $(w, h)$ 为这一图片的尺寸大小，单位为像素。
+
+\highcmd{gradient}{Something}
+
+\begin{framed}
+\begin{verbatim}
+void cmd_gradient(int16_t x0,
+                  int16_t y0,
+                  uint32_t rgb0,
+                  int16_t x1,
+                  int16_t y1,
+                  uint32_t rgb1);
+\end{verbatim}
+\end{framed}
+
+\sbs{0012}{
+\mach{gradient} 指令用于绘制一幅平滑变化的渐变色背景，由屏幕像素坐标 $(x0, y0)$ 处的颜色 \mach{rgb0} 
+逐渐变化，直至屏幕像素坐标 $(x1, y1)$ 处渐变为颜色 \mach{rgb1}。
+\example{gradient}{gradient}
+}
+
+
+\highcmd{inflate}{Something}
+
+\begin{framed}
+\begin{verbatim}
+void cmd_inflate(uint32_t ptr);
+\end{verbatim}
+\end{framed}
+
+\mach{inflate} 指令用于对压缩数据进行解压并存储至主存储器地址 \mach{ptr} 中。
+调用该指令后应提供相应的压缩数据。
+其压缩格式应为 zlib DEFLATE 。
+
+
+\highcmd{keys}{Something}
+
+\begin{framed}
+\begin{verbatim}
+void cmd_keys(int16_t x,
+              int16_t y,
+              int16_t w,
+              int16_t h,
+              byte font,
+              uint16_t options,
+              const char *keys);
+\end{verbatim}
+\end{framed}
+
+\sbs{0016}{
+\mach{keys} 指令用于绘制一排按键，每个按键依次由字符串（ \mach{chars} ）的每个字母进行标注，
+其位置位于屏幕像素坐标 $(x, y)$ 处，大小为$w \times h$。
+\threed
+在 \mach{options} 设置中制定一个字母代码将在按键中对其进行高亮显示。
+}
+
+\highcmd{loadidentity}{Something}
+
+\begin{framed}
+\begin{verbatim}
+void cmd_loadidentity(void);
+\end{verbatim}
+\end{framed}
+
+\mach{loadidentity} 指令用于将位图数据转换为单位矩阵数据。
+
+\highcmd{loadimage}{Something}
+\index{jpeg}
+
+\begin{framed}
+\begin{verbatim}
+void cmd_loadimage(uint32_t ptr,
+                   int32_t options);
+\end{verbatim}
+\end{framed}
+
+\sbs{jpeg2}{
+\mach{loadimage} 指令用于将一幅JPEG图片解压到从显存地址 \mach{ptr} 开始的存储空间。
+并将图片的相关参数存储至当前位图句柄。
+图片的默认格式为 \mach{RGB565} 。
+而当 \mach{options} 设置为 \mach{OPT\_MONO} 时，格式为 \mach{L8} 。
+\example{loadimage}{bitmaphandles}
+}
+
+\highcmd{memcpy}{Something}
+
+\begin{framed}
+\begin{verbatim}
+void cmd_memcpy(uint32_t dest,
+                uint32_t src,
+                uint32_t num);
+\end{verbatim}
+\end{framed}
+
+\mach{memcpy} 指令用于复制从显存地址 \mach{src} 开始长度为 \mach{num} 字节的数据，
+并将其粘贴到从显存地址\mach{dest} 开始的存储空间。
+
+\highcmd{memset}{Something}
+
+\begin{framed}
+\begin{verbatim}
+void cmd_memset(uint32_t ptr,
+                byte value,
+                uint32_t num);
+\end{verbatim}
+\end{framed}
+
+\mach{memset} 指令用于将从显存地址 \mach{ptr} 开始长度为 \mach{num} 字节的数据值设置为 \mach{value} 。
+
+\highcmd{memwrite}{Something}
+
+\begin{framed}
+\begin{verbatim}
+void cmd_memwrite(uint32_t ptr,
+                  uint32_t num);
+\end{verbatim}
+\end{framed}
+
+\mach{memwrite} 指令用于复制紧随其后长度为 \mach{num} 字节的数据，
+并将其粘贴到从显存地址 \mach{ptr} 开始的存储空间。
+
+\highcmd{regwrite}{Something}
+
+\begin{framed}
+\begin{verbatim}
+void cmd_regwrite(uint32_t ptr,
+                  uint32_t val);
+\end{verbatim}
+\end{framed}
+
+\mach{regwrite} 指令用于将GPU寄存器 \mach{ptr} 的值设定为 \mach{val} 。
+
+
+\highcmd{number}{Something}
+
+\begin{framed}
+\begin{verbatim}
+void cmd_number(int16_t x,
+                int16_t y,
+                byte font,
+                uint16_t options,
+                uint32_t val);
+\end{verbatim}
+\end{framed}
+
+\sbs{0017}{
+\mach{number} 指令用于显示一串数字 \mach{val} ，其字体由 \mach{font} 设定，
+其位置位于屏幕像素坐标 $(x, y)$ 处，
+当 \mach{options} 设置为 $n$ 时，将始终保持显示 $n$ 位数字，如果位数不够，数字前加 $0$ 补齐。
+\centeropts
+}
+
+\highcmd{progress}{Something}
+
+\begin{framed}
+\begin{verbatim}
+void cmd_progress(int16_t x,
+                  int16_t y,
+                  int16_t w,
+                  int16_t h,
+                  uint16_t options,
+                  uint16_t val,
+                  uint16_t range);
+\end{verbatim}
+\end{framed}
+
+\sbs{0018}{
+\mach{progress} 指令用于绘制进度条，其位置位于屏幕像素坐标 $(x, y)$ 处，
+尺寸为 $w \times h$ ，单位为像素。
+分数值（ \mach{val} / \mach{range} ）表示进度值。
+\aspect
+}
+
+\highcmd{rotate}{Something}
+
+\begin{framed}
+\begin{verbatim}
+void cmd_rotate(int32_t a);
+\end{verbatim}
+\end{framed}
+
+\mach{rotate} 指令用于对当前位图变换矩阵旋转角度为 \mach{a} 的旋转操作，单位为Furmans角度。
+
+\highcmd{scale}{Something}
+
+\begin{framed}
+\begin{verbatim}
+void cmd_scale(int32_t sx,
+               int32_t sy);
+\end{verbatim}
+\end{framed}
+
+\mach{scale} 指令用于对当前位图变换矩阵比例为 $(sx, sy)$ 的缩放操作。
+\fsixteen
+
+\highcmd{scrollbar}{Something}
+
+\begin{framed}
+\begin{verbatim}
+void cmd_scrollbar(int16_t x,
+                   int16_t y,
+                   int16_t w,
+                   int16_t h,
+                   uint16_t options,
+                   uint16_t val,
+                   uint16_t size,
+                   uint16_t range);
+\end{verbatim}
+\end{framed}
+
+\sbs{0019}{
+\mach{scrollbar} 指令用于绘制滚动条，其位置位于屏幕像素坐标 $(x, y)$ 处，
+尺寸为 $w \times h$ ，单位为像素。
+分数值（ \mach{val} / \mach{range} ）用于设定其滚动滑块所处的位置，
+而分数值（ \mach{size} / \mach{range} ）用于设定滚动滑块的尺寸。
+\aspect
+}
+
+
+\highcmd{setfont}{Something}
+
+\begin{framed}
+\begin{verbatim}
+void cmd_setfont(byte font,
+                 uint32_t ptr);
+\end{verbatim}
+\end{framed}
+
+\vspace{20pt}
+
+\mach{setfont} 指令用于从地址 \mach{ptr} 开始的一段字体块存储空间中规定一组标号为 $0\sim15$ 的 RAM \mach{font} ，
+在调用 \mach{setfont} 前，字体库必须已经存储在内存中，且位图句柄必须已经设置好。
+字体块的大小为 $148$ 字节，具体描述如下所示：
+
+\vspace{10 pt}
+\begin{tabular}{lcl}
+地址 & 大小 & 数值 \\ \hline
+\\
+$\mach{ptr}+0$   & 128 & 每个字体字符的宽度，单位为像素 \\
+$\mach{ptr}+128$ & 4   & 字体位图格式，例如 \mach{L1} 、 \mach{L4} 或 \mach{L8}  \\
+$\mach{ptr}+132$ & 4   & 字体行间距，单位为字节 \\
+$\mach{ptr}+136$ & 4   & 字体宽度，单位为像素 \\
+$\mach{ptr}+140$ & 4   & 字体高度，单位为像素 \\
+$\mach{ptr}+144$ & 4   & 内存中字体库的指针 \\
+\end{tabular}
+
+
+\highcmd{setmatrix}{Something}
+
+\begin{framed}
+\begin{verbatim}
+void cmd_setmatrix(void);
+\end{verbatim}
+\end{framed}
+
+\begin{tabular}{cl}
+
+\end{tabular}
+
+\vspace{20pt}
+\mach{setmatrix} 指令用于将当前位图变换矩阵应用到下次绘图操作中。
+
+\highcmd{sketch}{Something}
+
+\begin{framed}
+\begin{verbatim}
+void cmd_sketch(int16_t x,
+                int16_t y,
+                uint16_t w,
+                uint16_t h,
+                uint32_t ptr,
+                uint16_t format);
+\end{verbatim}
+\end{framed}
+
+\vspace{20pt}
+\sbs{sketching_b}{
+\mach{sketch} 指令用于启动一个该持续的绘制作用，
+其效果是使触摸到的像素点显示已存储于显存中的位图图像。
+位图的基地址由 \mach{ptr} 给定，
+其位置位于屏幕像素坐标 $(x, y)$ 处，尺寸为 $w \times h$。
+位图格式（ \mach{format} ）既可以为\mach{L1} 也可以为 \mach{L8} 。
+绘图操作将一直持续直到调用执行 \nameref{cmd:stop} 指令。
+关于 \nameref{cmd:sketch} 的具体例程请参见 \xref{sketching} 的内容。
+
+}
+\highcmd{slider}{Something}
+
+\begin{framed}
+\begin{verbatim}
+void cmd_slider(int16_t x,
+                int16_t y,
+                uint16_t w,
+                uint16_t h,
+                uint16_t options,
+                uint16_t val,
+                uint16_t range);
+\end{verbatim}
+\end{framed}
+
+\sbs{0020}{
+\mach{slider} 指令用于绘制控制滑块，其位置位于屏幕坐标 $(x, y)$ 处，尺寸为 $w \times h$。
+分数值（ \mach{val} / \mach{range} ）用于设定滑块的位置。
+\aspect
+\threed
+}
+
+
+
+\highcmd{spinner}{Something}
+
+\begin{framed}
+\begin{verbatim}
+void cmd_spinner(int16_t x,
+                 int16_t y,
+                 byte style,
+                 byte scale);
+\end{verbatim}
+\end{framed}
+
+\vspace{20pt}
+\sbs{0021}{
+\mach{spinner} 指令用于启动一个``等待'' 动画，
+其位置以屏幕像素坐标 $(x, y)$ 为中心。
+\mach{style} 用于设定该动画的风格；
+\mach{0} 表示圆形动画，
+\mach{1} 表示线形动画，
+\mach{2} 表示时钟动画，
+\mach{3} 表示转盘动画。
+\mach{scale} 用于设定动画图片的尺寸；
+$0\sim2$ 表示由小到大，
+
+
+% Use \nameref{cmd:stop} to stop the spin animation.
+}
+
+\highcmd{stop}{Something}
+
+\begin{framed}
+\begin{verbatim}
+void cmd_stop(void);
+\end{verbatim}
+\end{framed}
+
+\mach{stop} 指令用于停止当前运行的小动画或正在执行的绘图操作。
+具体参见 \nameref{cmd:spinner} 和 \nameref{cmd:sketch} 的内容。
+
+
+\highcmd{text}{Something}
+
+\begin{framed}
+\begin{verbatim}
+void cmd_text(int16_t x,
+              int16_t y,
+              byte font,
+              uint16_t options,
+              const char s);
+\end{verbatim}
+\end{framed}
+
+\sbs{helloworld}{
+\mach{text} 指令用于绘制一文本字符串 \mach{s} ，其字体由 \mach{font} 设定，
+其位置位于屏幕像素坐标 $(x, y)$ 处。
+\centeropts
+\example{text}{helloworld}
+}
+
+\highcmd{toggle}{Something}
+
+\begin{framed}
+\begin{verbatim}
+void cmd_toggle(int16_t x,
+                int16_t y,
+                int16_t w,
+                byte font,
+                uint16_t options,
+                uint16_t state,
+                const char *s);
+\end{verbatim}
+\end{framed}
+
+\sbs{0023}{
+\mach{toggle} 指令用于绘制一个拨动开关，其位置位于屏幕像素坐标 $(x, y)$ 处，
+宽度为 \mach{w} ，单位为像素。
+其拨动按钮的位置由 \mach{state} 设定；
+$0$ 表示其位置在最左侧， $65535$ 表示在最右侧。
+其标注文本为一对字符串，由ASCII字符码 \mach{0xff} 隔开。
+\threed
+}
+
+
+\highcmd{track}{Something}
+
+\begin{framed}
+\begin{verbatim}
+void cmd_track(int16_t x,
+               int16_t y,
+               uint16_t w,
+               uint16_t h,
+               byte tag);
+\end{verbatim}
+\end{framed}
+
+\mach{track} 指令用于要求GPU追踪对于标签值为 \mach{tag} 的像素点的触摸，
+并将相应值送入\mach{GD.inputs.track\_val}。
+位于屏幕像素坐标 $(x, y)$ 处，尺寸为 $w \times h$ 的矩形空间用于规定追踪压力的区域。
+当此区域仅为 $1 \times 1$ 的像素点时，追踪对象变为角度，
+且 \mach{GD.inputs.track\_val} 将表示触摸点相对于追踪像素点 $(x, y)$ 的Furmans角度。
+角度追踪功能对于 \nameref{cmd:dial} 、 \nameref{cmd:clock} 这类控件以及含有旋转控制单元的游戏程序（例如 \nameref{nightstrike} ）十分实用。
+
+除此以外， 追踪控制均是沿尺寸为 $w \times h$ 的矩形区域长轴方向进行线性追踪的。
+此时 \mach{GD.inputs.track\_val} 的值表示沿矩形区域长轴上移动的距离，其取值范围为 $0\sim65535$ 。
+线形追踪十分适用于 \nameref{cmd:scrollbar} 、 \nameref{cmd:toggle} 以及 \nameref{cmd:slider} 这类控件。
+
+关于 \nameref{cmd:track} 的具体例程请参见 \nameref{widgets} 的内容。
+
+\highcmd{translate}{Something}
+
+\begin{framed}
+\begin{verbatim}
+void cmd_translate(int32_t tx,
+                   int32_t ty);
+\end{verbatim}
+\end{framed}
+
+\mach{translate} 指令用于对当前位图变换矩阵进行位移为 $(tx, ty)$ 的平移变换。 
+\fsixteen
+
