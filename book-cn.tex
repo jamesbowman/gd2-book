@@ -126,8 +126,14 @@ Gameduino 2\\
   Excamera Labs\\
    \\
    \\
-  译者：戴晓天\footnote{云飞机器人实验室，邮箱：automatic.dai@gmail.com，翻译Chapt. 1-2, 13-16}
-  ,徐欣宇\footnote{英国谢菲尔德大学，邮箱：xinyu.xu@live.cn，翻译Chapt. 3-12}\\
+  译者：戴晓天\footnote{云飞机器人实验室，\url{http://www.yfworld.com}，翻译章节 1-2, 13-16}
+  ,徐欣宇\footnote{谢菲尔德大学，邮箱：xinyu.xu@live.cn，翻译章节3-12}\\
+  \\
+  \\
+  \\
+  \\
+  \\
+  ( Version 0.9 Beta )
   \\
   \\  
 }
@@ -202,6 +208,7 @@ Bowman, James.\\
 \thispagestyle{empty}
 \pagestyle{headings}
 
+\renewcommand{\contentsname}{目录}
 \tableofcontents
 
 \part{入门教程}
@@ -216,19 +223,17 @@ Bowman, James.\\
 \begin{enumerate}
 
 \item
-从 \url{http://gameduino.com/code} 下载 \gdtwo 的软件包 \mach{Gameduino2.zip} 并且将其安装至Arduino IDE。
-安装Arduino外设库的方法详见
-\\
-\url{http://arduino.cc/en/Guide/Libraries}.
+从 \url{http://gameduino.com/code} 下载 \gdtwo 的程序库 \mach{Gameduino2.zip} 并且将其安装至Arduino IDE中。
+如果不知道如何安装Arduino第三方程序库，可以在 \url{http://arduino.cc/en/Guide/Libraries} 找到详细步骤。
 
 \item
-将 \gdtwo 连接至Arduino，确认所有的引脚都正确对齐。
+将 \gdtwo 连接至Arduino的插槽中，连接时确认所有的引脚都正确对齐。
 
 \item
-为Arduino上电。因为当前还没有程序载入到Arduino中，所以 \gdtwo 的屏幕上不会有任何内容。
+将Arduino插入电脑USB端口为其通电。因为当前还没有程序载入到Arduino中，此时 \gdtwo 的屏幕上不会有任何内容显示。
 
 \item
-重新启动Arduino IDE并且载入一个程序，例如 \\
+启动Arduino IDE并且载入一个Gameduino 2的示例程序，如 \\
 \begin{small}
 \mach{File} $\triangleright$
 \mach{Sketchbook} $\triangleright$
@@ -243,10 +248,10 @@ Bowman, James.\\
 \end{center}
 
 \item
-将程序编译、下载到Arduino中。 此时 \gdtwo 将会启动并开始绘制载入的程序。
+点击下载按钮将程序编译并载入到Arduino中，等待一段时间后， \gdtwo 将会启动并开始绘制载入的程序。
 
 \item
-很多示例程序需要从microSD中读取数据。为了运行这些程序，需要有一张格式化的microSD卡，并且事先将 \mach{Gameduino2sd.zip} 压缩包中的文件拷入(该文件可从 \url{http://gameduino.com/code} 上下载)。
+很多示例程序需要从microSD中读取数据。为了能正常运行这些程序，需要准备一张格式化后的microSD卡，并将 \mach{Gameduino2sd.zip} 压缩包中的文件拷入到SD卡中 (该文件可从 \url{http://gameduino.com/code} 上下载)。
 
 \item
 试着运行其他的例程，劲情享受!
@@ -256,7 +261,7 @@ Bowman, James.\\
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{快速入门}
 
-本章介绍了 \gdtwo 的基本编程\ -\ 从 ``hello world'' 到创建一个简单的触控游戏。
+本章介绍了 \gdtwo 的基本编程方法\ - 从 ``hello world'' 到创建一个简单的触屏游戏。
 
 \newcommand*\cleartoleftpage{%
   \clearpage
@@ -280,7 +285,7 @@ Bowman, James.\\
 
 \eg{helloworld-A}
 
-以上代码中，函数 \mach{loop()} 将屏幕背景设置为舒爽的深绿色，并将一段文本写入了屏幕的正中央。这个代码将以每秒钟 $60$ 次的速度连续执行，但由于每次写入的内容相同，屏幕上看不出什么变化。
+以上示例代码中，函数 \mach{loop()} 首先将屏幕背景设置为深绿色，之后将一段文字显示在屏幕的正中央。这个代码将以每秒钟 $60$ 次的速度连续执行，但由于每次写入的内容相同，屏幕上不会看出任何变化。
 
 \dcmd{ClearColorRGB} 是一个绘图指令：它设置了屏幕清屏时所使用的背景色。
 这里所用的颜色是深绿色 \texttt{0x103000}。 \gdtwo 和HTML一样，使用三个 $16$ 进制数来表示颜色。
@@ -288,17 +293,17 @@ Bowman, James.\\
 
 \dcmd{Clear} 是另外一个绘图指令，它将屏幕清除为ClearColorRGB()中所设置的颜色。所有的绘图都是从清屏指令开始的。
 
-\cmd{text} 是一个高级GPU绘图指令。该指令在屏幕指定位置用特定字体绘制字符串。在这个例子中，文字被绘制在屏幕的正中心， $(x,y)$ 坐标值为 $(240,136)$ 。
-\mach{OPT\_CENTER} 参数的作用是指明绘制文本时使用中心坐标绘制，所以文本的中心设置将设置为 $(240,136)$ 。
+\cmd{text} 是一个高级GPU绘图指令。该指令在屏幕指定位置用特定字体绘制字符串。在这个例子中，文字被绘制在屏幕的正中心， $(x,y)$ 坐标 $(240,136)$ 处。
+\mach{OPT\_CENTER} 参数的作用是指明绘制文本时提供的坐标为中心坐标，所以文本绘制时的中心将被设置为 $(240,136)$。
 参数中的 $31$ 是文本的字号，$31$ 是内置字体中能设置的最大字号。
 
-最后 \mach{GD.swap()} 函数告知图形系统图形绘制已经完成，并将绘制完成后的图形内容显示到显示屏上。这里有两份图像的拷贝，一份是实际显示出来的图形，一份是在缓存中正在编辑的图形。调用 \mach{GD.swap()} 函数将把缓存中的内容同步到屏幕上。
-这种交换机制 (又称\term{双缓冲}) 意味着显示的内容更新将更加平滑，只有程序调用 \mach{GD.swap()} 时才会进行一次真正的绘制。
+最后 \mach{GD.swap()} 函数告知图形系统图形绘制已经完成，并将绘制完成后的图形内容显示到显示屏上。在Gameduino中有两份图像的拷贝，一份是在屏幕上实际显示出来的图形，一份是在缓存中用户正在编辑的图形。调用 \mach{GD.swap()} 函数将把缓存中的内容同步到屏幕上。
+这种交换机制 (又称\term{双缓冲}) 可以使显示的内容更新时更加平滑，只有程序调用 \mach{GD.swap()} 时才会进行一次真正的绘制。
 
 \index{screen coordinates}
 \index{coordinates, screen}
-\gdtwo 的屏幕分辨率为宽 $480$ 像素，高度 $272$ 像素。
-屏幕的左上角是 $(0,0)$ ，屏幕的右下角是 $(479,271)$ ，屏幕中心坐标点在 $(240,136)$ 。
+\gdtwo 的屏幕分辨率为宽 $480$ 像素，高 $272$ 像素。
+屏幕的左上角坐标是 $(0,0)$，屏幕的右下角坐标是 $(479,271)$，屏幕中心坐标点在 $(240,136)$。
 
 \begin{center}
 \begin{tikzpicture}
@@ -325,68 +330,63 @@ Bowman, James.\\
 \index{points}
 
 那么如何使用 \gdtwo 绘制图形呢？图形绘制有两个指令：\dcmd{Begin} 和 \dcmd{Vertex2ii}。
-其中 \dcmd{Begin} 告知图形系统将要绘制的图形类型，而 \dcmd{Vertex2ii} 将该图形绘制出来。 以下代码实现了在 $(220,100)$ 和 $(260,170)$ 两处分别绘制两个单像素的坐标点:
+其中 \dcmd{Begin} 告知图形系统将要绘制的图形类型，而 \dcmd{Vertex2ii} 将该图形在指定位置绘制出来。以下代码实现了在 $(220,100)$ 和 $(260,170)$ 两处分别绘制两个单位像素大小的坐标点:
 
 \eg{examples-a}
 
 \png{0000}
 
-\mach{Begin(POINTS)} 函数告知GPU准备开始绘制点。之后 \dcmd{Vertex2ii} 函数调用在指定的屏幕坐标 $(x,y)$ 处绘制一个新点。注意如果你不先调用函数 \dcmd{Begin}, 那么硬件无从得知将要绘制的图形类型，从而忽略接下来对 \dcmd{Vertex2ii} 的调用。
+\mach{Begin(POINTS)} 函数告知GPU准备开始进行点绘制。之后的 \dcmd{Vertex2ii} 函数调用在指定的屏幕坐标 $(x,y)$ 处绘制一个新点。注意如果不先调用准备绘制函数 \dcmd{Begin}， 那么硬件无从得知将要绘制的图形类型，从而导致其忽略接下来所有的 \dcmd{Vertex2ii} 的调用。
 
 \newpage
 GD图形库还包含
-\dcmd{PointSize} 调用，该函数用于设置绘制点的大小。此函数仅有一个参数，为绘制点的直径，单位为 $1/16$ 像素。硬件系统使用这样的子像素( \term{subpixel} ) 让用户对绘制物体的尺寸有更好的控制，相比以像素作为单位，可以提高显示效果。
-对于你想要用像素表示长度或直径的时候，最好在代码中显式将对应的距离乘以 $16$ 。
+\dcmd{PointSize} 调用，该函数用于设置绘制点的大小。此函数仅有一个参数：绘制点的直径，单位为 $1/16$ 像素。硬件系统使用子像素机制
+(\term{subpixel}) 让用户对绘制物体的尺寸有更好的控制。子像素相比以像素作为单位，可以显著提高显示的精度和效果。
+当你希望使用像素表示长度或直径的时候，最好在代码中显式将对应的数值乘以 $16$ 。
 
-这里，在调用点绘制函数之前增加了一个 \dcmd{PointSize} 调用，绘制了一个半径为 $30$ 像素（即直径( \term{diameter} ) $60$ 像素）的圆点。
+这里，在调用点绘制函数之前增加了一个 \dcmd{PointSize} 调用，绘制了一个半径为 $30$ 像素（即\term{直径} $60$ 像素）的圆点。
 
 \png{0001}
 \eg{examples-b}
 
 
-实际上, 硬件系统总是以和绘制圆相同的方式来绘制点( \mach{POINTS} )，但当绘制半径很小时，此时绘制的圆看上去就像单个像素点。
-所以在Gameduino中，点与圆可以看作同一种图形。
+实际上，硬件系统总是以和绘制圆相同的方式来绘制点( \mach{POINTS} )。但当绘制圆的半径很小时，此时绘制的圆看上去等效于一个像素点。
+所以在Gameduino中，点与圆如同手足不可分割。
 
 \newpage
 \section{色彩与透明度}
 
-在绘制vertex图形之前，可以通过 \dcmd{ColorRGB} 函数改变绘制的颜色：
+在绘制vertex图形之前，还可以通过 \dcmd{ColorRGB} 函数改变绘制的颜色：
 
 \png{0002}
 \eg{examples-c}
 
-\dcmd{ClearColorRGB}, \dcmd{ColorRGB} 和 \dcmd{PointSize} 都属于\term{图形状态}的范畴，
-这些图形状态好比是图形硬件系统中的变量一样。
-当这些状态被程序更改之后，将会影响到之后的绘图操作。
-为了让生活更加美好，所有的图形状态都在每一帧的开始被设置成了默认值。
-你可能想到了，对于 \dcmd{ColorRGB} 来说，默认的颜色就是是白色的，这也是为什么 ``Hello world'' 会是白色的。
-默认的 \dcmd{PointSize} 是 $8$ ，也就是半个像素的直径大小。
+\dcmd{ClearColorRGB}， \dcmd{ColorRGB} 和 \dcmd{PointSize} 都属于设置\term{图形状态}的功能函数，
+这些图形状态好比是图形硬件系统中的变量一样。当这些状态被程序更改之后，将会影响到之后的绘图操作。为了让生活美好一点，所有的图形状态在每一帧的开始处被恢复成了默认值。你可能想到了，对于 \dcmd{ColorRGB} 来说，默认的颜色就是是白色的，这也是为什么之前的 ``Hello world'' 会是白色的。而默认的 \dcmd{PointSize} 是 $8$ ，也就是半个像素的直径大小。
 
-你也可以如同改变颜色一样简单的更改绘图的透明度。
-透明度是通过一个alpha通道控制的，可用值为 $0\sim255$ 。
+你也可以如同改变颜色一样自如的改变绘图的透明度。透明度是通过 alpha 通道控制的，有效设置范围为 $0\sim255$。
 \index{alpha}
 \index{transparency, alpha}
-其中 $0$ 表示完全透明，而默认值 $255$ 表示完全不透明。
-利用 \dcmd{ColorA} 函数将透明度设置为 $128$ ，也就是 $50\%$ 的透明度。
+其中 $0$ 表示完全透明，而默认值 $255$ 表示完全不透明。以下是利用 \dcmd{ColorA} 函数将透明度设置为 $128$，也就是 $50\%$ 的透明度，得到的效果。
 
 \png{0003}
 \eg{examples-d}
 
-颜色修改函数 \dcmd{ColorRGB} 和 \dcmd{ClearColorRGB} 同样接受(R,G,B)组值作为参数。
-所以 \mach{ColorRGB(0x0080ff)} 也可以被写作 \mach{ColorRGB(0, 128, 255)}：
+颜色修改函数 \dcmd{ColorRGB} 和 \dcmd{ClearColorRGB} 同样接受 (R, G, B) 分立值作为参数。
+所以 \mach{ColorRGB(0x0080ff)} 也可以写为 \mach{ColorRGB(0, 128, 255)}：
 
 \eg{examples-triplet}
 
 \newpage
-\section{设计实例: fizz}
+\section{设计示例: fizz}
 \label{fizz}
 \index{demos!fizz}
 
 \png{fizz}
 \eg{fizz-a}
 
-``fizz'' 程序在每一帧中绘制 $100$ 个圆，这些圆使用随机的大小、颜色和透明度。
-每一帧执行时间是 $1/60$ 秒，因为视觉暂留，整体上看就好像无数五彩斑斓的圆盘。
+``fizz'' 程序在每一帧中绘制 $100$ 个圆，每一个圆都具有随机的大小、颜色和透明度。
+虽然每一帧的执行时间仅有 $1/60$ 秒，但因为人眼存在视觉暂留，一眼看上去就好像无数五彩斑斓的圆盘一样。
 \index{frenzy, seething}
 
 \begin{center}
