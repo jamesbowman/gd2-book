@@ -539,10 +539,10 @@ void RestoreContext(void);
 \end{tabular}
 
 \vspace{10pt}
-图形显示的属性集合统称为图形环境（ \textit{graphics context} ）。
+图形显示属性的集合统称为图形环境（ \textit{graphics context} ）。
 由 \mach{SaveContext} 将这一属性集合存储一份备份， 而 \mach{RestoreContext} 指令用于将图形环境恢复为这一备份的状态。
 
-设备支持存储最多4份备份。其图形环境内容包括：
+设备支持存储最多$4$份备份。其图形环境内容包括：
 \vspace{10pt}
 
 \begin{tabular}{rl}
@@ -583,7 +583,7 @@ void SaveContext(void);
 \end{tabular}
 
 \vspace{10pt}
-图形显示的属性集合统称为图形环境（ \textit{graphics context} ）。
+图形显示属性的集合统称为图形环境（ \textit{graphics context} ）。
 \mach{SaveContext} 指令用于将这一属性集合存储一份备份， 而 \mach{RestoreContext} 将图形环境恢复为这一备份的状态。
 
 \png{0036}
@@ -600,15 +600,15 @@ void ScissorSize(uint16_t width,
 
 \begin{tabular}{lp{0.8 \textwidth}}
 
-\\ \mach{width} & 裁切矩形窗口的宽度，单位为1像素，取值范围为 $0\sim512$ \\
+\\ \mach{width} & 裁切矩形窗口的宽度，单位为像素，取值范围为 $0\sim512$ \\
 
-\\ \mach{height} & 裁切矩形窗口的高度，单位为1像素，取值范围为 $0\sim512$ \\
+\\ \mach{height} & 裁切矩形窗口的高度，单位为像素，取值范围为 $0\sim512$ \\
 
 \end{tabular}
 
 \vspace{10pt}
 \mach{ScissorSize} 指令用于设定裁切矩形窗口的尺寸规格。
-裁切矩形窗口用于将绘图指令限制在指定的一个矩形区域中。
+裁切矩形窗口用于将绘图范围限制在一个指定的矩形区域中。
 
 \png{0037}
 \eg{examples-scissor}
@@ -633,9 +633,9 @@ void ScissorXY(uint16_t x,
 
 \vspace{10pt}
 \mach{ScissorXY} 指令用于设定裁切矩形窗口的左上角的坐标位置。
-裁切矩形窗口用于将绘图指令限制在指定的一个矩形区域中。
+裁切矩形窗口用于将绘图范围限制在一个指定的矩形区域中。
 
-\drawcmd{StencilFunc}{设定模板检测功能}
+\drawcmd{StencilFunc}{设定模板测试功能}
 
 \begin{framed}
 \begin{verbatim}
@@ -647,22 +647,21 @@ void StencilFunc(byte func,
 
 \begin{tabular}{lp{0.8 \textwidth}}
 
-\\ \mach{func} & 设定模板检测操作的比较方式，
-        \mach{NEVER} ， \mach{LESS} ， \mach{LEQUAL} ， \mach{GREATER} ， \mach{GEQUAL} ， \mach{EQUAL} ， \mach{NOTEQUAL} 或 \mach{ALWAYS} 中选择其一\\
+\\ \mach{func} & 设定模板测试操作的比较方式，可选值有：
+        \mach{NEVER} ， \mach{LESS} ， \mach{LEQUAL} ， \mach{GREATER} ， \mach{GEQUAL} ， \mach{EQUAL} ， \mach{NOTEQUAL} 或 \mach{ALWAYS}\\
 
 \\ \mach{ref} & 设定用于比较的模板参考值，取值范围为 $0\sim255$ \\
 
-\\ \mach{mask} & an 8-bit mask that is anded with both \mach{ref} and the pixel's stencil value before comparison, 0-255 \\
-\\ \mach{mask} & 检测前加入 \mach{ref} 和图像模板值的 $8$ 位蒙板，取值范围为 $0\sim255$ \\
+\\ \mach{mask} & $8$ 位蒙板，该蒙版会在检测前分别与 \mach{ref} 和图像模板值进行与操作，取值范围为 $0\sim255$ \\
 
 \end{tabular}
 
 \vspace{10pt}
-\mach{StencilFunc} 指令用于控制模板检测操作。
-绘制期间，模板检测应用于每一像素的图像，如果检测失败，该像素图像将不被绘制。
-设定 \mach{func} 为 \mach{ALWAYS} 表示绘制所有像素点。
+\mach{StencilFunc} 指令用于控制模板测试操作。
+绘制期间，模板测试会应用于每一个像素，如果测试结果为不成功，该像素将不被绘制。
+设定 \mach{func} 为 \mach{ALWAYS} 表示绘制所有像素点 （即忽略蒙版）。
 
-\drawcmd{StencilMask}{设定用于控制对模板进行编写的图层蒙板}
+\drawcmd{StencilMask}{设定用于控制写入图层模板的掩码}
 
 \begin{framed}
 \begin{verbatim}
@@ -678,7 +677,7 @@ void StencilMask(byte mask);
 
 \vspace{10pt}
 \mach{StencilMask} 指令用于控制向模板缓冲区写入数据。
-由于模板缓冲区有 $8$ 位空间， \mach{mask} 中的每一位对应控制激活模板缓冲区的对应位的写入操作。
+由于模板缓冲区有 $8$ 位大小， \mach{mask} 中的每一位控制模板缓冲区的对应位的写入使能。
 因此 \mach{mask} 为 \mach{0x00} 时将禁止模板写入，而 \mach{mask} 为 \mach{0xff} 时将激活模板写入。
 
 \drawcmd{StencilOp}{设定模板更新操作}
@@ -709,7 +708,7 @@ void StencilOp(byte sfail,
 \eg{examples-stencil}
 
 
-\drawcmd{TagMask}{设定标签图层蒙板}
+\drawcmd{TagMask}{设定标签图层写入掩码}
 
 \begin{framed}
 \begin{verbatim}
@@ -724,8 +723,8 @@ void TagMask(byte mask);
 \end{tabular}
 
 \vspace{10pt}
-\mach{TagMask} 指令用于控制向标签缓存中写入数据。
-当 \mach{mask} 为 $1$ 时，每当有像素点有绘图操作， \nameref{Tag} 将向标签缓存写入一字节值作为其标签值。
+\mach{TagMask} 指令用于控制标签缓存中数据写入的使能。
+当 \mach{mask} 为 $1$ 时，每当有像素点有绘图操作， \nameref{Tag} 将向标签缓存写入对应字节作为其标签值。
 当 \mach{mask} 为 $0$ 时，绘制操作对标签缓存不会产生影响。
 
 \drawcmd{Tag}{设定绘制对象的标签值}
@@ -743,10 +742,10 @@ void Tag(byte s);
 \end{tabular}
 
 \vspace{10pt}
-\mach{Tag} 指令用于指定一字节值为绘制对象的标签值并存入标签缓存中。
+\mach{Tag} 指令用于指定一个单字节数值作为绘制对象的标签值。
 
 
-\drawcmd{Vertex2f}{在子坐标系坐标下绘制图像}
+\drawcmd{Vertex2f}{在子像素坐标系下绘制图像}
 
 \begin{framed}
 \begin{verbatim}
@@ -766,8 +765,8 @@ void Vertex2f(int16_t x,
 \end{tabular}
 
 \vspace{10pt}
-\mach{Vertex2f} 指令用于指定绘制图像的屏幕位置。
-而绘制的图像由当前 \nameref{Begin} 指定的图像对象决定。
+\mach{Vertex2f} 指令只用于指定绘制图像的屏幕位置，
+而绘制的内容由当前 \nameref{Begin} 指定的对象决定。
 \mach{Vertex2f} 指定子坐标系（ \textit{subpixel} ）坐标，所以其精确度是 $1/16$ 像素。
 除此以外，其支持的坐标范围要大于实际屏幕的范围——这对于绘制尺寸大于屏幕的图像对象十分有帮助。
 
@@ -797,9 +796,9 @@ void Vertex2ii(uint16_t x,
 \end{tabular}
 
 \vspace{10pt}
-\mach{Vertex2ii} 指令用于指定绘制图像的屏幕位置。
-而绘制的图像由当前 \nameref{Begin} 指定的图像对象决定。
+\mach{Vertex2ii} 指令用于指定绘制图像的屏幕位置，
+而绘制的图像类型由当前 \nameref{Begin} 指定的对象决定。
 
 绘制 \mach{BITMAP} 时， \mach{Vertex2ii} 将调用由 \mach{handle} 和 \mach{cell} 指定的位图句柄和位图单元。
-而对于指令 \nameref{BitmapHandle} 和 \nameref{Cell} 中的图形属性信息，该指令既不会调用到也不会对其进行修改。
+而对于指令 \nameref{BitmapHandle} 和 \nameref{Cell} 中的图形属性信息，该指令既不会使用到也不会对其进行修改。
 

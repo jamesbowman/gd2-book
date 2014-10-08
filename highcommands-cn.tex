@@ -3,21 +3,21 @@
 当 $w>h$ 时，这一控件将自动水平绘制，否则将竖直绘制。
 }
 \newcommand\threed{
-默认状态下，这一控件的外观显示呈3D效果。将 \mach{options} 设置为 \mach{OPT\_FLAT} 可令其显示2D效果。
+默认状态下，这一控件使用3D效果的外观显示。将 \mach{options} 设置为 \mach{OPT\_FLAT} 可令其显示2D效果。
 }
 \newcommand\fsixteen{
 上述参数的格式为 $16.16$ 定点值，即 $65536$ 表示 $1.0$ 。
 方便起见，调用宏函数 \mach{F16()} 可将浮点型数据转换为有符号型 $16.16$ 定点值。
 }
 \newcommand\style{
-该指令对绘制所有控件均适用；对于非交互式部件使用背景色（ \nameref{cmd:bgcolor} ）绘制，
+所有控件均包含一些相同的样式；对于非交互式部件使用背景色（ \nameref{cmd:bgcolor} ）绘制，
 对于交互式部件使用前景色（ \nameref{cmd:fgcolor} ）绘制。
 通常情况下最好使用较深的颜色作为背景色（ \nameref{cmd:bgcolor} ），较浅的颜色作为前景色（ \nameref{cmd:fgcolor} ）。
 }
 \newcommand\centeropts{
 当 \mach{options} 设置为 \mach{OPT\_CENTERX} 时，文本将水平居中显示，
-为 \mach{OPT\_CENTERY} 时，文本将竖直居中显示，
-为 \mach{OPT\_CENTER} 时，文本既水平居中，又竖直居中显示。
+为 \mach{OPT\_CENTERY} 时，文本将垂直居中显示，
+为 \mach{OPT\_CENTER} 时，文本既水平居中，又垂直居中显示。
 添加 \mach{OPT\_SIGNED} 设置时， \mach{val} 的值将被识别为有符号型数据，
 即其值为负数时，在数值前将显示一个负号。 
 }
@@ -56,7 +56,7 @@ void cmd_bgcolor(uint32_t c);
 \end{verbatim}
 \end{framed}
 
-\mach{bgcolor} 指令用于设定用于绘制控件时的背景色。
+\mach{bgcolor} 指令用于设定绘制控件时使用的背景色。
 \style
 
 \highcmd{button}{Something}
@@ -74,8 +74,8 @@ void cmd_button(int16_t x,
 \end{framed}
 
 \sbs{0024}{
-\mach{button} 指令用于绘制按钮控件，其位置位于屏幕像素坐标 $(x, y)$ 处，大小为$w \times h$。
-\mach{label} 用于设置文本标签。
+\mach{button} 指令用于在屏幕坐标 $(x, y)$ 处绘制大小为 $w \times h$ 的按钮。
+\mach{label} 用于设置文本的标签。
 \threed
 }
 
@@ -106,8 +106,8 @@ void cmd_clock(int16_t x,
 \end{framed}
 
 \sbs{0013}{
-\mach{clock} 指令用于绘制一个模拟时钟，其位置位于屏幕像素坐标 $(x, y)$ 处，半径为 \mach{r} ，单位为像素。
-可以设置其显示时间，\mach{h} 、 \mach{m} 、 \mach{s} 和 \mach{ms} 分别对应时分秒和毫秒。
+\mach{clock} 指令用于在屏幕像素坐标 $(x, y)$ 处绘制一个半径为 \mach{r} 的模拟时钟。
+显示的时间由\mach{h} 、 \mach{m} 、 \mach{s} 和 \mach{ms} 指定。
 \threed
 }
 
@@ -119,7 +119,7 @@ void cmd_coldstart(void);
 \end{verbatim}
 \end{framed}
 
-\mach{coldstart} 指令用于将所有控件属性重置，恢复其默认值。
+\mach{coldstart} 指令用于将所有控件的状态重置为默认值。
 
 \highcmd{dial}{Something}
 
@@ -134,7 +134,7 @@ void cmd_dial(int16_t x,
 \end{framed}
 
 \sbs{0014}{
-\mach{dial} 指令用于绘制一个标度盘，其位置位于屏幕像素坐标 $(x, y)$ 处，半径为 \mach{r} ，单位为像素。
+\mach{dial} 指令用于在屏幕像素坐标 $(x, y)$ 处绘制一个半径为 \mach{r} 的标度盘。
 \mach{val} 用于设定标度盘上显示的角度位置，单位为Furmans角度。
 \threed
 }
@@ -186,6 +186,8 @@ void cmd_getprops(uint32_t &ptr,
 
 \mach{getprops} 指令用于询问GPU上一张由 \nameref{cmd:loadimage} 指令加载的图片属性。
 \mach{ptr} 为这一图片的基地址， 而 $(w, h)$ 为这一图片的尺寸大小，单位为像素。
+\\
+\\
 
 \highcmd{gradient}{Something}
 
@@ -216,8 +218,7 @@ void cmd_inflate(uint32_t ptr);
 \end{framed}
 
 \mach{inflate} 指令用于对压缩数据进行解压并存储至主存储器地址 \mach{ptr} 中。
-调用该指令后应提供相应的压缩数据。
-其压缩格式应为 zlib DEFLATE 。
+调用该指令后应提供相应的压缩数据，压缩格式使用 zlib DEFLATE 。
 
 
 \highcmd{keys}{Something}
@@ -235,7 +236,7 @@ void cmd_keys(int16_t x,
 \end{framed}
 
 \sbs{0016}{
-\mach{keys} 指令用于绘制一排按键，每个按键依次由字符串（ \mach{chars} ）的每个字母进行标注，
+\mach{keys} 指令用于绘制一排按键，每个按键依次由字符串（\mach{chars}）的每个字母进行标注，
 其位置位于屏幕像素坐标 $(x, y)$ 处，大小为$w \times h$。
 \threed
 在 \mach{options} 设置中制定一个字母代码将在按键中对其进行高亮显示。
@@ -250,6 +251,7 @@ void cmd_loadidentity(void);
 \end{framed}
 
 \mach{loadidentity} 指令用于将位图数据转换为单位矩阵数据。
+\newpage
 
 \highcmd{loadimage}{Something}
 \index{jpeg}
@@ -262,10 +264,10 @@ void cmd_loadimage(uint32_t ptr,
 \end{framed}
 
 \sbs{jpeg2}{
-\mach{loadimage} 指令用于将一幅JPEG图片解压到从显存地址 \mach{ptr} 开始的存储空间。
+\mach{loadimage} 指令用于将一幅JPEG图片解压到从显存地址 \mach{ptr} 开始的存储空间，
 并将图片的相关参数存储至当前位图句柄。
-图片的默认格式为 \mach{RGB565} 。
-而当 \mach{options} 设置为 \mach{OPT\_MONO} 时，格式为 \mach{L8} 。
+图片的默认格式为 \mach{RGB565}，
+而当 \mach{options} 设置为 \mach{OPT\_MONO} 时，格式则是 \mach{L8}。
 \example{loadimage}{bitmaphandles}
 }
 
@@ -279,8 +281,7 @@ void cmd_memcpy(uint32_t dest,
 \end{verbatim}
 \end{framed}
 
-\mach{memcpy} 指令用于复制从显存地址 \mach{src} 开始长度为 \mach{num} 字节的数据，
-并将其粘贴到从显存地址\mach{dest} 开始的存储空间。
+\mach{memcpy} 指令用于将显存首地址为 \mach{src}，长度为 \mach{num} 字节的数据复制到 \mach{dest} 开始的存储空间。
 
 \highcmd{memset}{Something}
 
@@ -292,7 +293,7 @@ void cmd_memset(uint32_t ptr,
 \end{verbatim}
 \end{framed}
 
-\mach{memset} 指令用于将从显存地址 \mach{ptr} 开始长度为 \mach{num} 字节的数据值设置为 \mach{value} 。
+\mach{memset} 指令用于将从显存地址 \mach{ptr} 开始长度为 \mach{num} 字节的数据值统一设置为 \mach{value} 。
 
 \highcmd{memwrite}{Something}
 
@@ -303,8 +304,8 @@ void cmd_memwrite(uint32_t ptr,
 \end{verbatim}
 \end{framed}
 
-\mach{memwrite} 指令用于复制紧随其后长度为 \mach{num} 字节的数据，
-并将其粘贴到从显存地址 \mach{ptr} 开始的存储空间。
+\mach{memwrite} 指令用于将紧随其后长度为 \mach{num} 字节的数据，
+拷贝到从显存地址 \mach{ptr} 开始的存储空间。
 
 \highcmd{regwrite}{Something}
 
@@ -332,7 +333,7 @@ void cmd_number(int16_t x,
 
 \sbs{0017}{
 \mach{number} 指令用于显示一串数字 \mach{val} ，其字体由 \mach{font} 设定，
-其位置位于屏幕像素坐标 $(x, y)$ 处，
+其位置位于屏幕像素坐标 $(x, y)$ 处。
 当 \mach{options} 设置为 $n$ 时，将始终保持显示 $n$ 位数字，如果位数不够，数字前加 $0$ 补齐。
 \centeropts
 }
@@ -354,7 +355,7 @@ void cmd_progress(int16_t x,
 \sbs{0018}{
 \mach{progress} 指令用于绘制进度条，其位置位于屏幕像素坐标 $(x, y)$ 处，
 尺寸为 $w \times h$ ，单位为像素。
-分数值（ \mach{val} / \mach{range} ）表示进度值。
+分数值（ \mach{val} / \mach{range} ）表示当前进度值。
 \aspect
 }
 
@@ -366,7 +367,7 @@ void cmd_rotate(int32_t a);
 \end{verbatim}
 \end{framed}
 
-\mach{rotate} 指令用于对当前位图变换矩阵旋转角度为 \mach{a} 的旋转操作，单位为Furmans角度。
+\mach{rotate} 指令用于对当前位图变换矩阵应用旋转 \mach{a} Furmans角度的操作。
 
 \highcmd{scale}{Something}
 
