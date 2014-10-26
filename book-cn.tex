@@ -1686,7 +1686,7 @@ void begin();
 \end{framed}
 
 初始化 \gdtwo 对象。
-在程序启动之初，调用其他 \mach{GD} 指令之前，必须执行这一指令。
+程序启动后，需在调用其他任何 \mach{GD} 指令之前执行这一指令。
 
 \lightcmd{finish}{finish}
 
@@ -1696,7 +1696,7 @@ void finish();
 \end{verbatim}
 \end{framed}
 
-将所有待命指令发送到GPU，之后等待这些指令执行完毕。
+将所有待执行的指令发送到GPU，并等待这些指令执行完毕。
 参见 \nameref{finish} 。
 
 \newpage
@@ -1721,8 +1721,8 @@ void get_accel(int &x, int &y, int &y);
 \end{framed}
 
 对三轴加速度传感器的数值进行采样。
-返回值是经过比例缩小的，1G的返回值为 $256$ 。
-轴的默认方向是确定的： \mach{x} 轴的正向为右， \mach{y} 轴的正向为下， \mach{z} 轴的正向为指向（ \emph{into} ）屏幕内部。
+返回值是经过比例校正的，1G的返回值为 $256$ 。
+加速度轴的默认方向定义如下： \mach{x} 轴的正方向为右， \mach{y} 轴的正方向为下， \mach{z} 轴的正向为指向屏幕内部。
 
 \lightcmd{get\_inputs}{getinputs}
 
@@ -1732,7 +1732,7 @@ void get_inputs();
 \end{verbatim}
 \end{framed}
 
-调用 \nameref{finish} ，之后检测收集所有触摸及传感器输入数据，并存入 \mach{GD.inputs}。
+调用 \nameref{getinputs} 时，Gameduino会检测并收集所有触摸及传感器输入数据，并存入 \mach{GD.inputs} 中。
 这些输入数据包括：
 
 \vspace{10pt}
@@ -1770,9 +1770,8 @@ void play(uint8_t instrument, uint8_t note = 0);
 \end{verbatim}
 \end{framed}
 
-播放一段音频。其中 \mach{instrument} 是从设备内置的众多乐器中挑选其一\\
-（ p. \pageref{instruments} ）。
-\mach{note} 是MIDI音符号（ p. \pageref{MIDI} ）。
+播放一个乐器音频。其中 \mach{instrument} 是从设备内置的众多乐器中挑选其一\\
+（ p. \pageref{instruments} ）， \mach{note} 参数选择MIDI音符号（ p. \pageref{MIDI} ）。
 
 \lightcmd{self\_calibrate}{selfcalibrate}
 
@@ -1782,7 +1781,7 @@ void self_calibrate(void);
 \end{verbatim}
 \end{framed}
 
-运行内置的触摸屏校定序列程序。
+运行内置的触摸屏校定程序。
 
 \lightcmd{sample}{sample}
 
@@ -1796,17 +1795,17 @@ void sample(uint32_t start,
 \end{verbatim}
 \end{framed}
 
-启动播放GPU主存储器中的一段音频文件。
-\mach{start} 为音频文件的开始存储位置。
-\mach{len} 为音频文件大小，单位为字节。
-\mach{freq} 为音频文件采样率，单位为Hz。
-\mach{format} 为音频文件的格式，
+启动回放功能，播放存储在GPU内存中的一段音频采样文件。
+\mach{start} 为音频文件的开始存储位置；
+\mach{len} 为音频文件大小，单位为字节；
+\mach{freq} 为音频文件采样率，单位为Hz；
+\mach{format} 为音频文件的格式，可选值为
 \mach{LINEAR\_SAMPLES} ，
 \mach{ULAW\_SAMPLES} 或
 \mach{ADPCM\_SAMPLES} 其中之一。
-如设定 \mach{loop} 值为1，音频文件将无限循环播放。
-如需立即停止采样回放，调用 \mach{sample} ，并以0作为 \mach{len} 参数的值。
-值得注意的是， \mach{start} 和 \mach{len} 参数的值应为8的倍数。
+若将 \mach{loop} 值设置为1，音频文件进行循环播放。
+如需立即停止采样回放，可调用 \mach{sample} ，并以0作为 \mach{len} 参数的值。
+注意， \mach{start} 和 \mach{len} 参数的值应为8的倍数。
 
 \lightcmd{swap}{swap}
 
@@ -1816,18 +1815,18 @@ void swap(void);
 \end{verbatim}
 \end{framed}
 
-以将要绘制的图像替换当前显示图像。
+完成当前正在操作的图像，并将其替换到前台进行显示。
 这一指令必须在图像绘制代码结束后进行调用。
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{数学函数}
 
-GD程序库的主要功能是作为 \gdtwo 硬件的一个小接口。
-但它也包含了一小部分对于游戏程序编写十分有帮助的小函数。
+GD程序库的主要功能是作为 \gdtwo 硬件的一个封装接口，
+但是除此之外它还包含了一些游戏程序编写中需要的实用函数。
 这些函数并不对硬件设备进行操作控制——但它们可以实现游戏程序经常需要的基本运算。
 
-这些数学函数都仅使用8位整型数据代码进行精确的运算，这使用户可以像操作面包机一样
-十分轻松地实现极高速的街机动作效果。
+这些数学函数谨慎地采用了整形参数、8位代码进行编写，使得用户可以轻松在CPU上实现高速运算。
+
 
 \lightcmd{atan2}{atan2}
 
@@ -1842,7 +1841,7 @@ uint16_t atan2(int16_t y, int16_t x);
 \operatorname{atan2}(y, x) = \begin{cases}
 \arctan\left(\frac x {-y} \right) & \qquad x < 0 \\
 \arctan\left(\frac x y \right) + \pi& \qquad x \ge 0 \\
-\text{undefined} & \qquad y = 0, x = 0
+\text{未定义} & \qquad y = 0, x = 0
 \end{cases}
 \]
 
@@ -1870,7 +1869,7 @@ void polar(int &x, int &y, int16_t r, uint16_t th);
 \end{tikzpicture}
 \end{center}
 
-返回值为以屏幕原点为起点，角度为 \mach{th} ，距离为 \mach{r} 的点 $(x,y)$ 的坐标位置。
+该函数返回以屏幕原点为起点，角度为 \mach{th} ，距离为 \mach{r} 的坐标 $(x,y)$。
 \mach{th} 为Furmans角度。
 此函数为 \nameref{atan2} 的逆运算。
 
@@ -1883,12 +1882,12 @@ uint16_t random(uint16_t n);
 \end{verbatim}
 \end{framed}
 
-返回一个随机数。如果没有设定参数，则返回值范围为 $0\sim65535$ 。
-当设定参数为 \mach{n} ，函数将返回一个随机数值 $x$ ，其范围为 $(0 \le x < \mach{n})$ 。
-\mach{random()} 会迅速（ \textbf{quickly} ）返回一个假（ \textbf{low-quality} ）随机数。
-但这对图像显示及游戏程序设计十分有益，因为性能往往比真正的随机性更重要。
+返回一个随机数。如果没有指定参数，则返回值范围为 $0\sim65535$；
+若设定了参数 \mach{n} ，函数将返回一个随机数值 $x$ ，其范围为 $(0 \le x < \mach{n})$ 。
+\mach{random()} 的返回值为一个伪随机数。
+这对图像显示及游戏程序设计十分有益，因为性能往往比真正的随机性更重要。
 
-对于提升随机数的随机性的传统技巧是在等待用户输入的同时调用 \mach{random()} 。
+对于提升随机性的传统技巧是在等待用户输入的同时不断调用 \mach{random()} 。
 这意味着当游戏开始时，产生的随机数值更不易于预测。
 % People are an excellent source of entropy.
 
@@ -1901,7 +1900,7 @@ int16_t rcos(int16_t r, uint16_t th);
 \end{verbatim}
 \end{framed}
 
-返回值为 \mach{r} 与 \mach{th} （单位为Furmans角度）余弦值的整数近似值的乘积：
+该函数将 \mach{r} 与 \mach{th} （单位Furmans） 的余弦值进行相乘，并返回计算结果的整数近似值：
 
 \[
   \left\lfloor \mach{r} \cos \frac{2 \pi \mach{th}}{65536} \right\rfloor
@@ -1918,7 +1917,7 @@ int16_t rsin(int16_t r, uint16_t th);
 \end{verbatim}
 \end{framed}
 
-返回值为 \mach{r} 与 \mach{th} （单位为Furmans角度）正弦值的整数近似值的乘积：
+该函数将 \mach{r} 与 \mach{th} （单位Furmans） 的正弦值进行相乘，并返回计算结果的整数近似值：
 
 \[
   \left\lfloor \mach{r} \sin \frac{2 \pi \mach{th}}{65536} \right\rfloor
@@ -1938,12 +1937,12 @@ int16_t rsin(int16_t r, uint16_t th);
 \index{bitmaps!tiling}
 \png{tiled}
 \eg{tiled-a}
-原始素材是一个 256 $\times$ 256 的无缝纹理, 该素材由 Patrick Hoesly\footnote{
+这里所用的原始素材是一个 256 $\times$ 256 的无缝纹理, 该素材由 Patrick Hoesly\footnote{
 在Flickr网站上还有他成百个作品， 全部基于CC协议。}创作。
 \begin{center}
 \includegraphics[width=0.5\textwidth]{assets/metal.png}
 \end{center}
-使用命令 \dcmd{BitmapSize} 将该图案平铺到整个 480 $\times$ 272 大小的屏幕上，得到以下结果： 
+使用命令 \dcmd{BitmapSize} 将该图案平铺到整个 480 $\times$ 272 大小的屏幕上，可以得到以下结果： 
 \png{tiled-norot}
 整个结果还算尽人意，不过还是能看出很明显的重复部分。
 将这个位图使用函数 \cmd{rotate}
@@ -1956,10 +1955,9 @@ int16_t rsin(int16_t r, uint16_t th);
 \index{shadows}
 \index{drawing|shadows}
 \png{0025}
-为了实现阴影的效果，需要绘制两次图形。首先使用阴影的颜色在目标位置附近($x$和$y$上各进行一段偏移)绘制一遍图形，之后使用
-前景色再次绘制一遍图形。
+为了实现阴影的效果，需要依次绘制两次图形。首先使用阴影的颜色在目标位置附近（ $x$ 和 $y$ 方向上各进行一段偏移）绘制一遍图形，之后使用前景色再次绘制一遍图形。
 \eg{examples-dropshadow}
-这个例子使用了3像素的偏移值来绘制阴影，可见这种方法对较大字体比较有效。而对于小一点的字体，1到2像素的偏移看上去会更好一些。
+这个例子使用了 3 像素的偏移值来绘制阴影，可见这种方法对较大字体比较有效。而对于小一点的字体，1 到 2 像素的偏移看上去会更好一些。
 
 \noindent
 \begin{minipage}[][][t]{0.45\textwidth}
@@ -1987,7 +1985,7 @@ int16_t rsin(int16_t r, uint16_t th);
 
 \term{淡入} 是一种逐渐改变屏幕颜色的技术。淡入到黑色或者白色是最常见的两种情况，当然淡入到其他颜色也是可能的。
 其中一种制造出淡入效果的方法是绘制一个屏幕大小的矩形，通过不断改变矩形的alpha值来实现过渡的效果。
-于是Alpha的大小就决定了原图像有多大程度被矩形覆盖了，这样只要逐渐将alpha大小从0上升到255，就可以实现场景过渡的效果。
+于是Alpha的大小就决定了原图像有多大程度被矩形覆盖了，这样只要逐渐将alpha大小从 0 上升到 255，就可以实现场景过渡的效果。
 
 以下是 \textit{NightStrike} 的一段代码，该代码演示了如何实现将标题画面逐渐过渡到黑色的方法。
 \index{NightStrike}
@@ -2007,18 +2005,18 @@ int16_t rsin(int16_t r, uint16_t th);
 
 动态模糊技术被用于平滑物体的运动，从而使物体的运动过程更为自然。
 图中在棋盘上运动的白色棋子用动态模糊进行了渲染。
-如果从单帧上看，物体会很不清晰。但如果把帧与帧之间连接起来播放，
-对于你的视觉系统来说就会认为是一个快速移动的物体。
+如果只从单帧上看，物体会显得很不清晰。但如果把帧与帧之间连续起来播放，
+视觉系统就会把其辨认为一个快速移动的物体。
 
-其中一个在 \gdtwo 中渲染出动态模糊效果的办法是，同一时间用多个不同的透明度绘制同一个物体。 
-在这个 ``chess'' 的演示程序中，用于渲染的数量是由 \mach{OVERSAMPLE}变量控制的，其值被设置为8。
-渲染器按照采样数量同时绘制多次图形，每一个图形之间存在细微距离差。
-如此一来，八个堆砌在一起的透明部分就在运动路径上形成了模糊的视觉效果。
+在 \gdtwo 中渲染动态模糊效果的方法之一，是在同一时间用多个不同的透明度绘制同一个物体。 
+在这个 ``chess'' 的演示程序中，用于渲染的数量是由 \mach{OVERSAMPLE}变量控制的，其值被设置为 8。
+渲染器按照采样数量同时绘制多次图形，每一个图形之间存在细微的距离差。
+如此一来，8 个彼此叠加的透明部分就在运动路径上产生了模糊的视觉效果。
 
 \eg{chess-a}
 
 \newpage
-\section{更多关于颜色混合}
+\section{叠加混合}
 \index{blending}
 
 \begin{center}
@@ -2027,13 +2025,14 @@ int16_t rsin(int16_t r, uint16_t th);
 \end{center}
  
 以上两个图片都是由下方的代码完成的。
-这段代码绘制了1000个直径为8像素的圆形，在绘制时使用了 \dcmd{BlendFunc} 函数，该函数设置了将每个像素的颜色与背景的颜色进行混合。
-这两幅图的区别在于，顶上的图片使用的颜色为纯绿 (\mach{0x00ff00})
+这段代码绘制了 1000 个直径为 8 像素的圆形，在绘制时使用了 \dcmd{BlendFunc} 函数。
+该函数设置了将每个像素的颜色与背景的颜色进行叠加。
+这两幅图的区别在于，顶上的图片使用的颜色为纯绿色 (\mach{0x00ff00})
 而底部使用的是一个稍浅的绿色(\mach{0x60c030})。
 
 对于纯绿色来说，任何多次绘制的图形依然是绿色的。
-而对于浅绿色来说 \mach{0x60c030} -- 包含了绿色，红色和少量蓝色 --， 每一次绘制都会让颜色更为明亮一些。
-当一个像素被绘制6次之后，就达到了纯白色 \mach{0xffffff}，此后就无法变得更明亮了。
+而对于浅绿色来说 \mach{0x60c030} -- 包含了绿色，红色和少量蓝色 --， 每一次叠加绘制都会让颜色更为明亮一些。
+不过在这种情况下，同一个像素被绘制 6 次之后就会变成纯白色 \mach{0xffffff}，此后就无法变得更亮了。
 
 \eg{examples-additive}
 
@@ -2042,17 +2041,17 @@ int16_t rsin(int16_t r, uint16_t th);
 \index{drawing!rectangles}
 \png{0052}
 这段代码首先设置了一个大小为 1$\times$1 像素的 \mach{L8} 位图。
-混合函数 \mach{(ONE, ZERO)} 仅仅是一个直接的替换操作：像素从位图中拷出，被复制到颜色缓冲中。
+混合函数 \mach{(ONE, ZERO)} 仅仅是一个直接替换操作：像素从位图中拷出，被复制到颜色缓冲中。
 % The source address for the bitmap is set to \mach{ROM\_PIXEL\_FF}, which is an address in the GPU's ROM that has value 255.
 对一个 \mach{L8} 位图而言，RGB像素的值就是其当前的颜色。
 
-之后的代码将位图的绘制大小设置为了60$\times$30像素。
+之后的代码将位图的绘制大小设置为了60$\times$30 像素。
 这个意味着 60$\times$30 大小的位图都会被当前颜色覆盖。
-这样的话，每次使用vertex绘制的时候都会是一个矩形了。
+这样的话，每次使用 vertex 绘制的时候都会是一个实心矩形了。
 
 使用这种方式绘制的矩形在多个方面有别于使用 \mach{RECTS} 绘制。
-首先，这些矩形没有反走样的特点：它们的大小完完全全是60$\times$30，而没有任何的边缘平滑处理。
-第二个不同之处在于，此处每一个 \dcmd{Vertex2ii} 都将绘制一个矩形，
+首先，这些矩形没有反走样的功能：它们的大小完完全全是 60$\times$30，而没有任何的边缘平滑处理。
+第二个不同之处在于，此处每一个 \dcmd{Vertex2ii} 都将绘制一个矩形；
 而在 \mach{RECTS} 中，每一个矩形需要调用两次vertex。
 \eg{examples-1x1}
 
@@ -2073,7 +2072,7 @@ int16_t rsin(int16_t r, uint16_t th);
 由于位图的高度是一个像素，它在每一行都进行了重复。
 \index{bitmaps!tiling}
 % \eg{examples-1d-twist}
-对于任何一维位图来说都可以进行伸缩和旋转。以下就是同一个位图经过0.3倍的伸缩与80$^\circ$ 旋转之后得到的结果。
+我们知道对于任何一个一维位图来说，都可以对其进行伸缩和旋转。以下就是同一个位图经过 0.3 倍的伸缩与 80$^\circ$  旋转之后得到的结果。
 
 \begin{center}
 \includegraphics[width=0.5\textwidth]{assets/0054.png}
@@ -2085,16 +2084,16 @@ int16_t rsin(int16_t r, uint16_t th);
 
 \png{0050}
 
-GD图形库有一个专门用于绘制多边形的辅助对象。
+GD图形库有一个专门用于绘制多边形的辅助对象 \textit{Poly}。
 如果需要绘制一个多边形，首先需要调用 \mach{begin()} 方法，
 之后再将多边形的顶点按照子像素坐标依次传递给 \mach{v()} 方法。
 最后使用 \mach{draw()} 用当前颜色完成多边形的绘制。
 
-这个例子中只使用了4个顶点，但实际上多边形最多可以支持16个顶点。
+例程中只使用了 4 个顶点，但实际上多边形最多可以支持 16 个顶点。
 多边形可以是任何形状，并且顶点不一定都需要在屏幕可见范围。
 
 \mach{Poly} 对象使用了一系列的模板缓冲操作来计算多边形的轮廓。
-最后它使用当前颜色和Alpha值绘制出多边形的内部，整个过程和 \mach{POINTS} 或者 \mach{LINES} 十分类似。
+最后它使用当前颜色和Alpha值设置填充多边形的内部，整个过程和 \mach{POINTS} 或者 \mach{LINES} 十分类似。
 
 \eg{examples-polygon}
 
@@ -2110,7 +2109,7 @@ GD图形库有一个专门用于绘制多边形的辅助对象。
 
 \index{demos!cobra}
 例程 \textit{cobra} 使用了类似的方法，首先用 \mach{Poly} 绘制了多边形，
-之后再绘制了蓝色发光的外边界。
+之后又勾勒了微微发光的蓝色外边界。
 \index{edges}
 \png{cobra}
 
@@ -2119,14 +2118,14 @@ GD图形库有一个专门用于绘制多边形的辅助对象。
 \index{lines}
 
 因为直线顶端有宽圆角的存在，宽直线可以作为非常实用的图形元素存在。
-在例程 \textit{sprites} 中，一个宽28像素、50\% Alpha的黑色宽直线就被用于了文本框的背景。
+在例程 \textit{sprites} 中，一个宽 28 像素、Alpha 50\%的黑色宽直线就被用于绘制了文本框的背景。
 \png{lines-el}
 \eg{sprites-line}
 
 \textit{NightStrike} 程序中在画面顶端使用了三个水平放置的宽直线来绘制能量槽。
 \index{NightStrike}
-首先一个10像素的浅黑色长条作为能量条的背景，而当钱能量的指示由两条直线配合完成：
-一条为10像素的淡橘色，另一条为4像素的亮橙色。这样配合下来就得到了令人满意的发光特效。
+首先一个 $10$ 像素的浅黑色长条作为能量条的背景，而当前能量的指示由两条直线配合完成：
+一条为 $10$ 像素的淡橘色，另一条为 $4$ 像素的亮橙色。这样配合下来就得到了令人满意的发光特效。
 \index{glow effect}
 
 \begin{center}
@@ -2150,8 +2149,8 @@ GD图形库有一个专门用于绘制多边形的辅助对象。
 \includegraphics[width=0.48\textwidth]{assets/vignette-1.png}
 \end{center}
 
-\term{晕映} 是摄影学中一种将图片边角暗化的技术。
-上方右图中就是使用了一个晕映作为额外的图层。晕映图片本身是一个 480$\times$272 像素的 \mach{L8} 放射渐变图形，越至边缘透明度越低：
+\term{晕映} 是在摄影中一种将图片边角暗化的技术。
+上方右图中就将晕映作为了一个额外的图层。晕映图片本身是一个 480$\times$272 像素的 \mach{L8} 放射渐变图形，越至边缘透明度越低：
 
 \begin{center}
 \setlength{\fboxsep}{0pt}
@@ -2175,11 +2174,11 @@ GD图形库有一个专门用于绘制多边形的辅助对象。
 \noindent
 \png{mirror}
 
-\textit{镜像} 一个图元，把它调整它到相对的方向上，是在2D游戏中十分有用的操作。
+\textit{镜像} 一个图元，把它调整它的镜像方向上，是在2D游戏中十分有用的操作。
 Gameduino 2的GPU单元可以处理复杂的位图变换，自然简单的翻转更不会存在问题。
 你可以设想一个左右的翻转实际上就是x轴被乘以了-1倍，该操作用 \cmd{scale} 就可以完成。
-两次 \cmd{translate} 调用仅仅是修改了位图的位置，以保证翻转的中心轴在图元的中心处。
-在这个例子中，图元是32像素宽的，所以翻转是在 $x = 16$处完成的：
+代码中两次 \cmd{translate} 调用仅仅是修改了位图的位置，以保证翻转的中心轴在图元的中心处。
+在这个例子中，图元是 $32$ 像素宽的，所以翻转是在 $x = 16$ 处完成的：
 
 \begin{center}
 \begin{tikzpicture}
@@ -2197,7 +2196,7 @@ Gameduino 2的GPU单元可以处理复杂的位图变换，自然简单的翻转
 \index{edges}
 \png{outline1}
 
-Gameduino 2的硬件底层只支持实心圆和直线的绘制。那么如何实现上图中，在圆的周围绘制勾勒线条呢？答案非常简单 -- 绘制圆形两次。
+Gameduino 2的硬件底层只支持实心圆和直线的绘制。那么如何实现上图的效果：在圆的周围勾勒出线条呢？答案非常简单 -- 绘制圆形两次。
 
 一个稍大的圆首先用边界的颜色绘制出来，之后稍小一点的圆再使用圆内部的颜色绘制。
 对于一群绘制的物体来说，绘制顺序将影响最终的图像。此处外轮廓的圆先绘制，这样可以给整个集群一个共有的边界。
@@ -2209,7 +2208,7 @@ Gameduino 2的硬件底层只支持实心圆和直线的绘制。那么如何实
 \includegraphics[width=0.48\textwidth]{assets/outline2.png}
 \end{center}
 
-这个按钮的边缘效果也是依靠两个直线绘制的 -- 一个白色直线和一个比它宽4个像素的蓝色直线。
+下图中按钮的边缘效果也是依靠两个直线绘制的 -- 一个白色直线和一个比它窄 $4$ 个像素的蓝色直线。
 
 这种边缘绘制方法也可以用于
 \mach{POINTS}， \mach{LINES} 和
@@ -2227,12 +2226,12 @@ Gameduino 2的硬件底层只支持实心圆和直线的绘制。那么如何实
 
 \png{zardoz}
 
-对于艺术家和设计师 Nick Criscuolo 来说，他更希望用Gameduino 2的图形系统实现更加粗糙、8位像素的复古感。在 \textit{Zardoz} 项目中，所有的图形都是以两倍伸展的方式绘制的。在每一帧开始之前，都会调用以下代码
+对于艺术家和设计师 Nick Criscuolo 来说，他更希望用Gameduino 2的图形系统实现更加粗糙、8位像素的复古感。在 \textit{Zardoz} 项目中，所有的图形都是以两倍伸展的方式绘制的。在每一帧开始之前，都会调用以下代码来把其绘制的每个位图扩展两倍：
 
 \eg{zardoz-double}
 
 \noindent
-来把其绘制的每个位图扩展两倍。结果就是原图中的每个像素都变成了屏幕上 2$\times$2 个像素。这导致了游戏的等效分辨率变为了 240$\times$136 (Gmaeduino 2的原始分辨率为480 $\times$136)。
+这样一来的结果就是原图中的每个像素都变成了屏幕上 2$\times$2 个像素。这导致了游戏的等效分辨率变为了 240$\times$136 (Gameduino 2 的原始分辨率为 480 $\times$136)。
 \index{emulating!low resolution displays}
 
 \newpage
@@ -2243,17 +2242,17 @@ Gameduino 2的硬件底层只支持实心圆和直线的绘制。那么如何实
 
 \index{drawing!vectors}
 
-矢量图形游戏起源于70, 80, 90年代，因为当时特殊的硬件条件，可以在CRT显示器上绘制出明亮、彩色的线条。
+矢量图形游戏在70、80和90年代期间，因为当时特殊的硬件条件，可以在CRT显示器上绘制出明亮、彩色的矢量线条。
 \index{emulating!CRT}
 \index{CRT, emulating}
 作为一个图形技术，这种绘制方式的优势在于不需要像素的概念：所有的一切都是由平滑明亮的直线和点构建而成的。
 \gdtwo 有非常完善的平滑线条和点的绘制支持，所以可以轻易模拟出这种矢量绘图方法。
 
-然后如果仅仅用直线来绘制游戏，恐怕看上去太“干净”了。原来的图形显示看上去还会有些微亮的效果，这个特效将分成两步实现。 \mach{drawgame()} 函数的作用是绘制屏幕上所有的直线。
+然而如果仅仅用直线来绘制游戏，恐怕看上去太“单薄”了：还需要模仿原来图形上微微发亮的效果。这个特效将分成两步实现。首先编写 \mach{drawgame()} 函数，其作用是绘制屏幕上所有的直线，之后将使用两种不同的线条属性来调用该函数进行绘制。
 \defidx{LINES}
-第一步的绘制中，配置直线为稍宽，使用背景亮光的颜色来绘制所有直线，之后调用 \mach{drawgame()}。
+第一步的绘制中，配置直线为稍宽的尺寸，使用背景亮光的颜色来绘制所有直线，之后调用 \mach{drawgame()}。
 第二步绘制的直线位置完全相同，但是在样式上使用了更为明亮，且线宽较细的直线。
-这两步绘制之后，所有的直线都得到了一点微光的效果。
+这两步绘制之后，所有的直线都实现了微光的效果。
 \index{glow effect}
 
 \eg{tempest-draw}
@@ -2270,9 +2269,9 @@ Gameduino 2的硬件底层只支持实心圆和直线的绘制。那么如何实
 \end{center}
 
 早期人们并没有像我们一样复杂的设计工具，所有的图形都是首先绘于纸稿之上，最后再徒手转换成数据的。如今，你也可以试着用同样的方法设计图形。
-\cmd{memwrite} 函数将8个字节的图案写入在起始地址为0的内存地址之中。
-一位编码的图形被存放在 \mach{picture[]} 中 -- ``\mach{0b}'' 前缀表示数据为二进制表示。
-之后，这个程序将这个 8$\times$8 \mach{L1} 格式的位图在整个屏幕的 $x$ 和 $y$ 上重复。
+\cmd{memwrite} 函数将 $8$ 个字节构成的图案写入在起始地址为 $0$ 的内存地址之中。
+二进制编码的图案被存放在 \mach{picture[]} 中 -- ``\mach{0b}'' 前缀表示数据为二进制表示。
+之后，这个程序将这个 8$\times$8 \mach{L1} 格式的位图在整个屏幕的 $x$ 和 $y$ 上平铺。
 
 \eg{examples-handmade}
 
@@ -2293,7 +2292,7 @@ Gameduino 2的硬件底层只支持实心圆和直线的绘制。那么如何实
 
 \eg{examples-comp1}
 
-但是如果想添加一个JPEG格式的背景的的话，结果就会是悲剧的：
+但是如果你想为其添加一个JPEG格式的背景的的话，结果就却是悲剧的：
 
 \begin{center}
 \includegraphics[width=0.4\textwidth]{assets/comp2.png}

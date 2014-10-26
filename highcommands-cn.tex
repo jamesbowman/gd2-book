@@ -6,8 +6,8 @@
 默认状态下，这一控件使用3D效果的外观显示。将 \mach{options} 设置为 \mach{OPT\_FLAT} 可令其显示2D效果。
 }
 \newcommand\fsixteen{
-上述参数的格式为 $16.16$ 定点值，即 $65536$ 表示 $1.0$ 。
-方便起见，调用宏函数 \mach{F16()} 可将浮点型数据转换为有符号型 $16.16$ 定点值。
+上述参数的格式为 $16.16$ 定点浮点数，即 $65536$ 表示 $1.0$ 。
+方便起见，调用宏函数 \mach{F16()} 可将浮点型数据转换为有符号型 $16.16$ 的表达形式。
 }
 \newcommand\style{
 所有控件均包含一些相同的样式；对于非交互式部件使用背景色（ \nameref{cmd:bgcolor} ）绘制，
@@ -378,7 +378,7 @@ void cmd_scale(int32_t sx,
 \end{verbatim}
 \end{framed}
 
-\mach{scale} 指令用于对当前位图变换矩阵比例为 $(sx, sy)$ 的缩放操作。
+\mach{scale} 指令用于以 $(sx, sy)$ 比例对当前位图变换矩阵进行缩放操作。
 \fsixteen
 
 \highcmd{scrollbar}{Something}
@@ -397,8 +397,7 @@ void cmd_scrollbar(int16_t x,
 \end{framed}
 
 \sbs{0019}{
-\mach{scrollbar} 指令用于绘制滚动条，其位置位于屏幕像素坐标 $(x, y)$ 处，
-尺寸为 $w \times h$ ，单位为像素。
+\mach{scrollbar} 指令用于在屏幕像素坐标 $(x, y)$ 处绘制大小为 $w \times h$ 像素的滚动条。
 分数值（ \mach{val} / \mach{range} ）用于设定其滚动滑块所处的位置，
 而分数值（ \mach{size} / \mach{range} ）用于设定滚动滑块的尺寸。
 \aspect
@@ -416,7 +415,7 @@ void cmd_setfont(byte font,
 
 \vspace{20pt}
 
-\mach{setfont} 指令用于从地址 \mach{ptr} 开始的一段字体块存储空间中规定一组标号为 $0\sim15$ 的 RAM \mach{font} ，
+\mach{setfont} 指令用于定义存储在内存中的标号 \mach{font} 介于 $0\sim15$ 的字体。该字体的属性由存储在内存 \mach{ptr} 处的字体块定义。
 在调用 \mach{setfont} 前，字体库必须已经存储在内存中，且位图句柄必须已经设置好。
 字体块的大小为 $148$ 字节，具体描述如下所示：
 
@@ -429,7 +428,7 @@ $\mach{ptr}+128$ & 4   & 字体位图格式，例如 \mach{L1} 、 \mach{L4} 或
 $\mach{ptr}+132$ & 4   & 字体行间距，单位为字节 \\
 $\mach{ptr}+136$ & 4   & 字体宽度，单位为像素 \\
 $\mach{ptr}+140$ & 4   & 字体高度，单位为像素 \\
-$\mach{ptr}+144$ & 4   & 内存中字体库的指针 \\
+$\mach{ptr}+144$ & 4   & 指向内存中字体图形所在位置的指针 \\
 \end{tabular}
 
 
@@ -463,12 +462,11 @@ void cmd_sketch(int16_t x,
 
 \vspace{20pt}
 \sbs{sketching_b}{
-\mach{sketch} 指令用于启动一个该持续的绘制作用，
-其效果是使触摸到的像素点显示已存储于显存中的位图图像。
-位图的基地址由 \mach{ptr} 给定，
+\mach{sketch} 指令用于开始一次连续的绘图操作。该指令会将之后所有触摸到的像素点记录、绘制到图形内存中。
+位图的基址由 \mach{ptr} 给定，
 其位置位于屏幕像素坐标 $(x, y)$ 处，尺寸为 $w \times h$。
 位图格式（ \mach{format} ）既可以为\mach{L1} 也可以为 \mach{L8} 。
-绘图操作将一直持续直到调用执行 \nameref{cmd:stop} 指令。
+该绘图进程将一直持续，直到用户主动调用 \nameref{cmd:stop} 指令为止。
 关于 \nameref{cmd:sketch} 的具体例程请参见 \xref{sketching} 的内容。
 
 }
@@ -508,14 +506,14 @@ void cmd_spinner(int16_t x,
 
 \vspace{20pt}
 \sbs{0021}{
-\mach{spinner} 指令用于启动一个``等待'' 动画，
+\mach{spinner} 指令用于绘制一个``等待'' 动画，
 其位置以屏幕像素坐标 $(x, y)$ 为中心。
 \mach{style} 用于设定该动画的风格；
 \mach{0} 表示圆形动画，
 \mach{1} 表示线形动画，
 \mach{2} 表示时钟动画，
 \mach{3} 表示转盘动画。
-\mach{scale} 用于设定动画图片的尺寸；
+\mach{scale} 用于设定动画图片的尺寸：
 $0\sim2$ 表示由小到大，
 
 
@@ -568,8 +566,7 @@ void cmd_toggle(int16_t x,
 \end{framed}
 
 \sbs{0023}{
-\mach{toggle} 指令用于绘制一个拨动开关，其位置位于屏幕像素坐标 $(x, y)$ 处，
-宽度为 \mach{w} ，单位为像素。
+\mach{toggle} 指令用于在屏幕像素坐标 $(x, y)$ 处绘制一个宽度为 \mach{w} 像素的拨动开关。
 其拨动按钮的位置由 \mach{state} 设定；
 $0$ 表示其位置在最左侧， $65535$ 表示在最右侧。
 其标注文本为一对字符串，由ASCII字符码 \mach{0xff} 隔开。
@@ -591,9 +588,9 @@ void cmd_track(int16_t x,
 
 \mach{track} 指令用于要求GPU追踪对于标签值为 \mach{tag} 的像素点的触摸，
 并将相应值送入\mach{GD.inputs.track\_val}。
-位于屏幕像素坐标 $(x, y)$ 处，尺寸为 $w \times h$ 的矩形空间用于规定追踪压力的区域。
-当此区域仅为 $1 \times 1$ 的像素点时，追踪对象变为角度，
-且 \mach{GD.inputs.track\_val} 将表示触摸点相对于追踪像素点 $(x, y)$ 的Furmans角度。
+位于屏幕像素坐标 $(x, y)$ 处，尺寸为 $w \times h$ 的矩形空间用于规定追踪的区域。
+当此区域仅为 $1 \times 1$ 的像素点时，输出值为触摸点相对于起始点 $(x, y)$ 的Furmans角度，
+由 \mach{GD.inputs.track\_val}  存储该角度。
 角度追踪功能对于 \nameref{cmd:dial} 、 \nameref{cmd:clock} 这类控件以及含有旋转控制单元的游戏程序（例如 \nameref{nightstrike} ）十分实用。
 
 除此以外， 追踪控制均是沿尺寸为 $w \times h$ 的矩形区域长轴方向进行线性追踪的。
@@ -611,6 +608,6 @@ void cmd_translate(int32_t tx,
 \end{verbatim}
 \end{framed}
 
-\mach{translate} 指令用于对当前位图变换矩阵进行位移为 $(tx, ty)$ 的平移变换。 
+\mach{translate} 指令用于对位图变换矩阵进行位移为 $(tx, ty)$ 的平移变换。 
 \fsixteen
 
