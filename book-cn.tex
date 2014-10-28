@@ -121,19 +121,19 @@ Gameduino 2\\
 入门指南，编程参考与设计实例
 }
 
-\author{作者：James Bowman(美) \\
+\author{作者：James Bowman (美) \\
 	{\tt\small jamesb@excamera.com} \\
   Excamera Labs\\
    \\
    \\
   译者：戴晓天\footnote{云飞机器人实验室，\url{http://www.yfworld.com}，翻译章节 1-2, 13-16，全文校稿}
-  ,徐欣宇\footnote{英国谢菲尔德大学，邮箱：xinyu.xu@live.cn，翻译章节3-12}\\
+  ，徐欣宇\footnote{英国谢菲尔德大学，邮箱：xinyu.xu@live.cn，翻译章节 3 - 12}\\
   \\
   \\
   \\
   \\
   \\
-  ( Version 0.9 Beta )
+  ( Version 1.0 )
   \\
   \\  
 }
@@ -2299,8 +2299,8 @@ Gameduino 2的硬件底层只支持实心圆和直线的绘制。那么如何实
 \end{center}
 \newpage
 
-黑色的大圆盘毁掉了整个设计感，如果能将中心圆盘变为透明色，整个画面感就能大幅提升。
-其中之一的解决之道是使用\term{alpha缓冲}。
+可见，黑色的圆盘毁掉了画面整体的设计感。如果能将中心圆盘变为透明色，整个画面感就能大幅提升。
+这里介绍一种解决之道：使用\term{alpha缓冲}。
 
 \index{alpha!buffer}
 屏幕上每个像素都有一个0-255的alpha值，这个alpha值通常和颜色缓冲同时更新。
@@ -2310,7 +2310,7 @@ Gameduino 2的硬件底层只支持实心圆和直线的绘制。那么如何实
 实现对屏幕上所有像素的混合模式绘制。在绘制时，只有alpha缓冲非零时才会被绘制出来。
 
 绘制完绿树的背景之后，首先用 \dcmd{ColorMask} 函数禁止对颜色缓冲写入，之后向 \dcmd{BlendFunc} 
-写入一个可以把之后的alpha值直接写入alpha缓冲的参数。设置方法是将 \term{源混合因子} 设置为 \mach{ONE}:
+写入一个可以把之后的alpha值直接写入alpha缓冲的参数。设置方法是将\term{源混合因子}设置为 \mach{ONE}:
 
 \eg{examples-comp2a}
 
@@ -2318,7 +2318,7 @@ Gameduino 2的硬件底层只支持实心圆和直线的绘制。那么如何实
 
 \eg{examples-comp2b}
 
-这样之后，并没有图形真正出现在屏幕上，因为上述操作实际上只会影响alpha缓冲，目前为止还是不可见的。
+这样操作之后，并没有图形真正显示在屏幕上。因为上述操作实际上只会影响alpha缓冲，目前为止还是不可见的。
 绘制内部圆时需要将混合模式设置为覆盖之前已经绘制的所有像素，即将源混合因子设置为 \mach{ZERO}：
 
 \eg{examples-comp2c}
@@ -2360,7 +2360,7 @@ Gameduino 2的硬件底层只支持实心圆和直线的绘制。那么如何实
 \end{center}
 
 \term{Slot gags} 是一个非常古老用于将两个元素合成在一起的动画技术
-masking two elements together\footnote{
+\footnote{
 \index{masking}
 见 Steve Wright 的 ``Digital Compositing for Film and Video'' 一书。
 }。
@@ -2465,7 +2465,7 @@ $\vcenter{\hbox{\includegraphics[width=0.3\textwidth]{assets/reflection2.png}}}$
 \eg{reflection-A}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\chapter{内存的节约}
+\chapter{内存节约}
 
 \newpage
 \section{双色位图}
@@ -2604,8 +2604,8 @@ Gameduino 2的GPU支持三种单色格式： \mach{L1}， \mach{L4}和 \mach{L8}
 而下图中的爆炸动画则使用了 \mach{ARGB2} 格式。
 \index{playing cards}
 \index{cards}
-对于纸牌来说，其用了大胆鲜明的颜色搭配，所以将颜色下降到 \mach{RGB332} 并不会引人注意；
-而对于爆炸动画来说，因为整个过程只有0.25秒的时间，快速的动作掩饰掉了颜色范围的缺失。
+对于纸牌来说，其用了大胆鲜明的颜色搭配，所以将颜色下降到 \mach{RGB332} 并不会产生太大变化；
+而对于爆炸动画来说，因为整个过程只有0.25秒的时间，快速的动作掩饰掉了颜色范围上的损失。
 \index{explosion}
 \index{animation}
 
@@ -2990,11 +2990,11 @@ $\vcenter{\hbox{\includegraphics[width=0.32\textwidth]{previews/nightstrike_welc
 
 \png{invaders}
 
-\textit{Invaders} 是从Gameduino 1而来的一个移植版本 \footnote{
+\textit{Invaders} 是从 Gameduino 1 中移植的版本 \footnote{
 \url{http://artlum.com/gameduino/gameduino.html}}。
-为了让其更为真实，它使用了街机版本中的艺术手段。
+为了让其更为接近原版，它使用了街机版本中的艺术手段。
 传统的70年代游戏机只有一个单色的CRT显示器，为了让它炫酷起来，设计师绞尽脑汁用了一个反射镜将一张太空图片投影到了图形的后方。
-如果离近些看，你就会发现像素变得有些透明就是这样因为这个原因。
+就是这样因为这个原因，当你离近些看时，就会发现像素变得有些透明。
 他们用的另一个小技巧就是在CRT屏幕的底部覆盖了一个绿色的矩形薄膜，并且在顶部覆盖了红色的薄膜。
 在原始版本的游戏中，你可以发现导弹在通过这些区域时改变了颜色。
 
